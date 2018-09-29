@@ -1,45 +1,29 @@
 import React, { Component } from "react";
-import { Platform, StyleSheet, Text, Dimensions, View } from "react-native";
+import { StyleSheet, Dimensions } from "react-native";
 import loginPage from "./Source/Login/loginPage"; //import the js files you create here.
 import { StackNavigator } from "react-navigation";
 import DamageCamera from "./damage-camera";
 
-class HomeScreen extends React.Component {
-  static navigationOptions = {
-    title: "Home"
-  };
-  render() {
-    const { navigate } = this.props.navigation;
-    return (
-      <View style={styles.homeFormat}>
-        <Text onPress={() => navigate("Camera")}> GO TO CAMERA.</Text>
-      </View>
-    );
-  }
-}
-
-class CameraScreen extends React.Component {
+class CameraScreen extends Component {
   static navigationOptions = {
     title: "Camera"
   };
   render() {
-    const { navigate } = this.props.navigation;
-    return (
-      <DamageCamera style={styles.preview} />
-    );
-  }
-
-  takePicture() {
-    this.camera
-      .capture()
-      .then(data => console.log(data))
-      .catch(err => console.error(err));
+    //const { navigate } = this.props.navigation;
+    // can use the navigate as a onpress to start
+    // navigating to directed page. See loginPage.js.
+    return <DamageCamera style={styles.preview} />;
   }
 }
 
+//=============//
+//Basically using stacknavigatior to create
+//the pages to navigate to one page to another.
+//=============//
+
 const NavApp = StackNavigator({
-  Home: { screen: HomeScreen },
-  Camera: { screen: CameraScreen }
+  Home: { screen: loginPage }, //calls the loginPage from loginPage.js.
+  Camera: { screen: CameraScreen } // calls the camera screen from above, should be moved to its own .js later.
 });
 
 export default class App extends Component {
@@ -62,13 +46,5 @@ const styles = StyleSheet.create({
     alignItems: "center",
     height: Dimensions.get("window").height,
     width: Dimensions.get("window").width
-  },
-  capture: {
-    flex: 0,
-    backgroundColor: "#ffffff",
-    borderRadius: 5,
-    color: "#000",
-    padding: 10,
-    margin: 40
   }
 });
