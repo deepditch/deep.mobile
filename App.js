@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Platform, StyleSheet, Text, Dimensions, View } from "react-native";
 import loginPage from "./Source/Login/loginPage"; //import the js files you create here.
 import { StackNavigator } from "react-navigation";
-import Camera from "react-native-camera";
+import DamageCamera from "./damage-camera";
 
 class HomeScreen extends React.Component {
   static navigationOptions = {
@@ -25,18 +25,7 @@ class CameraScreen extends React.Component {
   render() {
     const { navigate } = this.props.navigation;
     return (
-      <Camera
-        ref={cam => {
-          this.camera = cam;
-        }}
-        style={styles.preview}
-        aspect={Camera.constants.Aspect.fill}
-      >
-        <Text style={styles.capture} onPress={this.takePicture.bind(this)}>
-          {" "}
-          [CAPTURE]{" "}
-        </Text>
-      </Camera>
+      <DamageCamera style={styles.preview} />
     );
   }
 
