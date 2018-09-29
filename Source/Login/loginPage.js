@@ -52,6 +52,7 @@ export default class loginPage extends Component {
       })
       .then(response => {
         console.log(response);
+        this.props.navigation.navigate('Camera');
       })
       .catch(err => {
         console.log(err);
