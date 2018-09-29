@@ -1,11 +1,15 @@
 import React, { Component } from "react";
 import {
-  StyleSheet,
-  Text,
-  View,
-  TextInput,
-  TouchableOpacity
+    StyleSheet,
+    Text,
+    View,
+    TextInput,
+    TouchableOpacity,
+    Dimensions,
+    AsyncStorage,
+    KeyboardAvoidingView
 } from "react-native";
+import { StackNavigator } from 'react-navigation';
 
 /*
 Basic login page.
@@ -23,42 +27,76 @@ Has a login button that when clicked takes user to the camera screen.
 */
 
 export default class loginPage extends Component {
-  static navigationOptions = {
-    title: "Login Screen"
-  };
-
-  constructor(props) {
-    super(props);
-    this.state = {
-      username: "",
-      password: ""
+    static navigationOptions = {
+        title: "Login Screen"
     };
-  }
 
-  render() {
-    const { navigate } = this.props.navigation;
-    return (
-      <View>
-        <TextInput
-          placeholder="Username"
-          onChangeText={username => this.setState({ username })}
-        />
-        <TextInput
-          placeholder="Password"
-          onChangeText={password => this.setState({ password })}
-        />
+    constructor(props) {
+        super(props);
+        this.state = {
+            email: "",
+            password: ""
+        };
+    }
 
-        <TouchableOpacity onPress={() => navigate("Camera")}>
-          <Text>Log In</Text>
-        </TouchableOpacity>
-      </View>
-    );
-  }
+    render() {
+        const { navigate } = this.props.navigation;
+        return (
+            <KeyboardAvoidingView>
+                <View>
+                    <TextInput
+                        placeholder='Email'
+                        onChangeText={(email) => this.setState({ email })}
+                    ></TextInput>
+                    <TextInput placeholder="Password"
+                        onChangeText={(password) => this.setState({ password })}
+                    ></TextInput>
+                    <TouchableOpacity
+                        onPress={this.loginF}>
+                        <Text>Log In</Text>
+                    </TouchableOpacity>
+                </View>
+            </KeyboardAvoidingView>
+        ); // onPress={() => navigate('Camera')}>
+    }
+    /*
+   Fetch is supposed to connect to the fornt end api.
+   Using POST to send the login information.
+   stringifying the email and password and sending to the web
+   ---
+   here get a token error which im not sure how to fix it.
+   It might be because the website doesn't use json, but not sure -safayeth.
+   */
+    loginF = () => {
+        //  alert(this.state.email);
+        fetch('http://216.126.231.155/login?', {
+            method: 'POST',
+            header: {
+                'Accept': 'application/json, text/plain',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(
+                {
+                    email: this.state.email,
+                    password: this.state.password,
+                })
+        })
+            // .then((response) => response.json())
+            .then((res) => {
+                if (res.successs == true) {
+                    this.props.navigation.navigate('Camera');
+                }
+                else {
+                    alert(res.alertuser);
+                }
+            }
+            )
+            .done();
+    }
 }
-
-const style = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#3498db"
-  }
-});
+    const style = StyleSheet.create({
+        container: {
+            flex: 1,
+            backgroundColor: "#3498db"
+        }
+    });
