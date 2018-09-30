@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { StyleSheet, Dimensions } from "react-native";
-import loginPage from "./Source/Login/loginPage"; //import the js files you create here.
+import loginPage from "./source/login/loginPage"; //import the js files you create here.
 import { StackNavigator } from "react-navigation";
 import DamageCamera from "./damage-camera";
 
