@@ -1,9 +1,10 @@
 import React, { Component } from "react";
-import { StyleSheet, Dimensions, Text } from "react-native";
+import { StyleSheet, Dimensions, Text, TouchableOpacity } from "react-native";
 import loginPage from "./source/login/loginPage"; //import the js files you create here.
 import { StackNavigator } from "react-navigation";
 import Camera from "react-native-camera";
 import DamageService from "./source/services/damage.service";
+import { ButtonStyle } from "./source/styles/button.style";
 
 class CameraScreen extends Component {
   static navigationOptions = {
@@ -15,9 +16,6 @@ class CameraScreen extends Component {
   }
 
   render() {
-    //const { navigate } = this.props.navigation;
-    // can use the navigate as a onpress to start
-    // navigating to directed page. See loginPage.js.
     return (
       <Camera
         ref={cam => {
@@ -27,10 +25,18 @@ class CameraScreen extends Component {
         aspect={Camera.constants.Aspect.fill}
         captureTarget={Camera.constants.CaptureTarget.disk}
       >
-        <Text style={styles.capture} onPress={this.takePicture.bind(this)}>
-          {" "}
-          [CAPTURE]{" "}
-        </Text>
+        <TouchableOpacity
+          onPress={this.takePicture.bind(this)}
+          style={[
+            ButtonStyle.button,
+            ButtonStyle.buttonCenter,
+            ButtonStyle.buttonWhite
+          ]}
+        >
+          <Text style={[ButtonStyle.buttonText, ButtonStyle.buttonWhiteText]}>
+            CAPTURE
+          </Text>
+        </TouchableOpacity>
       </Camera>
     );
   }

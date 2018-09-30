@@ -9,10 +9,12 @@ import {
 } from "react-native";
 
 import AuthService from "../services/auth.service";
+import { ButtonStyle } from "../styles/button.style";
+import { InputStyle } from "../styles/input.style";
 
 export default class loginPage extends Component {
   static navigationOptions = {
-    title: "Login Screen"
+    title: "Login"
   };
 
   constructor(props) {
@@ -25,20 +27,31 @@ export default class loginPage extends Component {
 
   render() {
     return (
-      <KeyboardAvoidingView>
+      <KeyboardAvoidingView style={style.container}>
         <View>
+          <Text style={InputStyle.label}>Email</Text>
           <TextInput
+            style={InputStyle.input}
             placeholder="Email"
+            label="Email"
+            textContentType="emailAddress"
             value={this.state.email}
             onChangeText={email => this.setState({ email })}
           />
+          <Text style={InputStyle.label}>Password</Text>
           <TextInput
+            style={InputStyle.input}
             placeholder="Password"
+            label="Password"
+            textContentType="password"
             value={this.state.password}
             onChangeText={password => this.setState({ password })}
           />
-          <TouchableOpacity onPress={this.login.bind(this)}>
-            <Text>Log In</Text>
+          <TouchableOpacity
+            onPress={this.login.bind(this)}
+            style={[ButtonStyle.button, { marginTop: 10 }]}
+          >
+            <Text style={ButtonStyle.buttonText}>LOG IN</Text>
           </TouchableOpacity>
         </View>
       </KeyboardAvoidingView>
@@ -60,6 +73,7 @@ export default class loginPage extends Component {
 const style = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#3498db"
+    padding: 25,
+    backgroundColor: "#eee"
   }
 });
