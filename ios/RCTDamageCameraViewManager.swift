@@ -19,4 +19,10 @@ class RCTDamageCameraManager: RCTViewManager {
   override static func requiresMainQueueSetup() -> Bool {
     return true
   }
+  
+  @objc(resolver:rejecter:)
+  func capture(_ resolve: @escaping RCTPromiseResolveBlock,
+              rejecter reject: @escaping RCTPromiseRejectBlock) -> Void {
+    resolve("Test resolve")
+  }
 }

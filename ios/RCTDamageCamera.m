@@ -12,4 +12,7 @@
 // Makes RCTDamageCameraManager visible to react native
 @interface RCT_EXTERN_MODULE(RCTDamageCameraManager, RCTViewManager)
 
+RCT_EXTERN_METHOD(capture :(RCTPromiseResolveBlock)resolve
+                        rejecter:(RCTPromiseRejectBlock)reject)
+
 @end

@@ -8,7 +8,7 @@ import {
   KeyboardAvoidingView
 } from "react-native";
 
-import axios from "axios";
+import AuthService from "../services/auth.service";
 
 export default class loginPage extends Component {
   static navigationOptions = {
@@ -18,25 +18,26 @@ export default class loginPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      email: "",
-      password: ""
+      email: "test@gmail.com",
+      password: "test"
     };
   }
 
   render() {
-    const { navigate } = this.props.navigation;
     return (
       <KeyboardAvoidingView>
         <View>
           <TextInput
             placeholder="Email"
+            value={this.state.email}
             onChangeText={email => this.setState({ email })}
           />
           <TextInput
             placeholder="Password"
+            value={this.state.password}
             onChangeText={password => this.setState({ password })}
           />
-          <TouchableOpacity onPress={this.loginF}>
+          <TouchableOpacity onPress={this.login.bind(this)}>
             <Text>Log In</Text>
           </TouchableOpacity>
         </View>
@@ -44,20 +45,16 @@ export default class loginPage extends Component {
     );
   }
 
-  loginF = () => {
-    axios
-      .post("http://216.126.231.155/api/login", {
-        email: this.state.email,
-        password: this.state.password
-      })
+  login() {
+    new AuthService()
+      .login(this.state.email, this.state.password)
       .then(response => {
-        console.log(response);
-        this.props.navigation.navigate('Camera');
+        this.props.navigation.navigate("Camera");
       })
-      .catch(err => {
-        console.log(err);
+      .catch(error => {
+        alert("Login Failure");
       });
-  };
+  }
 }
 
 const style = StyleSheet.create({
