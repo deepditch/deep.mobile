@@ -48,6 +48,7 @@ export default class loginPage extends Component {
             textContentType="password"
             value={this.state.password}
             autoCapitalize="none"
+            secureTextEntry={true}
             onChangeText={password => this.setState({ password, alert: "" })}
           />
           <TouchableOpacity
