@@ -1,25 +1,30 @@
 import React, { Component } from "react";
-import { StyleSheet, Dimensions, Text, TouchableOpacity, Alert, Platform, } from "react-native";
+import {
+  StyleSheet,
+  Dimensions,
+  Text,
+  TouchableOpacity,
+  Alert,
+  Platform
+} from "react-native";
 import loginPage from "./source/login/loginPage"; //import the js files you create here.
 import { StackNavigator } from "react-navigation";
 import Camera from "react-native-camera";
 import DamageService from "./source/services/damage.service";
 import { ButtonStyle } from "./source/styles/button.style";
-import { PermissionsAndroid } from 'react-native';
+import { PermissionsAndroid } from "react-native";
 
 class CameraScreen extends Component {
   static navigationOptions = {
     title: "Camera"
   };
 
-
-
   componentDidMount() {
-    if (Platform.OS === 'ios') {                      //platform.OS detects if it ios or android and runs the respective permissions 
-      navigator.geolocation.requestAuthorization();   //so that both ios and android receives the right permissions and both work at the same time.  
-    }
-    else {
-      requestPermissions();                               
+    if (Platform.OS === "ios") {
+      //platform.OS detects if it ios or android and runs the respective permissions
+      navigator.geolocation.requestAuthorization(); //so that both ios and android receives the right permissions and both work at the same time.
+    } else {
+      requestPermissions();
     }
   }
 
@@ -50,37 +55,37 @@ class CameraScreen extends Component {
     );
   }
 
-
   async takePicture() {
     this.camera
       .capture()
       .then(data => {
         if (data.path) {
-
           new DamageService()
             .reportDamage(data.path)
-            .then(response => { })
-            .catch(err => { });
+            .then(response => {
+              Alert.alert(
+                "Congrats",
+                "Picture was uploaded successfully.",
+                [{ text: "OK", onPress: () => console.log("OK") }],
+                { cancelable: false }
+              );
+            })
+            .catch(err => {
+              Alert.alert(
+                "Sorry",
+                "Your picture failed to upload.",
+                [{ text: "OK", onPress: () => console.log("OK") }],
+                { cancelable: false }
+              );
+            });
 
           //==Sends the alert to the user from here.
-          // I assumed this was the right place to put it since the only way for the 
+          // I assumed this was the right place to put it since the only way for the
           // app to reach this place is if the data was successfully sent.
-          Alert.alert(
-            'Congrats',
-            'Picture was uploaded successfully.',
-            [
-              {text: 'OK', onPress:()=>console.log('OK')},
-            ],
-            { cancelable: false }
-          )
-
         }
-
-      }
-      )
+      })
       .catch(err => console.error(err));
   }
-
 }
 
 //=============//
@@ -93,7 +98,6 @@ const NavApp = StackNavigator({
   Camera: { screen: CameraScreen } // calls the camera screen from above, should be moved to its own .js later.
 });
 
-
 //===================Android Permissions=====================================//
 /*
 //Following permissions is needed to run the app on the android version.
@@ -105,30 +109,26 @@ const NavApp = StackNavigator({
 
 async function requestPermissions() {
   try {
-    const granted = await PermissionsAndroid.requestMultiplePermissions(
-      [
-        //PermissionsAndroid.PERMISSIONS.geolocation,
+    const granted = await PermissionsAndroid.requestMultiplePermissions([
+      //PermissionsAndroid.PERMISSIONS.geolocation,
 
-        PermissionsAndroid.PERMISSIONS.CAMERA,
+      PermissionsAndroid.PERMISSIONS.CAMERA,
 
-        PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+      PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
 
-        PermissionsAndroid.PERMISSIONS.ACCESS_COARSE_LOCATION,
+      PermissionsAndroid.PERMISSIONS.ACCESS_COARSE_LOCATION,
 
-        PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+      PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
 
-        PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
-
-
-      ]
-    )
+      PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE
+    ]);
     if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-      console.log("Permission granted")
+      console.log("Permission granted");
     } else {
-      console.log("Permission denied")
+      console.log("Permission denied");
     }
   } catch (err) {
-    console.warn(err)
+    console.warn(err);
   }
 }
 //===================================================================================
@@ -138,7 +138,6 @@ export default class App extends Component {
     return <NavApp />;
   }
 }
-
 
 const styles = StyleSheet.create({
   preview: {
