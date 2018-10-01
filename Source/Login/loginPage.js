@@ -20,8 +20,9 @@ export default class loginPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      email: "test@gmail.com",
-      password: "test"
+      email: "",
+      password: "",
+      alert: ""
     };
   }
 
@@ -36,7 +37,8 @@ export default class loginPage extends Component {
             label="Email"
             textContentType="emailAddress"
             value={this.state.email}
-            onChangeText={email => this.setState({ email })}
+            autoCapitalize="none"
+            onChangeText={email => this.setState({ email, alert: "" })}
           />
           <Text style={InputStyle.label}>Password</Text>
           <TextInput
@@ -45,7 +47,8 @@ export default class loginPage extends Component {
             label="Password"
             textContentType="password"
             value={this.state.password}
-            onChangeText={password => this.setState({ password })}
+            autoCapitalize="none"
+            onChangeText={password => this.setState({ password, alert: "" })}
           />
           <TouchableOpacity
             onPress={this.login.bind(this)}
@@ -53,19 +56,23 @@ export default class loginPage extends Component {
           >
             <Text style={ButtonStyle.buttonText}>LOG IN</Text>
           </TouchableOpacity>
+          <Text>{this.state.alert}</Text>
         </View>
       </KeyboardAvoidingView>
     );
   }
 
   login() {
+    console.log(this.state);
     new AuthService()
       .login(this.state.email, this.state.password)
       .then(response => {
         this.props.navigation.navigate("Camera");
       })
       .catch(error => {
-        alert("Login Failure");
+        if (error.message)
+          this.setState({ alert: "Login Failure: " + error.message });
+        else this.setState({ alert: "Login Failure" });
       });
   }
 }
