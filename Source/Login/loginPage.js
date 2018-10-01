@@ -20,8 +20,9 @@ export default class loginPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      email: "test@gmail.com",
-      password: "test"
+      email: "",
+      password: "",
+      alert: ""
     };
   }
 
@@ -36,6 +37,7 @@ export default class loginPage extends Component {
             label="Email"
             textContentType="emailAddress"
             value={this.state.email}
+            autoCapitalize="none"
             onChangeText={email => this.setState({ email })}
           />
           <Text style={InputStyle.label}>Password</Text>
@@ -45,6 +47,7 @@ export default class loginPage extends Component {
             label="Password"
             textContentType="password"
             value={this.state.password}
+            autoCapitalize="none"
             onChangeText={password => this.setState({ password })}
           />
           <TouchableOpacity
@@ -53,6 +56,7 @@ export default class loginPage extends Component {
           >
             <Text style={ButtonStyle.buttonText}>LOG IN</Text>
           </TouchableOpacity>
+          <Text>{this.state.alert}</Text>
         </View>
       </KeyboardAvoidingView>
     );
@@ -65,7 +69,7 @@ export default class loginPage extends Component {
         this.props.navigation.navigate("Camera");
       })
       .catch(error => {
-        alert("Login Failure");
+        this.setState({ alert: "Login Failure" });
       });
   }
 }
