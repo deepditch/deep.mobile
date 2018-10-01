@@ -39,7 +39,7 @@ export default class DamageService {
           });
       })
       .catch(err => {
-        console.error(err);
+        console.log(err);
         throw error;
       });
   }

@@ -38,7 +38,7 @@ export default class loginPage extends Component {
             textContentType="emailAddress"
             value={this.state.email}
             autoCapitalize="none"
-            onChangeText={email => this.setState({ email })}
+            onChangeText={email => this.setState({ email, alert: "" })}
           />
           <Text style={InputStyle.label}>Password</Text>
           <TextInput
@@ -48,7 +48,7 @@ export default class loginPage extends Component {
             textContentType="password"
             value={this.state.password}
             autoCapitalize="none"
-            onChangeText={password => this.setState({ password })}
+            onChangeText={password => this.setState({ password, alert: "" })}
           />
           <TouchableOpacity
             onPress={this.login.bind(this)}
@@ -63,13 +63,16 @@ export default class loginPage extends Component {
   }
 
   login() {
+    console.log(this.state);
     new AuthService()
       .login(this.state.email, this.state.password)
       .then(response => {
         this.props.navigation.navigate("Camera");
       })
       .catch(error => {
-        this.setState({ alert: "Login Failure" });
+        if (error.message)
+          this.setState({ alert: "Login Failure: " + error.message });
+        else this.setState({ alert: "Login Failure" });
       });
   }
 }
