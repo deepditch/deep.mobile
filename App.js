@@ -1,10 +1,18 @@
 import React, { Component } from "react";
-import { StyleSheet, Dimensions, Text, TouchableOpacity } from "react-native";
+import {
+  StyleSheet,
+  Dimensions,
+  Text,
+  TouchableOpacity,
+  Alert,
+  Platform
+} from "react-native";
 import loginPage from "./source/login/loginPage"; //import the js files you create here.
 import { StackNavigator } from "react-navigation";
 import Camera from "react-native-camera";
 import DamageService from "./source/services/damage.service";
 import { ButtonStyle } from "./source/styles/button.style";
+import { PermissionsAndroid } from "react-native";
 
 class CameraScreen extends Component {
   static navigationOptions = {
@@ -12,7 +20,12 @@ class CameraScreen extends Component {
   };
 
   componentDidMount() {
-    navigator.geolocation.requestAuthorization();
+    if (Platform.OS === "ios") {
+      //platform.OS detects if it ios or android and runs the respective permissions
+      navigator.geolocation.requestAuthorization(); //so that both ios and android receives the right permissions and both work at the same time.
+    } else {
+      requestPermissions();
+    }
   }
 
   render() {
@@ -27,6 +40,7 @@ class CameraScreen extends Component {
       >
         <TouchableOpacity
           onPress={this.takePicture.bind(this)}
+          // onPress={this.AlertUser.bind(this)}
           style={[
             ButtonStyle.button,
             ButtonStyle.buttonCenter,
@@ -48,8 +62,26 @@ class CameraScreen extends Component {
         if (data.path) {
           new DamageService()
             .reportDamage(data.path)
-            .then(response => {})
-            .catch(err => {});
+            .then(response => {
+              Alert.alert(
+                "Congrats",
+                "Picture was uploaded successfully.",
+                [{ text: "OK", onPress: () => console.log("OK") }],
+                { cancelable: false }
+              );
+            })
+            .catch(err => {
+              Alert.alert(
+                "Sorry",
+                "Your picture failed to upload.",
+                [{ text: "OK", onPress: () => console.log("OK") }],
+                { cancelable: false }
+              );
+            });
+
+          //==Sends the alert to the user from here.
+          // I assumed this was the right place to put it since the only way for the
+          // app to reach this place is if the data was successfully sent.
         }
       })
       .catch(err => console.error(err));
@@ -65,6 +97,41 @@ const NavApp = StackNavigator({
   Home: { screen: loginPage }, //calls the loginPage from loginPage.js.
   Camera: { screen: CameraScreen } // calls the camera screen from above, should be moved to its own .js later.
 });
+
+//===================Android Permissions=====================================//
+/*
+//Following permissions is needed to run the app on the android version.
+//Code below is android specific. You shouldn't need to comment it out to get it work on ios,
+//as I have fixed the issue on componentdidmount() with the if statement and platform.os so
+//that it detects the proper os and runs their respective version of the code for permissions.
+// function below can be moved to its own js file but I will keep it here for now.
+*/
+
+async function requestPermissions() {
+  try {
+    const granted = await PermissionsAndroid.requestMultiplePermissions([
+      //PermissionsAndroid.PERMISSIONS.geolocation,
+
+      PermissionsAndroid.PERMISSIONS.CAMERA,
+
+      PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+
+      PermissionsAndroid.PERMISSIONS.ACCESS_COARSE_LOCATION,
+
+      PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+
+      PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE
+    ]);
+    if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+      console.log("Permission granted");
+    } else {
+      console.log("Permission denied");
+    }
+  } catch (err) {
+    console.warn(err);
+  }
+}
+//===================================================================================
 
 export default class App extends Component {
   render() {
