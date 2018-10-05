@@ -20,6 +20,7 @@ class FrameExtractor : NSObject, AVCaptureVideoDataOutputSampleBufferDelegate {
   private let quality = AVCaptureSession.Preset.medium
   weak var delegate: FrameExtractorDelegate?
   private let context = CIContext()
+  private let damageDetector = DamageDetector()
   
   override init() {
     print("init")
@@ -81,6 +82,8 @@ class FrameExtractor : NSObject, AVCaptureVideoDataOutputSampleBufferDelegate {
   
   func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
     guard let uiImage = imageFromSampleBuffer(sampleBuffer: sampleBuffer) else { return }
+    
+    self.damageDetector.detect(for: uiImage)
     
     DispatchQueue.main.async { [unowned self] in // Image is sent to the delegate on the main thread. UI can be updated right away
       self.delegate?.captured(image: uiImage)
