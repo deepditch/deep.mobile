@@ -9,20 +9,14 @@
 
 import UIKit
 
-@objc(RCTDamageCameraManager)
-class RCTDamageCameraManager: RCTViewManager {
+@objc(DamageCameraViewManager)
+class DamageCameraViewManager: RCTViewManager {
   override func view() -> UIView! {
     return DamageCameraView();
   }
   
   @objc
   override static func requiresMainQueueSetup() -> Bool {
-    return true
-  }
-  
-  @objc(resolver:rejecter:)
-  func capture(_ resolve: @escaping RCTPromiseResolveBlock,
-              rejecter reject: @escaping RCTPromiseRejectBlock) -> Void {
-    resolve("Test resolve")
+    return true;
   }
 }

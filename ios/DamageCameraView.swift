@@ -8,22 +8,72 @@
 //
 
 import UIKit
+import CoreML
 
-class DamageCameraView: UIImageView, FrameExtractorDelegate {
+class DamageCameraView: UIImageView {
+  var onDamageDetected: RCTDirectEventBlock?
   var frameExtractor: FrameExtractor!
   
   init() {
     super.init(image: nil)
+    
     frameExtractor = FrameExtractor()
-    frameExtractor.delegate = self // self recieves each frame from the frame extractor
+    
+    frameExtractor.frameCaptured = { [unowned self] image in
+      self.image = image // Update the UI
+    }
+    
+    frameExtractor.damageDetected = { [unowned self] vec in
+      if(self.onDamageDetected != nil) {
+        var arr = [String]()
+        
+        if(vec![0].doubleValue > 0.5) {
+          arr.append("D00: Crack")
+        }
+        
+        if(vec![1].doubleValue > 0.5) {
+          arr.append("D01: Crack")
+        }
+        
+        if(vec![2].doubleValue > 0.5) {
+          arr.append("D10: Crack")
+        }
+        
+        if(vec![3].doubleValue > 0.5) {
+          arr.append("D11: Crack")
+        }
+        
+        if(vec![4].doubleValue > 0.5) {
+          arr.append("D20: Alligator Crack")
+        }
+        
+        if(vec![5].doubleValue > 0.5) {
+          arr.append("D40: Pothole")
+        }
+        
+        if(vec![6].doubleValue > 0.5) {
+          arr.append("D43: Line Blur")
+        }
+        
+        if(vec![7].doubleValue > 0.5) {
+          arr.append("D44: Crosswalk Blur")
+        }
+        
+        if(arr.count > 0) {
+          self.onDamageDetected!([
+            "Damages": arr
+          ]);
+        }
+      }
+    }
+  }
+  
+  @objc(setOnDamageDetected:)
+  public func setOnDamageDetected(callback: @escaping RCTDirectEventBlock) {
+    onDamageDetected = callback
   }
   
   required init?(coder aDecoder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
-  
-  func captured(image: UIImage) {
-    self.image = image
-  }
 }
-

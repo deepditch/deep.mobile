@@ -19,6 +19,13 @@ class CameraScreen extends Component {
     title: "Camera"
   };
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      damages: []
+    };
+  }
+
   componentDidMount() {
     if (Platform.OS === "ios") {
       //platform.OS detects if it ios or android and runs the respective permissions
@@ -28,9 +35,21 @@ class CameraScreen extends Component {
     }
   }
 
+  _onDamageDetected(event) {
+    console.log(event);
+    this.setState({ damages: event.damages })
+  }
+
   render() {
     return (
-      <DamageCamera />
+      <DamageCamera
+        style={styles.preview}
+        onDamageDetected={this._onDamageDetected.bind(this)}
+      >
+        {this.state.damages && this.state.damages.map(damage => (
+          <Text>{damage} </Text>
+        ))}
+      </DamageCamera>
     );
   }
 }
@@ -41,7 +60,7 @@ class CameraScreen extends Component {
 //=============//
 
 const NavApp = StackNavigator({
-  Home: { screen: loginPage }, //calls the loginPage from loginPage.js.
+  Home: { screen: CameraScreen }, //calls the loginPage from loginPage.js.
   Camera: { screen: CameraScreen } // calls the camera screen from above, should be moved to its own .js later.
 });
 
