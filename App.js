@@ -14,6 +14,17 @@ import DamageService from "./source/services/damage.service";
 import { ButtonStyle } from "./source/styles/button.style";
 import { PermissionsAndroid } from "react-native";
 
+class DamageLabels extends Component {
+  render() {
+    return (
+      <>
+        {this.props.labels &&
+          this.props.labels.map(label => <Text style={styles.capture}>{label}</Text>)}
+      </>
+    )
+  }
+}
+
 class CameraScreen extends Component {
   static navigationOptions = {
     title: "Camera"
@@ -46,9 +57,7 @@ class CameraScreen extends Component {
         style={styles.preview}
         onDamageDetected={this._onDamageDetected.bind(this)}
       >
-        {this.state.damages && this.state.damages.map(damage => (
-          <Text>{damage} </Text>
-        ))}
+        <DamageLabels labels={this.state.damages} />
       </DamageCamera>
     );
   }
