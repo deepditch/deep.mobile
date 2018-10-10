@@ -13,17 +13,26 @@ import CoreML
 class DamageCameraView: UIImageView {
   var onDamageDetected: RCTDirectEventBlock?
   var frameExtractor: FrameExtractor!
+  var damageDetector: DamageDetector!
+  var throttler: Throttler!
+  
   
   init() {
     super.init(image: nil)
     
     frameExtractor = FrameExtractor()
+    damageDetector = DamageDetector()
+    throttler = Throttler(seconds: 0.25)
     
     frameExtractor.frameCaptured = { [unowned self] image in
       self.image = image // Update the UI
+      
+      self.throttler.throttle(block: { [unowned self] in
+        self.damageDetector.detect(for: image!)
+      }, queue: DispatchQueue.global(qos: .userInitiated))
     }
     
-    frameExtractor.damageDetected = { [unowned self] vec in
+    damageDetector.damageDetected = { [unowned self] vec in
       if(self.onDamageDetected != nil) {
         var arr = [String]()
         
