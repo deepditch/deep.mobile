@@ -6,7 +6,6 @@
 //  Copyright © 2018 Facebook. All rights reserved.
 //
 
-
 import UIKit
 import CoreML
 import Vision

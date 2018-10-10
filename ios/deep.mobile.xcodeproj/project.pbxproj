@@ -38,8 +38,8 @@
 		2DF0FFEE2056DD460020B375 /* libReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3DAD3EA31DF850E9000B6D8A /* libReact.a */; };
 		74110C2FF5CD491EA4CD9191 /* libRNCamera.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 08D7FC3051434D3BAC99C1C3 /* libRNCamera.a */; };
 		832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 832341B51AAA6A8300B99B32 /* libRCTText.a */; };
+		9B0BCCFF216E85E4009D2503 /* FrameExtractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B0BCCFE216E85E4009D2503 /* FrameExtractor.swift */; };
 		ADBDB9381DFEBF1600ED6528 /* libRCTBlob.a in Frameworks */ = {isa = PBXBuildFile; fileRef = ADBDB9271DFEBF0700ED6528 /* libRCTBlob.a */; };
-		B957B25F215EB81B00FF2999 /* FrameExtractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = B957B25E215EB81B00FF2999 /* FrameExtractor.swift */; };
 		B957B261215EB8DE00FF2999 /* DamageCameraView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B957B260215EB8DE00FF2999 /* DamageCameraView.swift */; };
 		B957B264215EB92A00FF2999 /* DamageCameraViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B957B263215EB92A00FF2999 /* DamageCameraViewManager.swift */; };
 		B957B266215EB9FA00FF2999 /* DamageCameraViewBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = B957B265215EB9FA00FF2999 /* DamageCameraViewBridge.m */; };
@@ -359,9 +359,9 @@
 		5E91572D1DD0AC6500FF2AA8 /* RCTAnimation.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTAnimation.xcodeproj; path = "../node_modules/react-native/Libraries/NativeAnimation/RCTAnimation.xcodeproj"; sourceTree = "<group>"; };
 		78C398B01ACF4ADC00677621 /* RCTLinking.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTLinking.xcodeproj; path = "../node_modules/react-native/Libraries/LinkingIOS/RCTLinking.xcodeproj"; sourceTree = "<group>"; };
 		832341B01AAA6A8300B99B32 /* RCTText.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTText.xcodeproj; path = "../node_modules/react-native/Libraries/Text/RCTText.xcodeproj"; sourceTree = "<group>"; };
+		9B0BCCFE216E85E4009D2503 /* FrameExtractor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FrameExtractor.swift; sourceTree = "<group>"; };
 		ADBDB91F1DFEBF0600ED6528 /* RCTBlob.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTBlob.xcodeproj; path = "../node_modules/react-native/Libraries/Blob/RCTBlob.xcodeproj"; sourceTree = "<group>"; };
 		B957B25D215EB81B00FF2999 /* deep.mobile-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "deep.mobile-Bridging-Header.h"; sourceTree = "<group>"; };
-		B957B25E215EB81B00FF2999 /* FrameExtractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrameExtractor.swift; sourceTree = "<group>"; };
 		B957B260215EB8DE00FF2999 /* DamageCameraView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DamageCameraView.swift; sourceTree = "<group>"; };
 		B957B263215EB92A00FF2999 /* DamageCameraViewManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DamageCameraViewManager.swift; sourceTree = "<group>"; };
 		B957B265215EB9FA00FF2999 /* DamageCameraViewBridge.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DamageCameraViewBridge.m; sourceTree = "<group>"; };
@@ -510,7 +510,9 @@
 		13B07FAE1A68108700A75B9A /* deep.mobile */ = {
 			isa = PBXGroup;
 			children = (
-				B957B262215EB8E800FF2999 /* DamageCamera */,
+				9B0BCD00216E85FC009D2503 /* DamageDetector */,
+				9B0BCCD7216E856E009D2503 /* Util */,
+				B957B262215EB8E800FF2999 /* DamageCameraView */,
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
@@ -627,6 +629,24 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		9B0BCCD7216E856E009D2503 /* Util */ = {
+			isa = PBXGroup;
+			children = (
+				B9726072216D7F1A0066A59C /* Throttler.swift */,
+				9B0BCCFE216E85E4009D2503 /* FrameExtractor.swift */,
+			);
+			name = Util;
+			sourceTree = "<group>";
+		};
+		9B0BCD00216E85FC009D2503 /* DamageDetector */ = {
+			isa = PBXGroup;
+			children = (
+				B97BD71721682F4C0043C3DC /* RoadDamageModel.mlmodel */,
+				B97BD71121681D700043C3DC /* DamageDetector.swift */,
+			);
+			name = DamageDetector;
+			sourceTree = "<group>";
+		};
 		ADBDB9201DFEBF0600ED6528 /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -636,19 +656,15 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		B957B262215EB8E800FF2999 /* DamageCamera */ = {
+		B957B262215EB8E800FF2999 /* DamageCameraView */ = {
 			isa = PBXGroup;
 			children = (
-				B97BD71721682F4C0043C3DC /* RoadDamageModel.mlmodel */,
-				B957B25E215EB81B00FF2999 /* FrameExtractor.swift */,
 				B957B263215EB92A00FF2999 /* DamageCameraViewManager.swift */,
 				B957B260215EB8DE00FF2999 /* DamageCameraView.swift */,
 				B957B265215EB9FA00FF2999 /* DamageCameraViewBridge.m */,
 				B9DC94D8216D3CC6006C9DB9 /* DamageCameraViewBridge.h */,
-				B97BD71121681D700043C3DC /* DamageDetector.swift */,
-				B9726072216D7F1A0066A59C /* Throttler.swift */,
 			);
-			name = DamageCamera;
+			name = DamageCameraView;
 			sourceTree = "<group>";
 		};
 		B9E0D19B21614DE0004F7F10 /* Recovered References */ = {
@@ -1196,7 +1212,7 @@
 				B957B261215EB8DE00FF2999 /* DamageCameraView.swift in Sources */,
 				B9726073216D7F1A0066A59C /* Throttler.swift in Sources */,
 				B957B266215EB9FA00FF2999 /* DamageCameraViewBridge.m in Sources */,
-				B957B25F215EB81B00FF2999 /* FrameExtractor.swift in Sources */,
+				9B0BCCFF216E85E4009D2503 /* FrameExtractor.swift in Sources */,
 				13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */,
 				B97BD71821682F4D0043C3DC /* RoadDamageModel.mlmodel in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
