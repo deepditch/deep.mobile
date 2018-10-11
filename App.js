@@ -8,6 +8,8 @@ import {
   Platform
 } from "react-native";
 import loginPage from "./source/login/loginPage"; //import the js files you create here.
+import registrationPage from "./source/login/registrationPage"; //import the js files you create here.
+
 import { StackNavigator } from "react-navigation";
 import Camera from "react-native-camera";
 import DamageService from "./source/services/damage.service";
@@ -90,12 +92,13 @@ class CameraScreen extends Component {
 
 //=============//
 //Basically using stacknavigatior to create
-//the pages to navigate to one page to another.
+//the pages to navigate from one page to another.
 //=============//
 
 const NavApp = StackNavigator({
-  Home: { screen: loginPage }, //calls the loginPage from loginPage.js.
-  Camera: { screen: CameraScreen } // calls the camera screen from above, should be moved to its own .js later.
+  Home: { screen: loginPage },                  //calls the loginPage from loginPage.js.
+  Camera: { screen: CameraScreen },             //calls the camera screen from above, should be moved to its own .js later.
+  Register:{ screen: registrationPage},              //Calls the registrationPage.
 });
 
 //===================Android Permissions=====================================//

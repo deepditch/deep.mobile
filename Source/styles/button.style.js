@@ -1,6 +1,11 @@
 import { StyleSheet } from "react-native";
 
 export const ButtonStyle = StyleSheet.create({
+  bContainer:{
+    flex:1,
+    flexDirection: 'row',
+    justifyContent: 'space-between'
+  },
   button: {
     backgroundColor: "#2c3443",
     paddingTop: 12,
