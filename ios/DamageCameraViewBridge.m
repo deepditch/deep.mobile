@@ -14,5 +14,7 @@
 @interface RCT_EXTERN_MODULE(DamageCameraViewManager, RCTViewManager)
 
 RCT_EXPORT_VIEW_PROPERTY(onDamageDetected, RCTDirectEventBlock);
+RCT_EXPORT_VIEW_PROPERTY(authToken, NSString);
+
 
 @end

@@ -5,7 +5,8 @@ import {
   Text,
   TouchableOpacity,
   Alert,
-  Platform
+  Platform,
+  View
 } from "react-native";
 import loginPage from "./source/login/loginPage"; //import the js files you create here.
 import { StackNavigator } from "react-navigation";
@@ -13,15 +14,18 @@ import DamageCamera from "./damage-camera";
 import DamageService from "./source/services/damage.service";
 import { ButtonStyle } from "./source/styles/button.style";
 import { PermissionsAndroid } from "react-native";
+import AuthService from "./source/services/auth.service";
 
 class DamageLabels extends Component {
   render() {
     return (
       <>
         {this.props.labels &&
-          this.props.labels.map(label => <Text style={styles.capture}>{label}</Text>)}
+          this.props.labels.map(label => (
+            <Text style={styles.capture}>{label}</Text>
+          ))}
       </>
-    )
+    );
   }
 }
 
@@ -30,11 +34,13 @@ class CameraScreen extends Component {
     title: "Camera"
   };
 
+  state = {
+    token: null,
+    damages: []
+  };
+
   constructor(props) {
     super(props);
-    this.state = {
-      damages: []
-    };
   }
 
   componentDidMount() {
@@ -44,18 +50,33 @@ class CameraScreen extends Component {
     } else {
       requestPermissions();
     }
+
+    new AuthService().getToken(token => {
+      this.setState({
+        token: token
+      });
+    });
   }
 
   _onDamageDetected(event) {
-    console.log(event);
-    this.setState({ damages: event.damages })
+    this.setState({ damages: event.damages });
+    console.log(this.state.damages, this.state, event.damages);
   }
 
   render() {
+    if (!this.state.token) {
+      return (
+        <View>
+          <Text>Loading...</Text>
+        </View>
+      );
+    }
+
     return (
       <DamageCamera
         style={styles.preview}
         onDamageDetected={this._onDamageDetected.bind(this)}
+        authToken={this.authToken}
       >
         <DamageLabels labels={this.state.damages} />
       </DamageCamera>
@@ -69,7 +90,7 @@ class CameraScreen extends Component {
 //=============//
 
 const NavApp = StackNavigator({
-  Home: { screen: CameraScreen }, //calls the loginPage from loginPage.js.
+  Home: { screen: loginPage }, //calls the loginPage from loginPage.js.
   Camera: { screen: CameraScreen } // calls the camera screen from above, should be moved to its own .js later.
 });
 
