@@ -8,7 +8,6 @@ import {
   KeyboardAvoidingView
 } from "react-native";
 
-import registerPage from "./registrationPage"; //import the js files you create here.
 
 
 import AuthService from "../services/auth.service";

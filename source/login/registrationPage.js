@@ -20,7 +20,7 @@ export default class registrationPage extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            username: "",
+            name: "",
             email: "",
             password: "",
             confirmPassword:"",
@@ -37,11 +37,11 @@ export default class registrationPage extends Component {
                         style={InputStyle.input}
                         placeholder="User Name"
                         label="User Name"
-                        textContentType="username"
-                        value={this.state.username}
+                        textContentType="name"
+                        value={this.state.name}
                         autoCapitalize="none"
                         
-                        onChangeText={username => this.setState({ username, alert: "" })}
+                        onChangeText={name => this.setState({ name, alert: "" })}
                     />
                     <Text style={InputStyle.label}>Email</Text>
                     <TextInput
@@ -97,7 +97,7 @@ export default class registrationPage extends Component {
        // alert(this.state.confirmPassword);
         
         new AuthService()
-            .register(this.state.username, this.state.email, this.state.password, this.state.confirmPassword)
+            .register(this.state.name, this.state.email, this.state.password, this.state.confirmPassword)
             .then(response => {
                 this.props.navigation.navigate("Home");
             })
