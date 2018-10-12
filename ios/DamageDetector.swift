@@ -38,26 +38,32 @@ class DamageDetector: NSObject, CLLocationManagerDelegate {
   var damageDetected: ((UIImage, [String], Double, Double) -> Void)?
   
   let manager = CLLocationManager()
-  var currentSpeed: Double? = Double.infinity // First frame sent is processed
+  var hasMoved: Bool = true // First frame sent is processed
+  var location: CLLocation?
   var lat: Double?
   var lng: Double?
   
   override init() {
     super.init()
-    manager.requestWhenInUseAuthorization()
-    manager.delegate = self
-    manager.desiredAccuracy = kCLLocationAccuracyBest
-    manager.startUpdatingLocation()
+    DispatchQueue.main.async {
+      self.manager.requestWhenInUseAuthorization()
+      self.manager.delegate = self
+      self.manager.desiredAccuracy = kCLLocationAccuracyBest
+      self.manager.startUpdatingLocation()
+    }
   }
   
-  func locationManager(manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-    guard currentImage != nil, manager.location != nil else { // If an image is being processed, don't update the location
+  func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+    guard currentImage == nil else { return } // If an image is being processed, don't update the location
+    guard manager.location != nil else { return }
+    guard location != nil else {
+      location = manager.location
       return
     }
+    guard manager.location!.distance(from: location!) > 10 else { return } // Have we moved 10 meters
     
-    self.currentSpeed = manager.location?.speed
-    self.lat = Double((manager.location?.coordinate.latitude)!)
-    self.lng = Double((manager.location?.coordinate.longitude)!)
+    location = manager.location!
+    hasMoved = true
   }
   
   func locationManager(manager: CLLocationManager, didFailWithError error: NSError) {
@@ -84,11 +90,11 @@ class DamageDetector: NSObject, CLLocationManagerDelegate {
   private var currentImage: UIImage?
   
   // Queue for dispatching vision classification requests
-  private let visionQueue = DispatchQueue(label: "com.example.apple-samplecode.ARKitVision.serialVisionQueue")
+  private let visionQueue = DispatchQueue(label: "serial vision queue")
   
   // Detect road damage in an image
   func maybeDetect(for image: UIImage) {
-    guard currentImage == nil, currentSpeed == nil, currentSpeed! <= 0.0 else { // Disregard requests if the previous image is not finished or the device is stationary
+    guard currentImage == nil, hasMoved else { // Disregard requests if the previous image is not finished or the device is stationary
       return
     }
     
@@ -98,7 +104,6 @@ class DamageDetector: NSObject, CLLocationManagerDelegate {
   
   func processCurrentImage() {
     let orientation = CGImagePropertyOrientation(self.currentImage!.imageOrientation)
-    print(orientation)
     guard let ciImage = CIImage(image: self.currentImage!) else { fatalError("Unable to create \(CIImage.self) from \(String(describing: self.currentImage)).") }
     
     let handler = VNImageRequestHandler(ciImage: ciImage, orientation: orientation)
@@ -117,7 +122,7 @@ class DamageDetector: NSObject, CLLocationManagerDelegate {
     DispatchQueue.main.async { [unowned self] in
       defer { // New frame will be processed when a new image is recieved, the location is updated, and the device is moving
         self.currentImage = nil
-        self.currentSpeed = 0.0
+        self.hasMoved = false
       }
       
       guard let results = request.results else {
@@ -132,12 +137,11 @@ class DamageDetector: NSObject, CLLocationManagerDelegate {
 
       let types = self.mapOutputs(vec: m)
       
-      if types.count > 0 { // Damage has been detected in the image
-        self.damageDetected?(self.currentImage!, types, self.lat!, self.lng!)
+      if types.count > 0, self.currentImage != nil, self.location != nil { // Damage has been detected in the image
+        self.damageDetected?(self.currentImage!, types, self.location!.coordinate.latitude, self.location!.coordinate.longitude)
       }
     }
   }
-  
   
   func mapOutputs(vec: MLMultiArray) -> [String] {
     var arr = [String]()

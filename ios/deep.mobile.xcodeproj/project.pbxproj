@@ -49,9 +49,6 @@
 		B97BD71221681D700043C3DC /* DamageDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = B97BD71121681D700043C3DC /* DamageDetector.swift */; };
 		B97BD71821682F4D0043C3DC /* RoadDamageModel.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = B97BD71721682F4C0043C3DC /* RoadDamageModel.mlmodel */; };
 		B9E0D1CC21615A35004F7F10 /* libRCTCameraRoll.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B9E0D1CB21615A05004F7F10 /* libRCTCameraRoll.a */; };
-		C9549E7471CFC16F620926ED /* Pods_deep_mobileTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 052B3A3960FEDFFE76454C26 /* Pods_deep_mobileTests.framework */; };
-		D8321A2FD52BA4B09ED0D179 /* libPods-deep.mobile-tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = ACF7E6F1673610126C8490E4 /* libPods-deep.mobile-tvOSTests.a */; };
-		F5E44F5F0704E4DBC858B324 /* libPods-deep.mobile-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 92D4F4ADDF70535EC1737C82 /* libPods-deep.mobile-tvOS.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -347,7 +344,6 @@
 		00E356EE1AD99517003FC87E /* deep.mobileTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = deep.mobileTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00E356F21AD99517003FC87E /* deep.mobile.tests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = deep.mobile.tests.m; sourceTree = "<group>"; };
-		052B3A3960FEDFFE76454C26 /* Pods_deep_mobileTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_deep_mobileTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		07AF3F6E2BD5A5583FDA26E1 /* Pods-deep.mobile-tvOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-deep.mobile-tvOS.debug.xcconfig"; path = "Pods/Target Support Files/Pods-deep.mobile-tvOS/Pods-deep.mobile-tvOS.debug.xcconfig"; sourceTree = "<group>"; };
 		139105B61AF99BAD00B5F7CC /* RCTSettings.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTSettings.xcodeproj; path = "../node_modules/react-native/Libraries/Settings/RCTSettings.xcodeproj"; sourceTree = "<group>"; };
 		139FDEE61B06529A00C62182 /* RCTWebSocket.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTWebSocket.xcodeproj; path = "../node_modules/react-native/Libraries/WebSocket/RCTWebSocket.xcodeproj"; sourceTree = "<group>"; };
@@ -370,11 +366,9 @@
 		62E3398320158F60A35275B3 /* Pods-deep.mobile-tvOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-deep.mobile-tvOSTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-deep.mobile-tvOSTests/Pods-deep.mobile-tvOSTests.debug.xcconfig"; sourceTree = "<group>"; };
 		78C398B01ACF4ADC00677621 /* RCTLinking.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTLinking.xcodeproj; path = "../node_modules/react-native/Libraries/LinkingIOS/RCTLinking.xcodeproj"; sourceTree = "<group>"; };
 		832341B01AAA6A8300B99B32 /* RCTText.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTText.xcodeproj; path = "../node_modules/react-native/Libraries/Text/RCTText.xcodeproj"; sourceTree = "<group>"; };
-		92D4F4ADDF70535EC1737C82 /* libPods-deep.mobile-tvOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-deep.mobile-tvOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		9B0BCCFE216E85E4009D2503 /* FrameExtractor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FrameExtractor.swift; sourceTree = "<group>"; };
 		9B0BCD35216E92E3009D2503 /* DamageHTTPService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DamageHTTPService.swift; sourceTree = "<group>"; };
 		9B814607216FDFB900590FCB /* DamageService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DamageService.swift; sourceTree = "<group>"; };
-		ACF7E6F1673610126C8490E4 /* libPods-deep.mobile-tvOSTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-deep.mobile-tvOSTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		ADBDB91F1DFEBF0600ED6528 /* RCTBlob.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTBlob.xcodeproj; path = "../node_modules/react-native/Libraries/Blob/RCTBlob.xcodeproj"; sourceTree = "<group>"; };
 		B957B25D215EB81B00FF2999 /* deep.mobile-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "deep.mobile-Bridging-Header.h"; sourceTree = "<group>"; };
 		B957B260215EB8DE00FF2999 /* DamageCameraView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DamageCameraView.swift; sourceTree = "<group>"; };
@@ -395,7 +389,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				140ED2AC1D01E1AD002B40FF /* libReact.a in Frameworks */,
-				C9549E7471CFC16F620926ED /* Pods_deep_mobileTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -432,7 +425,6 @@
 				2D02E4C61E0B4AEC006451C7 /* libRCTSettings-tvOS.a in Frameworks */,
 				2D02E4C71E0B4AEC006451C7 /* libRCTText-tvOS.a in Frameworks */,
 				2D02E4C81E0B4AEC006451C7 /* libRCTWebSocket-tvOS.a in Frameworks */,
-				F5E44F5F0704E4DBC858B324 /* libPods-deep.mobile-tvOS.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -441,7 +433,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				2DF0FFEE2056DD460020B375 /* libReact.a in Frameworks */,
-				D8321A2FD52BA4B09ED0D179 /* libPods-deep.mobile-tvOSTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -574,9 +565,6 @@
 			children = (
 				2D16E6891FA4F8E400B85C8A /* libReact.a */,
 				15A7342A538FEBAB9D56F031 /* Pods_deep_mobile.framework */,
-				92D4F4ADDF70535EC1737C82 /* libPods-deep.mobile-tvOS.a */,
-				ACF7E6F1673610126C8490E4 /* libPods-deep.mobile-tvOSTests.a */,
-				052B3A3960FEDFFE76454C26 /* Pods_deep_mobileTests.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";

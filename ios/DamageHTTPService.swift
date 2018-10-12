@@ -34,7 +34,7 @@ extension DamageHTTPService: TargetType {
     case let .report(image, latitude, longitude):
       guard let imageData = image.jpegData(compressionQuality: 1.0) else { return .requestPlain }
       let timestamp = String(Date().timeIntervalSince1970)
-      let data = [MultipartFormData(provider: .data(imageData), name: "damages", fileName: timestamp + ".jpg", mimeType:"image/jpeg")]
+      let data = [MultipartFormData(provider: .data(imageData), name: "image", fileName: timestamp + ".jpg", mimeType:"image/jpeg")]
       let params = ["latitude": latitude, "longitude": longitude]
       return .uploadCompositeMultipart(data, urlParameters: params)
     }

@@ -51,11 +51,16 @@ class CameraScreen extends Component {
       requestPermissions();
     }
 
-    new AuthService().getToken(token => {
-      this.setState({
-        token: token
+    new AuthService()
+      .getToken()
+      .then(token => {
+        this.setState({
+          token: token
+        });
+      })
+      .catch(err => {
+        console.log(err);
       });
-    });
   }
 
   _onDamageDetected(event) {
@@ -76,7 +81,7 @@ class CameraScreen extends Component {
       <DamageCamera
         style={styles.preview}
         onDamageDetected={this._onDamageDetected.bind(this)}
-        authToken={this.authToken}
+        authToken={this.state.token}
       >
         <DamageLabels labels={this.state.damages} />
       </DamageCamera>
@@ -149,7 +154,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     color: "#000",
     padding: 10,
-    margin: 40
+    margin: 5
   },
   homeFormat: {
     flex: 1,
