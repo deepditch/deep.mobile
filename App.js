@@ -29,6 +29,21 @@ class DamageLabels extends Component {
   }
 }
 
+class UploadMSG extends Component {
+  render() {
+    if(!this.props.msg)
+     return null;
+
+    return (
+      <>
+        {this.props.msg &&
+            <Text style={[styles.capture, this.props.status == "ok" ? styles.ok : styles.err]}>{this.props.msg}</Text>
+          }
+      </>
+    );
+  }
+}
+
 class CameraScreen extends Component {
   static navigationOptions = {
     title: "Camera"
@@ -64,8 +79,23 @@ class CameraScreen extends Component {
   }
 
   _onDamageDetected(event) {
+    clearTimeout(this.damagesTimeout)
     this.setState({ damages: event.damages });
-    console.log(this.state.damages, this.state, event.damages);
+    this.damagesTimeout = setTimeout(function() {
+      this.setState({ damages: [] })
+    }.bind(this), 3000)
+  }
+
+  _onDamageReported(event) {
+    clearTimeout(this.statusTimeout)
+    if(event.status = 201) {
+      this.setState({ status: "ok", msg: "Upload Successful"})
+    } else {
+      this.setState({ status: "err", msg: "Failed To Upload" })
+    }
+    this.statusTimeout = setTimeout(function() {
+      this.setState({ msg: "" })
+    }.bind(this), 3000)
   }
 
   render() {
@@ -81,8 +111,10 @@ class CameraScreen extends Component {
       <DamageCamera
         style={styles.preview}
         onDamageDetected={this._onDamageDetected.bind(this)}
+        onDamageReported={this._onDamageReported.bind(this)}
         authToken={this.state.token}
       >
+        <UploadMSG msg={this.state.msg} status={this.state.status} />
         <DamageLabels labels={this.state.damages} />
       </DamageCamera>
     );
@@ -155,6 +187,13 @@ const styles = StyleSheet.create({
     color: "#000",
     padding: 10,
     margin: 5
+  },
+  ok: {
+    backgroundColor: "#00ff00"
+  },
+  err: {
+    backgroundColor: "#ff0000",
+    color: "#fff"
   },
   homeFormat: {
     flex: 1,

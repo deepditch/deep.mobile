@@ -1,7 +1,5 @@
 //
-//  ViewController.swift
-//  RealTimeCamera
-//  A view that dispalays camera frames in real time
+//  DamageCameraView.swift
 //
 //  Created by Drake Svoboda on 9/28/18.
 //  Copyright © 2018 Drake Svoboda. All rights reserved.
@@ -12,6 +10,7 @@ import CoreML
 
 class DamageCameraView: UIImageView {
   var onDamageDetected: RCTDirectEventBlock?
+  var onDamageReported: RCTDirectEventBlock?
   var frameExtractor: FrameExtractor!
   var damageDetector: DamageDetector!
   var damageService: DamageService!
@@ -26,7 +25,7 @@ class DamageCameraView: UIImageView {
     damageDetector = DamageDetector()
     damageService = DamageService()
     
-    throttler = Throttler(seconds: 0.25)
+    throttler = Throttler(seconds: 10) // Damage detection is run a maximum of 4 times per second
     
     frameExtractor.frameCaptured = { [unowned self] (image: UIImage?) in
       self.image = image // Update the UI
@@ -37,12 +36,30 @@ class DamageCameraView: UIImageView {
     }
     
     damageDetector.damageDetected = { [unowned self] (image: UIImage, types: [String], lat: Double, lng: Double) in
-      self.damageService.report(image: image, types: types, latitude: lat, longitude: lng)
+      self.damageService.maybeReport(image: image, types: types, latitude: lat, longitude: lng) { result in
+        if(self.onDamageReported != nil) {
+          switch result {
+          case let .success(response):
+            let data = response.data // Data, your JSON response is probably in here!
+            let statusCode = response.statusCode // Int - 200, 401, 500, etc
+            
+            self.onDamageReported!([
+              "data": data,
+              "status": statusCode
+              ]);
+            
+          case let .failure(error): // Server did not recieve request, or server did not send response
+            self.onDamageReported!([
+              "error": "Failed to Make Request"
+              ]);
+          }
+        }
+      }
       
       if(self.onDamageDetected != nil) {
         self.onDamageDetected!([
           "damages": types
-        ]);
+          ]);
       }
     }
   }
@@ -50,6 +67,11 @@ class DamageCameraView: UIImageView {
   @objc(setOnDamageDetected:)
   public func setOnDamageDetected(callback: @escaping RCTDirectEventBlock) {
     onDamageDetected = callback
+  }
+  
+  @objc(setOnDamageReported:)
+  public func setOnDamageReported(callback: @escaping RCTDirectEventBlock) {
+    onDamageReported = callback
   }
   
   @objc(setAuthToken:)

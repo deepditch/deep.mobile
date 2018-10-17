@@ -60,7 +60,7 @@ class DamageDetector: NSObject, CLLocationManagerDelegate {
       location = manager.location
       return
     }
-    guard manager.location!.distance(from: location!) > 10 else { return } // Have we moved 10 meters
+    guard manager.location!.distance(from: location!) > 1 else { return } // Have we moved a meter
     
     location = manager.location!
     hasMoved = true
@@ -122,7 +122,7 @@ class DamageDetector: NSObject, CLLocationManagerDelegate {
     DispatchQueue.main.async { [unowned self] in
       defer { // New frame will be processed when a new image is recieved, the location is updated, and the device is moving
         self.currentImage = nil
-        self.hasMoved = false
+      //  self.hasMoved = false
       }
       
       guard let results = request.results else {

@@ -31,7 +31,7 @@ class DamageService {
     self.damageProvider = MoyaProvider(endpointClosure: authMiddleware)
   }
   
-  func report(image: UIImage, types: [String], latitude: Double, longitude: Double) {
+  func maybeReport(image: UIImage, types: [String], latitude: Double, longitude: Double, completion: @escaping Completion) {
     guard damageProvider != nil else { return }
     let sizedImage = imageWithImage(image: image, scaledToSize: CGSize(width: 300, height: 300))
     self.damageProvider!.request(.report(sizedImage, latitude, longitude)) { result in
@@ -44,6 +44,8 @@ class DamageService {
       case let .failure(error): // Server did not recieve request, or server did not send response
         print(error)
       }
+      
+      completion(result)
     }
   }
 }

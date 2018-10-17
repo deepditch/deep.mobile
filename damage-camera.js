@@ -11,10 +11,18 @@ export default class DamageCamera extends Component {
     this.props.onDamageDetected(event.nativeEvent);
   };
 
+  _onDamageReported = event => {
+    if (!this.props.onDamageReported) {
+      return;
+    }
+    this.props.onDamageReported(event.nativeEvent);
+  };
+
   render() {
     const nativeProps = {
       ...this.props,
-      onDamageDetected: this._onDamageDetected
+      onDamageDetected: this._onDamageDetected,
+      onDamageReported: this._onDamageReported
     };
     return <DamageCameraView {...nativeProps} />;
   }
