@@ -10,7 +10,11 @@ import {
 import loginPage from "./source/login/loginPage"; //import the js files you create here.
 import registrationPage from "./source/login/registrationPage"; //import the js files you create here.
 
-import { StackNavigator } from "react-navigation";
+import {
+  StackNavigator,
+  DrawerNavigator,
+} from "react-navigation";
+
 import Camera from "react-native-camera";
 import DamageService from "./source/services/damage.service";
 import { ButtonStyle } from "./source/styles/button.style";
@@ -81,9 +85,6 @@ class CameraScreen extends Component {
               );
             });
 
-          //==Sends the alert to the user from here.
-          // I assumed this was the right place to put it since the only way for the
-          // app to reach this place is if the data was successfully sent.
         }
       })
       .catch(err => console.error(err));
@@ -94,12 +95,44 @@ class CameraScreen extends Component {
 //Basically using stacknavigatior to create
 //the pages to navigate from one page to another.
 //=============//
+const cameraScreen = StackNavigator({
+  Camera: { screen: CameraScreen }
+}
+)
+
+//const registrationpage = StackNavigator({
+ // Screen1: { screen: registrationPage }
+
+//})
+
+const DrawerStack = DrawerNavigator({
+  Camera: { screen: cameraScreen },
+  //Screen1: { screen: registrationpage },
+
+})
+
+const LoginStack = StackNavigator({
+  Home: { screen: loginPage },
+  Register: { screen: registrationPage },
+})
+
 
 const NavApp = StackNavigator({
-  Home: { screen: loginPage },                  //calls the loginPage from loginPage.js.
-  Camera: { screen: CameraScreen },             //calls the camera screen from above, should be moved to its own .js later.
-  Register:{ screen: registrationPage},              //Calls the registrationPage.
-});
+  //Home: { screen: loginPage },                  //calls the loginPage from loginPage.js.
+  //Camera: { screen: CameraScreen },             //calls the camera screen from above, should be moved to its own .js later.
+  //Register: { screen: registrationPage },              //Calls the registrationPage.
+  loginStack: { screen: LoginStack },
+  drawerStack: { screen: DrawerStack },
+}, {
+    headerMode: 'none',
+    initialRouteName: 'loginStack',
+    navigationOptions: {
+      gesturesEnabled: false
+    }
+  }
+
+);
+
 
 //===================Android Permissions=====================================//
 /*

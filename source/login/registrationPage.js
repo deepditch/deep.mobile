@@ -95,7 +95,8 @@ export default class registrationPage extends Component {
        // alert(this.state.email);
     //    alert(this.state.password);
        // alert(this.state.confirmPassword);
-        
+        if (this.state.password===this.state.confirmPassword)
+        {
         new AuthService()
             .register(this.state.name, this.state.email, this.state.password, this.state.confirmPassword)
             .then(response => {
@@ -106,6 +107,10 @@ export default class registrationPage extends Component {
                     this.setState({ alert: "Registration Failure: " + error.message });
                 else this.setState({ alert: "Registration Failure" });
             });
+        }
+        else {
+            alert("Password doesn't match!");
+        }
     }
 }
 
