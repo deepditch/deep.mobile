@@ -88,7 +88,8 @@ class CameraScreen extends Component {
 
   _onDamageReported(event) {
     clearTimeout(this.statusTimeout)
-    if(event.status = 201) {
+    console.log(event)
+    if(event.status == 201) {
       this.setState({ status: "ok", msg: "Upload Successful"})
     } else {
       this.setState({ status: "err", msg: "Failed To Upload" })

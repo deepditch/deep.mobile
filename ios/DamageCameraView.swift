@@ -25,7 +25,7 @@ class DamageCameraView: UIImageView {
     damageDetector = DamageDetector()
     damageService = DamageService()
     
-    throttler = Throttler(seconds: 10) // Damage detection is run a maximum of 4 times per second
+    throttler = Throttler(seconds: 0.25) // Damage detection is run a maximum of 4 times per second
     
     frameExtractor.frameCaptured = { [unowned self] (image: UIImage?) in
       self.image = image // Update the UI
@@ -50,7 +50,7 @@ class DamageCameraView: UIImageView {
             
           case let .failure(error): // Server did not recieve request, or server did not send response
             self.onDamageReported!([
-              "error": "Failed to Make Request"
+              "status": "err"
               ]);
           }
         }

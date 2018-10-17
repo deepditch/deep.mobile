@@ -122,7 +122,7 @@ class DamageDetector: NSObject, CLLocationManagerDelegate {
     DispatchQueue.main.async { [unowned self] in
       defer { // New frame will be processed when a new image is recieved, the location is updated, and the device is moving
         self.currentImage = nil
-      //  self.hasMoved = false
+        self.hasMoved = false
       }
       
       guard let results = request.results else {
