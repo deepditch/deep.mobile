@@ -19,7 +19,6 @@ class FrameExtractor : NSObject, AVCaptureVideoDataOutputSampleBufferDelegate {
   private let context = CIContext()
   var frameCaptured: ((UIImage?) -> Void)?
   
-  
   override init() {
     print("init")
     super.init()

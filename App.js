@@ -5,7 +5,8 @@ import {
   Text,
   TouchableOpacity,
   Alert,
-  Platform
+  Platform,
+  View
 } from "react-native";
 import loginPage from "./source/login/loginPage"; //import the js files you create here.
 import { StackNavigator } from "react-navigation";
@@ -13,15 +14,33 @@ import DamageCamera from "./damage-camera";
 import DamageService from "./source/services/damage.service";
 import { ButtonStyle } from "./source/styles/button.style";
 import { PermissionsAndroid } from "react-native";
+import AuthService from "./source/services/auth.service";
 
 class DamageLabels extends Component {
   render() {
     return (
       <>
         {this.props.labels &&
-          this.props.labels.map(label => <Text style={styles.capture}>{label}</Text>)}
+          this.props.labels.map(label => (
+            <Text style={styles.capture}>{label}</Text>
+          ))}
       </>
-    )
+    );
+  }
+}
+
+class UploadMSG extends Component {
+  render() {
+    if(!this.props.msg)
+     return null;
+
+    return (
+      <>
+        {this.props.msg &&
+            <Text style={[styles.capture, this.props.status == "ok" ? styles.ok : styles.err]}>{this.props.msg}</Text>
+          }
+      </>
+    );
   }
 }
 
@@ -30,11 +49,13 @@ class CameraScreen extends Component {
     title: "Camera"
   };
 
+  state = {
+    token: null,
+    damages: []
+  };
+
   constructor(props) {
     super(props);
-    this.state = {
-      damages: []
-    };
   }
 
   componentDidMount() {
@@ -44,19 +65,57 @@ class CameraScreen extends Component {
     } else {
       requestPermissions();
     }
+
+    new AuthService()
+      .getToken()
+      .then(token => {
+        this.setState({
+          token: token
+        });
+      })
+      .catch(err => {
+        console.log(err);
+      });
   }
 
   _onDamageDetected(event) {
-    console.log(event);
-    this.setState({ damages: event.damages })
+    clearTimeout(this.damagesTimeout)
+    this.setState({ damages: event.damages });
+    this.damagesTimeout = setTimeout(function() {
+      this.setState({ damages: [] })
+    }.bind(this), 3000)
+  }
+
+  _onDamageReported(event) {
+    clearTimeout(this.statusTimeout)
+    console.log(event)
+    if(event.status == 201) {
+      this.setState({ status: "ok", msg: "Upload Successful"})
+    } else {
+      this.setState({ status: "err", msg: "Failed To Upload" })
+    }
+    this.statusTimeout = setTimeout(function() {
+      this.setState({ msg: "" })
+    }.bind(this), 3000)
   }
 
   render() {
+    if (!this.state.token) {
+      return (
+        <View>
+          <Text>Loading...</Text>
+        </View>
+      );
+    }
+
     return (
       <DamageCamera
         style={styles.preview}
         onDamageDetected={this._onDamageDetected.bind(this)}
+        onDamageReported={this._onDamageReported.bind(this)}
+        authToken={this.state.token}
       >
+        <UploadMSG msg={this.state.msg} status={this.state.status} />
         <DamageLabels labels={this.state.damages} />
       </DamageCamera>
     );
@@ -69,7 +128,7 @@ class CameraScreen extends Component {
 //=============//
 
 const NavApp = StackNavigator({
-  Home: { screen: CameraScreen }, //calls the loginPage from loginPage.js.
+  Home: { screen: loginPage }, //calls the loginPage from loginPage.js.
   Camera: { screen: CameraScreen } // calls the camera screen from above, should be moved to its own .js later.
 });
 
@@ -128,7 +187,14 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     color: "#000",
     padding: 10,
-    margin: 40
+    margin: 5
+  },
+  ok: {
+    backgroundColor: "#00ff00"
+  },
+  err: {
+    backgroundColor: "#ff0000",
+    color: "#fff"
   },
   homeFormat: {
     flex: 1,
