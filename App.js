@@ -1,138 +1,39 @@
 import React, { Component } from "react";
-import {
-  StyleSheet,
-  Dimensions,
-  Text,
-  TouchableOpacity,
-  Alert,
-  Platform
-} from "react-native";
+
 import loginPage from "./source/login/loginPage"; //import the js files you create here.
 import registrationPage from "./source/login/registrationPage"; //import the js files you create here.
+import DamageCameraScreen from "./source/damage-camera-screen";
 
-import {
-  StackNavigator,
-  DrawerNavigator,
-} from "react-navigation";
+import { StackNavigator, DrawerNavigator } from "react-navigation";
 
-import Camera from "react-native-camera";
-import DamageService from "./source/services/damage.service";
-import { ButtonStyle } from "./source/styles/button.style";
 import { PermissionsAndroid } from "react-native";
 
-class CameraScreen extends Component {
-  static navigationOptions = {
-    title: "Camera"
-  };
-
-  componentDidMount() {
-    if (Platform.OS === "ios") {
-      //platform.OS detects if it ios or android and runs the respective permissions
-      navigator.geolocation.requestAuthorization(); //so that both ios and android receives the right permissions and both work at the same time.
-    } else {
-      requestPermissions();
-    }
-  }
-
-  render() {
-    return (
-      <Camera
-        ref={cam => {
-          this.camera = cam;
-        }}
-        style={styles.preview}
-        aspect={Camera.constants.Aspect.fill}
-        captureTarget={Camera.constants.CaptureTarget.disk}
-      >
-        <TouchableOpacity
-          onPress={this.takePicture.bind(this)}
-          // onPress={this.AlertUser.bind(this)}
-          style={[
-            ButtonStyle.button,
-            ButtonStyle.buttonCenter,
-            ButtonStyle.buttonWhite
-          ]}
-        >
-          <Text style={[ButtonStyle.buttonText, ButtonStyle.buttonWhiteText]}>
-            CAPTURE
-          </Text>
-        </TouchableOpacity>
-      </Camera>
-    );
-  }
-
-  async takePicture() {
-    this.camera
-      .capture()
-      .then(data => {
-        if (data.path) {
-          new DamageService()
-            .reportDamage(data.path)
-            .then(response => {
-              Alert.alert(
-                "Congrats",
-                "Picture was uploaded successfully.",
-                [{ text: "OK", onPress: () => console.log("OK") }],
-                { cancelable: false }
-              );
-            })
-            .catch(err => {
-              Alert.alert(
-                "Sorry",
-                "Your picture failed to upload.",
-                [{ text: "OK", onPress: () => console.log("OK") }],
-                { cancelable: false }
-              );
-            });
-
-        }
-      })
-      .catch(err => console.error(err));
-  }
-}
-
-//=============//
-//Basically using stacknavigatior to create
-//the pages to navigate from one page to another.
-//=============//
 const cameraScreen = StackNavigator({
-  Camera: { screen: CameraScreen }
-}
-)
-
-//const registrationpage = StackNavigator({
- // Screen1: { screen: registrationPage }
-
-//})
+  Camera: { screen: DamageCameraScreen }
+});
 
 const DrawerStack = DrawerNavigator({
-  Camera: { screen: cameraScreen },
-  //Screen1: { screen: registrationpage },
-
-})
+  Camera: { screen: cameraScreen }
+});
 
 const LoginStack = StackNavigator({
   Home: { screen: loginPage },
-  Register: { screen: registrationPage },
-})
+  Register: { screen: registrationPage }
+});
 
-
-const NavApp = StackNavigator({
-  //Home: { screen: loginPage },                  //calls the loginPage from loginPage.js.
-  //Camera: { screen: CameraScreen },             //calls the camera screen from above, should be moved to its own .js later.
-  //Register: { screen: registrationPage },              //Calls the registrationPage.
-  loginStack: { screen: LoginStack },
-  drawerStack: { screen: DrawerStack },
-}, {
-    headerMode: 'none',
-    initialRouteName: 'loginStack',
+const NavApp = StackNavigator(
+  {
+    loginStack: { screen: LoginStack },
+    drawerStack: { screen: DrawerStack }
+  },
+  {
+    headerMode: "none",
+    initialRouteName: "loginStack",
     navigationOptions: {
       gesturesEnabled: false
     }
   }
-
 );
-
 
 //===================Android Permissions=====================================//
 /*
@@ -142,7 +43,6 @@ const NavApp = StackNavigator({
 //that it detects the proper os and runs their respective version of the code for permissions.
 // function below can be moved to its own js file but I will keep it here for now.
 */
-
 async function requestPermissions() {
   try {
     const granted = await PermissionsAndroid.requestMultiplePermissions([
@@ -175,27 +75,3 @@ export default class App extends Component {
   }
 }
 
-const styles = StyleSheet.create({
-  preview: {
-    flex: 1,
-    justifyContent: "flex-end",
-    alignItems: "center",
-    height: Dimensions.get("window").height,
-    width: Dimensions.get("window").width
-  },
-  capture: {
-    flex: 0,
-    backgroundColor: "#ffffff",
-    borderRadius: 5,
-    color: "#000",
-    padding: 10,
-    margin: 40
-  },
-  homeFormat: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    height: Dimensions.get("window").height,
-    width: Dimensions.get("window").width
-  }
-});

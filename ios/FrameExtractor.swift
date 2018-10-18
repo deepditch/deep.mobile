@@ -2,24 +2,22 @@
 //  FrameExtractor.swift
 //  Uses the devices camera and makes real time frames availible for processing
 //
-//  https://medium.com/ios-os-x-development/ios-camera-frames-extraction-d2c0f80ed05a
 //
 
 import AVFoundation
 import UIKit
-
-protocol FrameExtractorDelegate: class {
-  func captured(image: UIImage)
-}
+import CoreML
+import Vision
+import ImageIO
 
 class FrameExtractor : NSObject, AVCaptureVideoDataOutputSampleBufferDelegate {
   private let captureSession = AVCaptureSession()
   private let sessionQueue = DispatchQueue(label: "session queue")
   private var cameraPermissionGranted = false
-  private let position = AVCaptureDevice.Position.front
+  private let position = AVCaptureDevice.Position.back
   private let quality = AVCaptureSession.Preset.medium
-  weak var delegate: FrameExtractorDelegate?
   private let context = CIContext()
+  var frameCaptured: ((UIImage?) -> Void)?
   
   override init() {
     print("init")
@@ -62,7 +60,7 @@ class FrameExtractor : NSObject, AVCaptureVideoDataOutputSampleBufferDelegate {
     guard captureSession.canAddInput(captureDeviceInput) else { return }
     captureSession.addInput(captureDeviceInput)
     let videoOutput = AVCaptureVideoDataOutput()
-    videoOutput.setSampleBufferDelegate(self, queue: DispatchQueue(label: "sample buffer")) // Self is an AVCaptureVideoDataOutputSampleBufferDelegate, frames are processed on a different queue to avoid pile up
+    videoOutput.setSampleBufferDelegate(self, queue: DispatchQueue(label: "sample buffer"))
     guard captureSession.canAddOutput(videoOutput) else { return }
     captureSession.addOutput(videoOutput)
     guard let connection = videoOutput.connection(with: AVFoundation.AVMediaType.video) else { return }
@@ -82,8 +80,8 @@ class FrameExtractor : NSObject, AVCaptureVideoDataOutputSampleBufferDelegate {
   func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
     guard let uiImage = imageFromSampleBuffer(sampleBuffer: sampleBuffer) else { return }
     
-    DispatchQueue.main.async { [unowned self] in // Image is sent to the delegate on the main thread. UI can be updated right away
-      self.delegate?.captured(image: uiImage)
+    DispatchQueue.main.async { [unowned self] in // Image is sent to the delegate on the main thread.
+      self.frameCaptured?(uiImage)
     }
   }
 }
