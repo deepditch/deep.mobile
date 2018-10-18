@@ -9,15 +9,33 @@ import {
 } from "react-native";
 import loginPage from "./source/login/loginPage"; //import the js files you create here.
 import { StackNavigator } from "react-navigation";
-import Camera from "react-native-camera";
+import DamageCamera from "./damage-camera";
 import DamageService from "./source/services/damage.service";
 import { ButtonStyle } from "./source/styles/button.style";
 import { PermissionsAndroid } from "react-native";
+
+class DamageLabels extends Component {
+  render() {
+    return (
+      <>
+        {this.props.labels &&
+          this.props.labels.map(label => <Text style={styles.capture}>{label}</Text>)}
+      </>
+    )
+  }
+}
 
 class CameraScreen extends Component {
   static navigationOptions = {
     title: "Camera"
   };
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      damages: []
+    };
+  }
 
   componentDidMount() {
     if (Platform.OS === "ios") {
@@ -28,63 +46,20 @@ class CameraScreen extends Component {
     }
   }
 
-  render() {
-    return (
-      <Camera
-        ref={cam => {
-          this.camera = cam;
-        }}
-        style={styles.preview}
-        aspect={Camera.constants.Aspect.fill}
-        captureTarget={Camera.constants.CaptureTarget.disk}
-      >
-        <TouchableOpacity
-          onPress={this.takePicture.bind(this)}
-          // onPress={this.AlertUser.bind(this)}
-          style={[
-            ButtonStyle.button,
-            ButtonStyle.buttonCenter,
-            ButtonStyle.buttonWhite
-          ]}
-        >
-          <Text style={[ButtonStyle.buttonText, ButtonStyle.buttonWhiteText]}>
-            CAPTURE
-          </Text>
-        </TouchableOpacity>
-      </Camera>
-    );
+  _onDamageDetected(event) {
+    console.log(event);
+    this.setState({ damages: event.damages })
   }
 
-  async takePicture() {
-    this.camera
-      .capture()
-      .then(data => {
-        if (data.path) {
-          new DamageService()
-            .reportDamage(data.path)
-            .then(response => {
-              Alert.alert(
-                "Congrats",
-                "Picture was uploaded successfully.",
-                [{ text: "OK", onPress: () => console.log("OK") }],
-                { cancelable: false }
-              );
-            })
-            .catch(err => {
-              Alert.alert(
-                "Sorry",
-                "Your picture failed to upload.",
-                [{ text: "OK", onPress: () => console.log("OK") }],
-                { cancelable: false }
-              );
-            });
-
-          //==Sends the alert to the user from here.
-          // I assumed this was the right place to put it since the only way for the
-          // app to reach this place is if the data was successfully sent.
-        }
-      })
-      .catch(err => console.error(err));
+  render() {
+    return (
+      <DamageCamera
+        style={styles.preview}
+        onDamageDetected={this._onDamageDetected.bind(this)}
+      >
+        <DamageLabels labels={this.state.damages} />
+      </DamageCamera>
+    );
   }
 }
 
@@ -94,7 +69,7 @@ class CameraScreen extends Component {
 //=============//
 
 const NavApp = StackNavigator({
-  Home: { screen: loginPage }, //calls the loginPage from loginPage.js.
+  Home: { screen: CameraScreen }, //calls the loginPage from loginPage.js.
   Camera: { screen: CameraScreen } // calls the camera screen from above, should be moved to its own .js later.
 });
 
