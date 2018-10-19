@@ -8,9 +8,9 @@ class DamageLabels extends Component {
   render() {
     return (
       <>
-        {this.props.labels &&
-          this.props.labels.map(label => (
-            <Text style={styles.pop}>{label}</Text>
+        {this.props.damages &&
+          this.props.damages.map(damage => (
+            <Text style={styles.pop}>{damage.type}: {damage.description} ({damage.confidence})</Text>
           ))}
       </>
     );
@@ -116,7 +116,7 @@ export default class DamageCameraScreen extends Component {
         authToken={this.state.token}
       >
         <UploadMSG msg={this.state.msg} status={this.state.status} />
-        <DamageLabels labels={this.state.damages} />
+        <DamageLabels damages={this.state.damages} />
       </DamageCamera>
     );
   }

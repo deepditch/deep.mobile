@@ -12,36 +12,24 @@ import Vision
 import ARKit
 import CoreLocation
 
-extension CGImagePropertyOrientation {
-  /**
-   Converts a `UIImageOrientation` to a corresponding
-   `CGImagePropertyOrientation`. The cases for each
-   orientation are represented by different raw values.
+struct Damage: Codable {
+  var type: String
+  var description: String
+  var confidence: Double
+}
 
-   - Tag: ConvertOrientation
-   */
-  init(_ orientation: UIImage.Orientation) {
-    switch orientation {
-    case .up: self = .up
-    case .upMirrored: self = .upMirrored
-    case .down: self = .down
-    case .downMirrored: self = .downMirrored
-    case .left: self = .left
-    case .leftMirrored: self = .leftMirrored
-    case .right: self = .right
-    case .rightMirrored: self = .rightMirrored
-    }
+extension Damage {
+  var dictionary: [String: Any]? {
+    guard let data = try? JSONEncoder().encode(self) else { return nil }
+    return (try? JSONSerialization.jsonObject(with: data, options: .allowFragments)).flatMap { $0 as? [String: Any] }
   }
 }
 
 class DamageDetector: NSObject, CLLocationManagerDelegate {
-  var damageDetected: ((UIImage, [String], Double, Double) -> Void)?
-  
+  var damageDetected: ((_ image: UIImage, _ damages: [Damage], _ coords: CLLocationCoordinate2D) -> Void)?
   let manager = CLLocationManager()
-  var hasMoved: Bool = true // First frame sent is processed
+  var hasMoved: Bool = false
   var location: CLLocation?
-  var lat: Double?
-  var lng: Double?
   
   override init() {
     super.init()
@@ -54,16 +42,13 @@ class DamageDetector: NSObject, CLLocationManagerDelegate {
   }
   
   func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-    guard currentImage == nil else { return } // If an image is being processed, don't update the location
-    guard manager.location != nil else { return }
-    guard location != nil else {
-      location = manager.location
-      return
+    guard currentImage == nil, manager.location != nil else { return } // If an image is being processed, don't update the location
+
+    if location == nil || manager.location!.distance(from: location!) > 1 {
+      // We have moved a meter
+      location = manager.location!
+      hasMoved = true
     }
-    guard manager.location!.distance(from: location!) > 1 else { return } // Have we moved a meter
-    
-    location = manager.location!
-    hasMoved = true
   }
   
   func locationManager(manager: CLLocationManager, didFailWithError error: NSError) {
@@ -90,23 +75,24 @@ class DamageDetector: NSObject, CLLocationManagerDelegate {
   private var currentImage: UIImage?
   
   // Queue for dispatching vision classification requests
-  private let visionQueue = DispatchQueue(label: "serial vision queue")
+  private let visionQueue = DispatchQueue(label: "com.deep.ditch.visionqueue")
   
-  // Detect road damage in an image
+  // Detect road damage in an image. image is dropped if the device has not moved or an image is currently being processed
   func maybeDetect(for image: UIImage) {
-    guard currentImage == nil, hasMoved else { // Disregard requests if the previous image is not finished or the device is stationary
-      return
-    }
-    
+    guard currentImage == nil, hasMoved else { return } // Drop requests if the previous image is not finished or the device is stationary
     self.currentImage = image
     processCurrentImage()
   }
   
   func processCurrentImage() {
     let orientation = CGImagePropertyOrientation(self.currentImage!.imageOrientation)
-    guard let ciImage = CIImage(image: self.currentImage!) else { fatalError("Unable to create \(CIImage.self) from \(String(describing: self.currentImage)).") }
+    
+    guard let ciImage = CIImage(image: self.currentImage!) else {
+      fatalError("Unable to create \(CIImage.self) from \(String(describing: self.currentImage)).")
+    }
     
     let handler = VNImageRequestHandler(ciImage: ciImage, orientation: orientation)
+    
     visionQueue.async { // Image processing happens in a separate queue
       do {
         try handler.perform([self.classificationRequest])
@@ -120,9 +106,15 @@ class DamageDetector: NSObject, CLLocationManagerDelegate {
   /// - Tag: ProcessClassifications
   func processClassifications(for request: VNRequest, error: Error?) {
     DispatchQueue.main.async { [unowned self] in
-      defer { // New frame will be processed when a new image is recieved, the location is updated, and the device is moving
+      defer { // Executed after function return.
+        // New frame will be processed when a new image is recieved and the device has moved
         self.currentImage = nil
         self.hasMoved = false
+      }
+      
+      guard self.currentImage != nil, self.location != nil else {
+        print("The image or location was lost somehow")
+        return
       }
       
       guard let results = request.results else {
@@ -131,54 +123,68 @@ class DamageDetector: NSObject, CLLocationManagerDelegate {
       }
 
       let classifications = results as! [VNCoreMLFeatureValueObservation]
-
-      let obs : VNCoreMLFeatureValueObservation = (classifications.first)!
-      let m: MLMultiArray = obs.featureValue.multiArrayValue!
-
-      let types = self.mapOutputs(vec: m)
+      let obs: VNCoreMLFeatureValueObservation = (classifications.first)!
+      let outputs: MLMultiArray = obs.featureValue.multiArrayValue!
+      let damages: [Damage] = self.mapOutputsToDamages(for: outputs)
       
-      if types.count > 0, self.currentImage != nil, self.location != nil { // Damage has been detected in the image
-        self.damageDetected?(self.currentImage!, types, self.location!.coordinate.latitude, self.location!.coordinate.longitude)
+      if damages.count > 0 { // Damage has been detected in the image
+        self.damageDetected?(self.currentImage!, damages, self.location!.coordinate)
       }
     }
   }
   
-  func mapOutputs(vec: MLMultiArray) -> [String] {
-    var arr = [String]()
+  func mapOutputsToDamages(for outputs: MLMultiArray) -> [Damage] {
+    var damages = [Damage]()
     
-    if(vec[0].doubleValue > 0.5) {
-      arr.append("D00: Crack")
+    if(outputs[0].doubleValue > 0.5) {
+      damages.append(Damage(type: "D00",
+                        description: "Crack",
+                        confidence: outputs[0].doubleValue))
     }
     
-    if(vec[1].doubleValue > 0.5) {
-      arr.append("D01: Crack")
+    if(outputs[1].doubleValue > 0.5) {
+      damages.append(Damage(type: "D01",
+                        description: "Crack",
+                        confidence: outputs[1].doubleValue))
     }
     
-    if(vec[2].doubleValue > 0.5) {
-      arr.append("D10: Crack")
+    if(outputs[2].doubleValue > 0.5) {
+      damages.append(Damage(type: "D10",
+                        description:"Crack",
+                        confidence: outputs[2].doubleValue))
     }
     
-    if(vec[3].doubleValue > 0.5) {
-      arr.append("D11: Crack")
+    if(outputs[3].doubleValue > 0.5) {
+      damages.append(Damage(type: "D11",
+                        description: "Crack",
+                        confidence: outputs[3].doubleValue))
     }
     
-    if(vec[4].doubleValue > 0.5) {
-      arr.append("D20: Alligator Crack")
+    if(outputs[4].doubleValue > 0.5) {
+      damages.append(Damage(type: "D20",
+                        description: "Alligator Crack",
+                        confidence: outputs[4].doubleValue))
     }
     
-    if(vec[5].doubleValue > 0.5) {
-      arr.append("D40: Pothole")
+    if(outputs[5].doubleValue > 0.5) {
+      damages.append(Damage(type: "D40",
+                        description: "Pothole",
+                        confidence: outputs[5].doubleValue))
     }
     
-    if(vec[6].doubleValue > 0.5) {
-      arr.append("D43: Line Blur")
+    if(outputs[6].doubleValue > 0.5) {
+      damages.append(Damage(type: "D43",
+                        description: "Line Blur",
+                        confidence: outputs[6].doubleValue))
     }
     
-    if(vec[7].doubleValue > 0.5) {
-      arr.append("D44: Crosswalk Blur")
+    if(outputs[7].doubleValue > 0.5) {
+      damages.append(Damage(type: "D44",
+                        description: "Crosswalk Blur",
+                        confidence: outputs[7].doubleValue))
     }
     
-    return arr
+    return damages
   }
 }
 
