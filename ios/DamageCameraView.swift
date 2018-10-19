@@ -7,6 +7,7 @@
 
 import UIKit
 import CoreML
+import CoreLocation
 
 class DamageCameraView: UIImageView {
   var onDamageDetected: RCTDirectEventBlock?
@@ -24,19 +25,18 @@ class DamageCameraView: UIImageView {
     frameExtractor = FrameExtractor()
     damageDetector = DamageDetector()
     damageService = DamageService()
-    
-    throttler = Throttler(seconds: 0.25) // Damage detection is run a maximum of 4 times per second
+    throttler = Throttler(seconds: 0.25, queue: DispatchQueue.global(qos: .userInitiated)) // Damage detection is run a maximum of 4 times per second
     
     frameExtractor.frameCaptured = { [unowned self] (image: UIImage?) in
       self.image = image // Update the UI
       
-      self.throttler.throttle(block: { [unowned self] in
+      self.throttler.throttle { [unowned self] in
         self.damageDetector.maybeDetect(for: image!)
-      }, queue: DispatchQueue.global(qos: .userInitiated))
+      }
     }
     
-    damageDetector.damageDetected = { [unowned self] (image: UIImage, types: [String], lat: Double, lng: Double) in
-      self.damageService.maybeReport(image: image, types: types, latitude: lat, longitude: lng) { result in
+    damageDetector.damageDetected = { [unowned self] (image: UIImage, damages: [Damage], coords: CLLocationCoordinate2D) in
+      self.damageService.maybeReport(image: image, damages: damages, latitude: coords.latitude, longitude: coords.longitude) { result in
         if(self.onDamageReported != nil) {
           switch result {
           case let .success(response):
@@ -57,24 +57,28 @@ class DamageCameraView: UIImageView {
       }
       
       if(self.onDamageDetected != nil) {
-        self.onDamageDetected!([
-          "damages": types
-          ]);
+        var list = [[AnyHashable: Any]]()
+        
+        for damage in damages {
+          list.append(damage.dictionary!)
+        }
+        
+        self.onDamageDetected!(["damages": list]);
       }
     }
   }
   
-  @objc(setOnDamageDetected:)
+  @objc(setOnDamageDetected:) // For react native to set the damage detected callback
   public func setOnDamageDetected(callback: @escaping RCTDirectEventBlock) {
     onDamageDetected = callback
   }
   
-  @objc(setOnDamageReported:)
+  @objc(setOnDamageReported:) // For react native to set the damage reported callback
   public func setOnDamageReported(callback: @escaping RCTDirectEventBlock) {
     onDamageReported = callback
   }
   
-  @objc(setAuthToken:)
+  @objc(setAuthToken:) // For react native to set the auth token
   public func setAuthToken(token: NSString) {
     damageService.setAuthToken(with: token as String)
   }

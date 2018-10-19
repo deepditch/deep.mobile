@@ -40,6 +40,7 @@
 		832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 832341B51AAA6A8300B99B32 /* libRCTText.a */; };
 		9B0BCCFF216E85E4009D2503 /* FrameExtractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B0BCCFE216E85E4009D2503 /* FrameExtractor.swift */; };
 		9B0BCD36216E92E3009D2503 /* DamageHTTPService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B0BCD35216E92E3009D2503 /* DamageHTTPService.swift */; };
+		9B238AAA217A371000E7AAC3 /* CGImagePropertyOrientation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B238AA9217A371000E7AAC3 /* CGImagePropertyOrientation.swift */; };
 		9B814608216FDFB900590FCB /* DamageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B814607216FDFB900590FCB /* DamageService.swift */; };
 		ADBDB9381DFEBF1600ED6528 /* libRCTBlob.a in Frameworks */ = {isa = PBXBuildFile; fileRef = ADBDB9271DFEBF0700ED6528 /* libRCTBlob.a */; };
 		B957B261215EB8DE00FF2999 /* DamageCameraView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B957B260215EB8DE00FF2999 /* DamageCameraView.swift */; };
@@ -364,6 +365,7 @@
 		832341B01AAA6A8300B99B32 /* RCTText.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTText.xcodeproj; path = "../node_modules/react-native/Libraries/Text/RCTText.xcodeproj"; sourceTree = "<group>"; };
 		9B0BCCFE216E85E4009D2503 /* FrameExtractor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FrameExtractor.swift; sourceTree = "<group>"; };
 		9B0BCD35216E92E3009D2503 /* DamageHTTPService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DamageHTTPService.swift; sourceTree = "<group>"; };
+		9B238AA9217A371000E7AAC3 /* CGImagePropertyOrientation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGImagePropertyOrientation.swift; sourceTree = "<group>"; };
 		9B814607216FDFB900590FCB /* DamageService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DamageService.swift; sourceTree = "<group>"; };
 		ADBDB91F1DFEBF0600ED6528 /* RCTBlob.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTBlob.xcodeproj; path = "../node_modules/react-native/Libraries/Blob/RCTBlob.xcodeproj"; sourceTree = "<group>"; };
 		B957B25D215EB81B00FF2999 /* deep.mobile-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "deep.mobile-Bridging-Header.h"; sourceTree = "<group>"; };
@@ -659,6 +661,7 @@
 			children = (
 				B97BD71721682F4C0043C3DC /* RoadDamageModel.mlmodel */,
 				B97BD71121681D700043C3DC /* DamageDetector.swift */,
+				9B238AA9217A371000E7AAC3 /* CGImagePropertyOrientation.swift */,
 			);
 			name = DamageDetector;
 			sourceTree = "<group>";
@@ -1272,6 +1275,7 @@
 				B957B266215EB9FA00FF2999 /* DamageCameraViewBridge.m in Sources */,
 				9B0BCCFF216E85E4009D2503 /* FrameExtractor.swift in Sources */,
 				13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */,
+				9B238AAA217A371000E7AAC3 /* CGImagePropertyOrientation.swift in Sources */,
 				B97BD71821682F4D0043C3DC /* RoadDamageModel.mlmodel in Sources */,
 				9B814608216FDFB900590FCB /* DamageService.swift in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,

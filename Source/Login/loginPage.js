@@ -22,8 +22,8 @@ export default class loginPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      email: "test@gmail.com",
-      password: "test",
+      email: "",
+      password: "",
       alert: ""
     };
   }

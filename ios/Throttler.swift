@@ -12,15 +12,17 @@ import UIKit
 import Foundation
 
 public class Throttler {
+  private let queue: DispatchQueue!
   private var job: DispatchWorkItem = DispatchWorkItem(block: {})
   private var previousRun: Date = Date.distantPast
   private var maxInterval: Double
   
-  init(seconds: Double) {
+  init(seconds: Double, queue: DispatchQueue = DispatchQueue.global(qos: .background)) {
     self.maxInterval = seconds
+    self.queue = queue
   }
   
-  func throttle(block: @escaping () -> (), queue: DispatchQueue) {
+  func throttle(block: @escaping () -> ()) {
     job.cancel()
     job = DispatchWorkItem(){ [weak self] in
       self?.previousRun = Date()
