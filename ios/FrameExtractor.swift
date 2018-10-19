@@ -66,7 +66,7 @@ class FrameExtractor : NSObject, AVCaptureVideoDataOutputSampleBufferDelegate {
     guard let connection = videoOutput.connection(with: AVFoundation.AVMediaType.video) else { return }
     guard connection.isVideoOrientationSupported else { return }
     guard connection.isVideoMirroringSupported else { return }
-    connection.videoOrientation = .portrait
+    connection.videoOrientation = .landscapeLeft
     connection.isVideoMirrored = position == .front
   }
   
@@ -74,7 +74,23 @@ class FrameExtractor : NSObject, AVCaptureVideoDataOutputSampleBufferDelegate {
     guard let imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else { return nil }
     let ciImage = CIImage(cvPixelBuffer: imageBuffer)
     guard let cgImage = context.createCGImage(ciImage, from: ciImage.extent) else { return nil }
-    return UIImage(cgImage: cgImage)
+    let img = UIImage(cgImage: cgImage, scale: 1, orientation: exifOrientationFromDeviceOrientation())
+    return fixOrientation(for: img)
+  }
+  
+  func fixOrientation(for img: UIImage) -> UIImage {
+    if (img.imageOrientation == .up) {
+      return img
+    }
+    
+    UIGraphicsBeginImageContextWithOptions(img.size, false, img.scale)
+    let rect = CGRect(x: 0, y: 0, width: img.size.width, height: img.size.height)
+    img.draw(in: rect)
+    
+    let normalizedImage = UIGraphicsGetImageFromCurrentImageContext()!
+    UIGraphicsEndImageContext()
+    
+    return normalizedImage
   }
   
   func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
@@ -83,5 +99,24 @@ class FrameExtractor : NSObject, AVCaptureVideoDataOutputSampleBufferDelegate {
     DispatchQueue.main.async { [unowned self] in // Image is sent to the delegate on the main thread.
       self.frameCaptured?(uiImage)
     }
+  }
+  
+  public func exifOrientationFromDeviceOrientation() -> UIImage.Orientation {
+    let curDeviceOrientation = UIDevice.current.orientation
+    let exifOrientation: UIImage.Orientation
+    
+    switch curDeviceOrientation {
+    case UIDeviceOrientation.portraitUpsideDown:  // Device oriented vertically, home button on the top
+      exifOrientation = .right
+    case UIDeviceOrientation.landscapeLeft:       // Device oriented horizontally, home button on the right
+      exifOrientation = .down
+    case UIDeviceOrientation.portrait:            // Device oriented vertically, home button on the bottom
+      exifOrientation = .left
+    case UIDeviceOrientation.landscapeRight:      // Device oriented horizontally, home button on the left
+      exifOrientation = .up
+    default:
+      exifOrientation = .up
+    }
+    return exifOrientation
   }
 }
