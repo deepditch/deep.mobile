@@ -13,6 +13,7 @@ import Camera from "react-native-camera";
 import DamageService from "./source/services/damage.service";
 import { ButtonStyle } from "./source/styles/button.style";
 import { PermissionsAndroid } from "react-native";
+import mapview from "./source/mapview";
 
 class CameraScreen extends Component {
   static navigationOptions = {
@@ -49,6 +50,19 @@ class CameraScreen extends Component {
         >
           <Text style={[ButtonStyle.buttonText, ButtonStyle.buttonWhiteText]}>
             CAPTURE
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={()=> this.props.navigation.navigate('Map')}
+          // onPress={this.AlertUser.bind(this)}
+          style={[
+            ButtonStyle.button,
+            ButtonStyle.buttonCenter,
+            ButtonStyle.buttonWhite
+          ]}
+        >
+          <Text style={[ButtonStyle.buttonText, ButtonStyle.buttonWhiteText]}>
+            button 2
           </Text>
         </TouchableOpacity>
       </Camera>
@@ -95,7 +109,8 @@ class CameraScreen extends Component {
 
 const NavApp = StackNavigator({
   Home: { screen: loginPage }, //calls the loginPage from loginPage.js.
-  Camera: { screen: CameraScreen } // calls the camera screen from above, should be moved to its own .js later.
+  Camera: { screen: CameraScreen }, // calls the camera screen from above, should be moved to its own .js later.
+  Map : { screen: mapview}
 });
 
 //===================Android Permissions=====================================//

@@ -1,0 +1,58 @@
+import React, { Component } from "react";
+import {
+  StyleSheet,
+  Text,
+  View,
+  TextInput,
+  TouchableOpacity,
+  KeyboardAvoidingView
+} from "react-native";
+
+import MapView, { AnimatedRegion } from 'react-native-maps';
+
+export default class mapview extends Component {
+  static navigationOptions = {
+    title: "Map"
+  };
+
+//   constructor(props){
+//       super(props);
+
+//       this.state = {
+//           latitude : LATITUDE,
+//           longitude: LONGITUDE,
+//           routeCoordinates: [],
+//           distanceTravelled: 0,
+//           prevLatLng:{},
+//           coordinate: new AnimatedRegion({
+//               latitude: LATITUDE,
+//               longitude:LONGITUDE,
+//           })
+//       };
+//   }
+
+
+
+  render() {
+    return (
+      <MapView style={style.mappingview}
+      showsUserLocation
+      followsUserLocation 
+      />
+
+    );
+  }
+
+}
+
+const style = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 25,
+    backgroundColor: "#eee"
+  },
+  mappingview:{
+      ...StyleSheet.absoluteFillObject,
+      top:10,
+  }
+});
