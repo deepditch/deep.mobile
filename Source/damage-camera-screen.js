@@ -86,7 +86,7 @@ export default class DamageCameraScreen extends Component {
   _onDamageReported(event) {
     clearTimeout(this.statusTimeout);
     console.log(event);
-    if (event.status == 201) {
+    if (event.status == 201 && event.status == 200) {
       this.setState({ status: "ok", msg: "Upload Successful" });
     } else {
       this.setState({ status: "err", msg: "Failed To Upload" });
