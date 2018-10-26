@@ -10,11 +10,11 @@ import Foundation
 import Moya
 
 enum DamageHTTPService {
-  case report(_ image: UIImage, _ latitude: Double, _ longitude: Double)
+  case report(_ image: UIImage, _ latitude: Double, _ longitude: Double, _ damages: [Damage])
 }
 
 extension DamageHTTPService: TargetType {
-  var baseURL: URL { return URL(string: "http://216.126.231.155/api")! }
+  var baseURL: URL { return URL(string: "http://10.200.0.108:8000/api")! }
   var path: String {
     switch self {
     case .report:
@@ -31,19 +31,25 @@ extension DamageHTTPService: TargetType {
   
   var task: Task {
     switch self {
-    case let .report(image, latitude, longitude):
+    case let .report(image, latitude, longitude, damages):
       guard let imageData = image.jpegData(compressionQuality: 1.0) else { return .requestPlain }
-      let timestamp = String(Date().timeIntervalSince1970)
-      let data = [MultipartFormData(provider: .data(imageData), name: "image", fileName: timestamp + ".jpg", mimeType:"image/jpeg")]
-      let params = ["latitude": latitude, "longitude": longitude]
-      return .uploadCompositeMultipart(data, urlParameters: params)
+      
+      var list = [[AnyHashable: Any]]()
+      
+      for damage in damages {
+        list.append(damage.dictionary!)
+      }
+      
+      let params = ["location": ["latitude": latitude, "longitude": longitude], "direction": "N", "damages": list, "image": imageData.base64EncodedString()] as [String : Any]
+      
+      return .requestParameters(parameters: params, encoding: JSONEncoding.default)
     }
   }
   
   var headers: [String: String]? {
     switch self {
     case .report:
-      return ["Content-type": "multipart/form-data;"]
+      return ["Content-type": "application/json"]
     }
   }
   

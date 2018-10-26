@@ -63,7 +63,7 @@ class DamageService {
     guard reportToSend != nil, damageProvider != nil else { return }
     defer { reportToSend = nil }
     
-    self.damageProvider!.request(.report(reportToSend!.image, reportToSend!.latitude, reportToSend!.longitude)) { result in
+    self.damageProvider!.request(.report(reportToSend!.image, reportToSend!.latitude, reportToSend!.longitude, reportToSend!.damages)) { result in
       switch result {
       case let .success(response):
         let data = response.data
