@@ -21,6 +21,7 @@ struct DamageReport {
   var image: UIImage
   var latitude: Double
   var longitude: Double
+  var course: String
   var damages: [Damage]
   var confidence: Double
 }
@@ -45,12 +46,17 @@ class DamageService {
     self.damageProvider = MoyaProvider(endpointClosure: authMiddleware)
   }
   
-  func maybeReport(image: UIImage, damages: [Damage], latitude: Double, longitude: Double, completion: @escaping Completion) {
+  func maybeReport(image: UIImage, damages: [Damage], latitude: Double, longitude: Double, course: String, completion: @escaping Completion) {
     let sizedImage = ScaleImage(image: image, size: CGSize(width: 300, height: 300))
     let highestConfidenceDamage = damages.max {a, b in a.confidence < b.confidence}
     
     if(reportToSend == nil || highestConfidenceDamage!.confidence > reportToSend!.confidence) {
-      reportToSend = DamageReport(image: sizedImage, latitude: latitude, longitude: longitude, damages: damages, confidence: highestConfidenceDamage!.confidence)
+      reportToSend = DamageReport(image: sizedImage,
+                                  latitude: latitude,
+                                  longitude: longitude,
+                                  course: course,
+                                  damages: damages,
+                                  confidence: highestConfidenceDamage!.confidence)
       
       throttler.throttle { [unowned self] in
         self.sendReport(completion: completion)
@@ -63,7 +69,12 @@ class DamageService {
     guard reportToSend != nil, damageProvider != nil else { return }
     defer { reportToSend = nil }
     
-    self.damageProvider!.request(.report(reportToSend!.image, reportToSend!.latitude, reportToSend!.longitude, reportToSend!.damages)) { result in
+    self.damageProvider!.request(
+    .report(reportToSend!.image,
+            reportToSend!.latitude,
+            reportToSend!.longitude,
+            reportToSend!.course,
+            reportToSend!.damages)) { result in
       switch result {
       case let .success(response):
         let data = response.data
