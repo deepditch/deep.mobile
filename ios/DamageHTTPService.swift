@@ -14,7 +14,7 @@ enum DamageHTTPService {
 }
 
 extension DamageHTTPService: TargetType {
-  var baseURL: URL { return URL(string: "http://10.200.0.108:8000/api")! }
+  var baseURL: URL { return URL(string: "http://216.126.231.155/api")! }
   var path: String {
     switch self {
     case .report:
