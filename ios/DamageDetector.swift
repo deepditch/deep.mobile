@@ -115,7 +115,7 @@ class DamageDetector: NSObject, CLLocationManagerDelegate {
         self.hasMoved = false
       }
       
-      guard self.currentImage != nil, self.location != nil, self.location!.course >= 0 else {
+      guard self.currentImage != nil, self.location != nil else {
         print("The image or location was lost somehow")
         return
       }
