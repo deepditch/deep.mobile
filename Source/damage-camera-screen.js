@@ -39,9 +39,14 @@ class UploadMSG extends Component {
 }
 
 export default class DamageCameraScreen extends Component {
-  static navigationOptions = {
-    title: "Camera"
-  };
+  //static navigationOptions = {
+    //title: "Camera"
+    static navigationOptions = function(props) {
+      return{
+          //title: "Map",
+       headerLeft:
+    <Text onPress={()=>props.navigation.openDrawer()}>Menu</Text>
+  };}
 
   state = {
     token: null,

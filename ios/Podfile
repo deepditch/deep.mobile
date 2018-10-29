@@ -17,6 +17,7 @@ target 'deep.mobile' do
   'RCTNetwork',
   'RCTWebSocket', # needed for debugging
   'RCTImage',
+  'RCTAnimation',
   'RCTGeolocation',
   'RCTLinkingIOS',
   'RCTPushNotification'

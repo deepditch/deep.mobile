@@ -22,8 +22,8 @@ export default class loginPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      email: "",
-      password: "",
+      email: "m@m.m",
+      password: "m",
       alert: ""
     };
   }
@@ -83,7 +83,7 @@ export default class loginPage extends Component {
     new AuthService()
       .login(this.state.email, this.state.password)
       .then(response => {
-        this.props.navigation.navigate("Camera");
+        this.props.navigation.navigate("Map");
       })
       .catch(error => {
         if (error.message)
