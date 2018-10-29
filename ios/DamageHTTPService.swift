@@ -10,7 +10,7 @@ import Foundation
 import Moya
 
 enum DamageHTTPService {
-  case report(_ image: UIImage, _ latitude: Double, _ longitude: Double)
+  case report(_ image: UIImage, _ latitude: Double, _ longitude: Double, _ course: String, _ damages: [Damage])
 }
 
 extension DamageHTTPService: TargetType {
@@ -31,19 +31,28 @@ extension DamageHTTPService: TargetType {
   
   var task: Task {
     switch self {
-    case let .report(image, latitude, longitude):
+    case let .report(image, latitude, longitude, course, damages):
       guard let imageData = image.jpegData(compressionQuality: 1.0) else { return .requestPlain }
-      let timestamp = String(Date().timeIntervalSince1970)
-      let data = [MultipartFormData(provider: .data(imageData), name: "image", fileName: timestamp + ".jpg", mimeType:"image/jpeg")]
-      let params = ["latitude": latitude, "longitude": longitude]
-      return .uploadCompositeMultipart(data, urlParameters: params)
+      
+      var damageDicts = [[AnyHashable: Any]]()
+      
+      for damage in damages {
+        damageDicts.append(damage.dictionary!)
+      }
+      
+      let params = ["location": ["latitude": latitude, "longitude": longitude],
+                    "direction": course,
+                    "damages": damageDicts,
+                    "image": imageData.base64EncodedString()] as [String : Any]
+      
+      return .requestParameters(parameters: params, encoding: JSONEncoding.default)
     }
   }
   
   var headers: [String: String]? {
     switch self {
     case .report:
-      return ["Content-type": "multipart/form-data;"]
+      return ["Content-type": "application/json"]
     }
   }
   
