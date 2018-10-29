@@ -35,8 +35,8 @@ class DamageCameraView: UIImageView {
       }
     }
     
-    damageDetector.damageDetected = { [unowned self] (image: UIImage, damages: [Damage], coords: CLLocationCoordinate2D) in
-      self.damageService.maybeReport(image: image, damages: damages, latitude: coords.latitude, longitude: coords.longitude) { result in
+    damageDetector.damageDetected = { [unowned self] (image: UIImage, damages: [Damage], coords: CLLocationCoordinate2D, course: String) in
+      self.damageService.maybeReport(image: image, damages: damages, latitude: coords.latitude, longitude: coords.longitude, course: course) { result in
         if(self.onDamageReported != nil) {
           switch result {
           case let .success(response):

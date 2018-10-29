@@ -26,7 +26,7 @@ extension Damage {
 }
 
 class DamageDetector: NSObject, CLLocationManagerDelegate {
-  var damageDetected: ((_ image: UIImage, _ damages: [Damage], _ coords: CLLocationCoordinate2D) -> Void)?
+  var damageDetected: ((_ image: UIImage, _ damages: [Damage], _ coords: CLLocationCoordinate2D, _ course: String) -> Void)?
   let manager = CLLocationManager()
   var hasMoved: Bool = false
   var location: CLLocation?
@@ -37,6 +37,7 @@ class DamageDetector: NSObject, CLLocationManagerDelegate {
       self.manager.requestWhenInUseAuthorization()
       self.manager.delegate = self
       self.manager.desiredAccuracy = kCLLocationAccuracyBest
+      self.manager.activityType = .automotiveNavigation
       self.manager.startUpdatingLocation()
     }
   }
@@ -102,6 +103,8 @@ class DamageDetector: NSObject, CLLocationManagerDelegate {
     }
   }
 
+  let directions = ["N", "NE", "E", "SE", "S", "SW", "W", "NW"]
+  
   /// Updates the UI with the results of the classification.
   /// - Tag: ProcessClassifications
   func processClassifications(for request: VNRequest, error: Error?) {
@@ -128,7 +131,8 @@ class DamageDetector: NSObject, CLLocationManagerDelegate {
       let damages: [Damage] = self.mapOutputsToDamages(for: outputs)
       
       if damages.count > 0 { // Damage has been detected in the image
-        self.damageDetected?(self.currentImage!, damages, self.location!.coordinate)
+        let heading = self.directions[Int((self.location!.course / 45).rounded()) % 8]
+        self.damageDetected?(self.currentImage!, damages, self.location!.coordinate, heading)
       }
     }
   }

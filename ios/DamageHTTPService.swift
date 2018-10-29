@@ -10,7 +10,7 @@ import Foundation
 import Moya
 
 enum DamageHTTPService {
-  case report(_ image: UIImage, _ latitude: Double, _ longitude: Double, _ damages: [Damage])
+  case report(_ image: UIImage, _ latitude: Double, _ longitude: Double, _ course: String, _ damages: [Damage])
 }
 
 extension DamageHTTPService: TargetType {
@@ -31,16 +31,19 @@ extension DamageHTTPService: TargetType {
   
   var task: Task {
     switch self {
-    case let .report(image, latitude, longitude, damages):
+    case let .report(image, latitude, longitude, course, damages):
       guard let imageData = image.jpegData(compressionQuality: 1.0) else { return .requestPlain }
       
-      var list = [[AnyHashable: Any]]()
+      var damageDicts = [[AnyHashable: Any]]()
       
       for damage in damages {
-        list.append(damage.dictionary!)
+        damageDicts.append(damage.dictionary!)
       }
       
-      let params = ["location": ["latitude": latitude, "longitude": longitude], "direction": "N", "damages": list, "image": imageData.base64EncodedString()] as [String : Any]
+      let params = ["location": ["latitude": latitude, "longitude": longitude],
+                    "direction": course,
+                    "damages": damageDicts,
+                    "image": imageData.base64EncodedString()] as [String : Any]
       
       return .requestParameters(parameters: params, encoding: JSONEncoding.default)
     }

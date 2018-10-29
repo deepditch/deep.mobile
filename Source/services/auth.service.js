@@ -34,6 +34,7 @@ export default class AuthService {
       fetch("http://216.126.231.155/api/register", config)
         .then(this.parseJSON)
         .then(response => {
+          console.log(response)
           if (!response.ok) return reject(response.json);
           // this.setToken(response.json.access_token);
           return resolve(response.json);
