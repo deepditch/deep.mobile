@@ -26,13 +26,17 @@ struct DamageReport {
   var confidence: Double
 }
 
+struct MLModelResponse : Decodable {
+  let url: String?
+}
+
 class DamageService {
   var damageProvider: MoyaProvider<DamageHTTPService>?
   var reportToSend: DamageReport?
   var throttler: Throttler!
   
   init() {
-    throttler = Throttler(seconds: 15) // Reports are sent a maximum of once per 15 seconds
+    throttler = Throttler(seconds: 7.5) // Reports are sent a maximum of once per 15 seconds
   }
   
   func setAuthToken(with token: String) {
@@ -44,6 +48,23 @@ class DamageService {
     
     // Initialize moya provider
     self.damageProvider = MoyaProvider(endpointClosure: authMiddleware)
+  }
+  
+  func getModel(completion: @escaping (String?) -> Void) {
+    self.damageProvider!.request(.getModel()) { result in
+      switch result {
+      case let .success(response):
+        do {
+          let filteredResponse = try response.filterSuccessfulStatusCodes()
+          let resonseData = try filteredResponse.map(MLModelResponse.self) // user is of type User
+          completion(resonseData.url)
+        } catch let error {
+          
+        }
+      case let .failure(error): // Server did not recieve request, or server did not send response
+        print(error)
+      }
+    }
   }
   
   func maybeReport(image: UIImage, damages: [Damage], latitude: Double, longitude: Double, course: String, completion: @escaping Completion) {
@@ -58,7 +79,7 @@ class DamageService {
                                   damages: damages,
                                   confidence: highestConfidenceDamage!.confidence)
       
-      throttler.throttle { [unowned self] in
+      throttler.throttle {
         self.sendReport(completion: completion)
       }
     }

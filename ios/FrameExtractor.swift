@@ -97,6 +97,7 @@ class FrameExtractor : NSObject, AVCaptureVideoDataOutputSampleBufferDelegate {
     guard let uiImage = imageFromSampleBuffer(sampleBuffer: sampleBuffer) else { return }
     
     DispatchQueue.main.async { [unowned self] in // Image is sent to the delegate on the main thread.
+      guard self.frameCaptured != nil else { return }
       self.frameCaptured?(uiImage)
     }
   }

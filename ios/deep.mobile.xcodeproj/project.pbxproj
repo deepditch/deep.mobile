@@ -21,6 +21,7 @@
 		9B0BCCFF216E85E4009D2503 /* FrameExtractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B0BCCFE216E85E4009D2503 /* FrameExtractor.swift */; };
 		9B0BCD36216E92E3009D2503 /* DamageHTTPService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B0BCD35216E92E3009D2503 /* DamageHTTPService.swift */; };
 		9B238AAA217A371000E7AAC3 /* CGImagePropertyOrientation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B238AA9217A371000E7AAC3 /* CGImagePropertyOrientation.swift */; };
+		9B2DE4782198C3F000C232FF /* Downloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B2DE4772198C3F000C232FF /* Downloader.swift */; };
 		9B814608216FDFB900590FCB /* DamageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B814607216FDFB900590FCB /* DamageService.swift */; };
 		B957B261215EB8DE00FF2999 /* DamageCameraView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B957B260215EB8DE00FF2999 /* DamageCameraView.swift */; };
 		B957B264215EB92A00FF2999 /* DamageCameraViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B957B263215EB92A00FF2999 /* DamageCameraViewManager.swift */; };
@@ -67,6 +68,7 @@
 		9B0BCCFE216E85E4009D2503 /* FrameExtractor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FrameExtractor.swift; sourceTree = "<group>"; };
 		9B0BCD35216E92E3009D2503 /* DamageHTTPService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DamageHTTPService.swift; sourceTree = "<group>"; };
 		9B238AA9217A371000E7AAC3 /* CGImagePropertyOrientation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGImagePropertyOrientation.swift; sourceTree = "<group>"; };
+		9B2DE4772198C3F000C232FF /* Downloader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Downloader.swift; sourceTree = "<group>"; };
 		9B814607216FDFB900590FCB /* DamageService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DamageService.swift; sourceTree = "<group>"; };
 		B957B25D215EB81B00FF2999 /* deep.mobile-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "deep.mobile-Bridging-Header.h"; sourceTree = "<group>"; };
 		B957B260215EB8DE00FF2999 /* DamageCameraView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DamageCameraView.swift; sourceTree = "<group>"; };
@@ -204,6 +206,7 @@
 			children = (
 				B9726072216D7F1A0066A59C /* Throttler.swift */,
 				9B0BCCFE216E85E4009D2503 /* FrameExtractor.swift */,
+				9B2DE4772198C3F000C232FF /* Downloader.swift */,
 			);
 			name = Util;
 			sourceTree = "<group>";
@@ -502,6 +505,7 @@
 				13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */,
 				9B238AAA217A371000E7AAC3 /* CGImagePropertyOrientation.swift in Sources */,
 				B97BD71821682F4D0043C3DC /* RoadDamageModel.mlmodel in Sources */,
+				9B2DE4782198C3F000C232FF /* Downloader.swift in Sources */,
 				9B814608216FDFB900590FCB /* DamageService.swift in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
 				9B0BCD36216E92E3009D2503 /* DamageHTTPService.swift in Sources */,

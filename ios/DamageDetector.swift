@@ -30,8 +30,9 @@ class DamageDetector: NSObject, CLLocationManagerDelegate {
   let manager = CLLocationManager()
   var hasMoved: Bool = false
   var location: CLLocation?
+  var roadDamageModel: RoadDamageModel!
   
-  override init() {
+  init(compiledUrl: URL) {
     super.init()
     DispatchQueue.main.async {
       self.manager.requestWhenInUseAuthorization()
@@ -40,6 +41,13 @@ class DamageDetector: NSObject, CLLocationManagerDelegate {
       self.manager.activityType = .automotiveNavigation
       self.manager.startUpdatingLocation()
     }
+    
+    do {
+      roadDamageModel = try RoadDamageModel(contentsOf: compiledUrl)
+    } catch {
+    
+    }
+
   }
   
   func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
@@ -58,7 +66,7 @@ class DamageDetector: NSObject, CLLocationManagerDelegate {
 
   lazy var classificationRequest: VNCoreMLRequest = {
     do {
-      let model = try VNCoreMLModel(for: RoadDamageModel().model)
+      let model = try VNCoreMLModel(for: roadDamageModel.model)
 
       let request = VNCoreMLRequest(model: model, completionHandler: { [weak self] request, error in
         self?.processClassifications(for: request, error: error)
