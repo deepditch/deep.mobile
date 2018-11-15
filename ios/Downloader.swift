@@ -22,6 +22,10 @@ class Downloader {
         }
         
         do {
+          if FileManager.default.fileExists(atPath: localUrl.path) {
+            try FileManager.default.removeItem(at: localUrl)
+          }
+          
           try FileManager.default.copyItem(at: tempLocalUrl, to: localUrl)
           completion()
         } catch (let writeError) {

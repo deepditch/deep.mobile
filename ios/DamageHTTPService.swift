@@ -9,7 +9,7 @@
 import Foundation
 import Moya
 
-enum DamageHTTPService {
+enum APIHTTPService {
   case report(_ image: UIImage, _ latitude: Double, _ longitude: Double, _ course: String, _ damages: [Damage])
   case getModel()
 }
@@ -22,14 +22,14 @@ class Config {
   }
 }
 
-extension DamageHTTPService: TargetType {
+extension APIHTTPService: TargetType {
   var baseURL: URL { return URL(string: Config().config.object(forKey: "API Base Path") as! String)! }
   var path: String {
     switch self {
     case .report:
       return "/road-damage/new"
     case .getModel:
-      return "/machine-learning/latest-model"
+      return "/machine-learning/get-latest"
     }
   }
   
@@ -77,4 +77,15 @@ extension DamageHTTPService: TargetType {
   var sampleData: Data {
     return "There is No smaple Data".data(using: String.Encoding.utf8)!
   }
+}
+
+func MakeApiProvider(with token: String) -> MoyaProvider<APIHTTPService>{
+  // Attach JWT to each request
+  let authMiddleware = { (target: APIHTTPService) -> Endpoint in
+    let defaultEndpoint = MoyaProvider.defaultEndpointMapping(for: target)
+    return defaultEndpoint.adding(newHTTPHeaderFields: ["authorization": "Bearer " + token])
+  }
+  
+  // Initialize moya provider
+  return MoyaProvider(endpointClosure: authMiddleware)
 }

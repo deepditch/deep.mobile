@@ -27,14 +27,15 @@ extension Damage {
 
 class DamageDetector: NSObject, CLLocationManagerDelegate {
   var damageDetected: ((_ image: UIImage, _ damages: [Damage], _ coords: CLLocationCoordinate2D, _ course: String) -> Void)?
-  let manager = CLLocationManager()
   var hasMoved: Bool = false
   var location: CLLocation?
   var roadDamageModel: RoadDamageModel!
+  var manager: CLLocationManager!
   
   init(compiledUrl: URL) {
     super.init()
     DispatchQueue.main.async {
+      self.manager = CLLocationManager()
       self.manager.requestWhenInUseAuthorization()
       self.manager.delegate = self
       self.manager.desiredAccuracy = kCLLocationAccuracyBest
@@ -47,7 +48,6 @@ class DamageDetector: NSObject, CLLocationManagerDelegate {
     } catch {
     
     }
-
   }
   
   func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {

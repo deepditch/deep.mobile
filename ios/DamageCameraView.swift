@@ -15,19 +15,17 @@ class DamageCameraView: UIImageView {
   var frameExtractor: FrameExtractor!
   var damageDetector: DamageDetector?
   var damageService: DamageService?
+  var mlmodelService: MLModelService?
   var throttler: Throttler!
-  var authToken: NSString = ""
-  
   
   init() {
     super.init(image: nil)
-    
   }
   
   func startDetecting() {
     frameExtractor = FrameExtractor()
     
-    throttler = Throttler(seconds: 0.125, queue: DispatchQueue.global(qos: .userInitiated)) // Damage detection is run a maximum of 4 times per second
+    throttler = Throttler(seconds: 0.125, queue: DispatchQueue.global(qos: .userInitiated)) // Damage detection is run a maximum of 8 times per second
     
     frameExtractor.frameCaptured = { [unowned self] (image: UIImage?) in
       self.image = image // Update the UI
@@ -35,6 +33,7 @@ class DamageCameraView: UIImageView {
       guard self.damageDetector != nil else { return }
       
       self.throttler.throttle {
+        guard self.damageDetector != nil else { return }
         self.damageDetector!.maybeDetect(for: image!)
       }
     }
@@ -84,22 +83,12 @@ class DamageCameraView: UIImageView {
   
   @objc(setAuthToken:) // For react native to set the auth token
   public func setAuthToken(token: NSString) {
-    damageService = DamageService()
-    damageService!.setAuthToken(with: token as String)
+    damageService = DamageService(with: token as String)
+    mlmodelService = MLModelService(with: token as String)
     
-    damageService!.getModel() { url in
-      if let url = NSURL(string: url!) {
-        let modelUrl = URL(string: "roaddamagemodel.mlmodel")
-        Downloader.load(url: url as URL, to: modelUrl!) {
-          do {
-            let compiledUrl = try MLModel.compileModel(at: modelUrl!)
-            self.damageDetector = DamageDetector(compiledUrl: compiledUrl)
-            self.startDetecting()
-          } catch {
-            
-          }
-        }
-      }
+    mlmodelService!.getModel() { compiledUrl in
+      self.damageDetector = DamageDetector(compiledUrl: compiledUrl)
+      self.startDetecting()
     }
   }
   

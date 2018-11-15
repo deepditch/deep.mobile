@@ -26,53 +26,21 @@ struct DamageReport {
   var confidence: Double
 }
 
-struct MLModelResponse : Decodable {
-  let url: String?
-}
-
 class DamageService {
-  var damageProvider: MoyaProvider<DamageHTTPService>?
+  var apiProvider: MoyaProvider<APIHTTPService>!
   var reportToSend: DamageReport?
   var throttler: Throttler!
   
-  init() {
-    throttler = Throttler(seconds: 7.5) // Reports are sent a maximum of once per 15 seconds
-  }
-  
-  func setAuthToken(with token: String) {
-    // Attach JWT to each request
-    let authMiddleware = { (target: DamageHTTPService) -> Endpoint in
-      let defaultEndpoint = MoyaProvider.defaultEndpointMapping(for: target)
-      return defaultEndpoint.adding(newHTTPHeaderFields: ["authorization": "Bearer " + token])
-    }
-    
-    // Initialize moya provider
-    self.damageProvider = MoyaProvider(endpointClosure: authMiddleware)
-  }
-  
-  func getModel(completion: @escaping (String?) -> Void) {
-    self.damageProvider!.request(.getModel()) { result in
-      switch result {
-      case let .success(response):
-        do {
-          let filteredResponse = try response.filterSuccessfulStatusCodes()
-          let resonseData = try filteredResponse.map(MLModelResponse.self) // user is of type User
-          completion(resonseData.url)
-        } catch let error {
-          
-        }
-      case let .failure(error): // Server did not recieve request, or server did not send response
-        print(error)
-      }
-    }
+  init(with token: String) {
+    throttler = Throttler(seconds: 7.5) // Reports are sent a maximum of 8 times per minute
+    apiProvider = MakeApiProvider(with: token)
   }
   
   func maybeReport(image: UIImage, damages: [Damage], latitude: Double, longitude: Double, course: String, completion: @escaping Completion) {
-    let sizedImage = ScaleImage(image: image, size: CGSize(width: 300, height: 300))
     let highestConfidenceDamage = damages.max {a, b in a.confidence < b.confidence}
     
     if(reportToSend == nil || highestConfidenceDamage!.confidence > reportToSend!.confidence) {
-      reportToSend = DamageReport(image: sizedImage,
+      reportToSend = DamageReport(image: image,
                                   latitude: latitude,
                                   longitude: longitude,
                                   course: course,
@@ -87,10 +55,10 @@ class DamageService {
   
   func sendReport(completion: @escaping Completion) {
     // Auth token has not been set yet
-    guard reportToSend != nil, damageProvider != nil else { return }
+    guard reportToSend != nil, apiProvider != nil else { return }
     defer { reportToSend = nil }
     
-    self.damageProvider!.request(
+    self.apiProvider.request(
     .report(reportToSend!.image,
             reportToSend!.latitude,
             reportToSend!.longitude,
