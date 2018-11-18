@@ -30,7 +30,7 @@ export default class DamageService {
           body: data
         };
 
-        return fetch("http://216.126.231.155/api/road-damage/new", config)
+        return fetch("http://209.126.30.247/api/road-damage/new", config)
           .then(responseData => {
             console.log(responseData);
           })

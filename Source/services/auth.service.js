@@ -31,7 +31,7 @@ export default class AuthService {
     };
 
     return new Promise((resolve, reject) => {
-      fetch("http://216.126.231.155/api/register", config)
+      fetch("http://209.126.30.247/api/register", config)
         .then(this.parseJSON)
         .then(response => {
           console.log(response)
@@ -59,7 +59,7 @@ export default class AuthService {
     };
 
     return new Promise((resolve, reject) => {
-      fetch("http://216.126.231.155/api/login", config)
+      fetch("http://209.126.30.247/api/login", config)
         .then(this.parseJSON)
         .then(response => {
           if (!response.ok) return reject(response.json);
