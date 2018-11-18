@@ -36,6 +36,8 @@ PODS:
     - React/PrivateDatabase
   - React/jsinspector (0.57.1)
   - React/PrivateDatabase (0.57.1)
+  - React/RCTAnimation (0.57.1):
+    - React/Core
   - React/RCTBlob (0.57.1):
     - React/Core
   - React/RCTGeolocation (0.57.1):
@@ -46,6 +48,8 @@ PODS:
   - React/RCTLinkingIOS (0.57.1):
     - React/Core
   - React/RCTNetwork (0.57.1):
+    - React/Core
+  - React/RCTPushNotification (0.57.1):
     - React/Core
   - React/RCTText (0.57.1):
     - React/Core
@@ -65,10 +69,12 @@ DEPENDENCIES:
   - React/Core (from `../node_modules/react-native`)
   - React/CxxBridge (from `../node_modules/react-native`)
   - React/DevSupport (from `../node_modules/react-native`)
+  - React/RCTAnimation (from `../node_modules/react-native`)
   - React/RCTGeolocation (from `../node_modules/react-native`)
   - React/RCTImage (from `../node_modules/react-native`)
   - React/RCTLinkingIOS (from `../node_modules/react-native`)
   - React/RCTNetwork (from `../node_modules/react-native`)
+  - React/RCTPushNotification (from `../node_modules/react-native`)
   - React/RCTText (from `../node_modules/react-native`)
   - React/RCTWebSocket (from `../node_modules/react-native`)
   - yoga (from `../node_modules/react-native/ReactCommon/yoga`)
@@ -106,6 +112,6 @@ SPEC CHECKSUMS:
   Result: d2d07204ce72856f1fd9130bbe42c35a7b0fea10
   yoga: b1ce48b6cf950b98deae82838f5173ea7cf89e85
 
-PODFILE CHECKSUM: 895ef077df988145683b35449e91b71d1b50ec15
+PODFILE CHECKSUM: 1ded7f9478354edf4116bdd7da6bac04d7915818
 
 COCOAPODS: 1.5.3
