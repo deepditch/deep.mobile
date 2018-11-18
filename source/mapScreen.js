@@ -46,6 +46,7 @@ export default class mapScreenView extends Component {
       />
     );
   }
+
 }
 
 const style = StyleSheet.create({
@@ -54,8 +55,10 @@ const style = StyleSheet.create({
     padding: 25,
     backgroundColor: "#eee"
   },
+
   mappingview: {
     ...StyleSheet.absoluteFillObject,
     top: 10
   }
 });
+
