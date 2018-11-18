@@ -16,7 +16,7 @@ export default class mapScreenView extends Component {
     return{
         title: "Map",
      headerLeft:
-  <Text onPress={()=>props.navigation.openDrawer()}>Menu</Text>
+     <TouchableOpacity onPress={()=>props.navigation.openDrawer()}><Text>Menu</Text></TouchableOpacity>
 };}
 
 //   constructor(props){
