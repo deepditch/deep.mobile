@@ -1,4 +1,5 @@
 import { AsyncStorage } from "react-native";
+import config from "../../project.config";
 
 export default class AuthService {
   async parseJSON(response) {
@@ -20,7 +21,7 @@ export default class AuthService {
       password: password
     };
 
-    const config = {
+    const requestBody = {
       method: "POST",
       headers: {
         Accept: "application/json",
@@ -31,7 +32,7 @@ export default class AuthService {
     };
 
     return new Promise((resolve, reject) => {
-      fetch("http://216.126.231.155/api/register", config)
+      fetch(config.API_BASE_PATH + "/register", requestBody)
         .then(this.parseJSON)
         .then(response => {
           console.log(response)
@@ -48,7 +49,7 @@ export default class AuthService {
       password: password
     };
 
-    const config = {
+    const requestBody = {
       method: "POST",
       headers: {
         Accept: "application/json",
@@ -59,9 +60,10 @@ export default class AuthService {
     };
 
     return new Promise((resolve, reject) => {
-      fetch("http://216.126.231.155/api/login", config)
+      fetch(config.API_BASE_PATH + "/login", requestBody)
         .then(this.parseJSON)
         .then(response => {
+          console.log(response)
           if (!response.ok) return reject(response.json);
           this.setToken(response.json.access_token);
           return resolve(response.json);

@@ -13,30 +13,33 @@ class DamageCameraView: UIImageView {
   var onDamageDetected: RCTDirectEventBlock?
   var onDamageReported: RCTDirectEventBlock?
   var frameExtractor: FrameExtractor!
-  var damageDetector: DamageDetector!
-  var damageService: DamageService!
+  var damageDetector: DamageDetector?
+  var damageService: DamageService?
+  var mlmodelService: MLModelService?
   var throttler: Throttler!
-  var authToken: NSString = ""
-  
   
   init() {
     super.init(image: nil)
-    
+  }
+  
+  func startDetecting() {
     frameExtractor = FrameExtractor()
-    damageDetector = DamageDetector()
-    damageService = DamageService()
-    throttler = Throttler(seconds: 0.25, queue: DispatchQueue.global(qos: .userInitiated)) // Damage detection is run a maximum of 4 times per second
+    
+    throttler = Throttler(seconds: 0.125, queue: DispatchQueue.global(qos: .userInitiated)) // Damage detection is run a maximum of 8 times per second
     
     frameExtractor.frameCaptured = { [unowned self] (image: UIImage?) in
       self.image = image // Update the UI
       
-      self.throttler.throttle { [unowned self] in
-        self.damageDetector.maybeDetect(for: image!)
+      guard self.damageDetector != nil else { return }
+      
+      self.throttler.throttle {
+        guard self.damageDetector != nil else { return }
+        self.damageDetector!.maybeDetect(for: image!)
       }
     }
     
-    damageDetector.damageDetected = { [unowned self] (image: UIImage, damages: [Damage], coords: CLLocationCoordinate2D, course: String) in
-      self.damageService.maybeReport(image: image, damages: damages, latitude: coords.latitude, longitude: coords.longitude, course: course) { result in
+    self.damageDetector!.damageDetected = { [unowned self] (image: UIImage, damages: [Damage], coords: CLLocationCoordinate2D, course: String) in
+      self.damageService!.maybeReport(image: image, damages: damages, latitude: coords.latitude, longitude: coords.longitude, course: course) { result in
         if(self.onDamageReported != nil) {
           switch result {
           case let .success(response):
@@ -80,7 +83,13 @@ class DamageCameraView: UIImageView {
   
   @objc(setAuthToken:) // For react native to set the auth token
   public func setAuthToken(token: NSString) {
-    damageService.setAuthToken(with: token as String)
+    damageService = DamageService(with: token as String)
+    mlmodelService = MLModelService(with: token as String)
+    
+    mlmodelService!.getModel() { compiledUrl in
+      self.damageDetector = DamageDetector(compiledUrl: compiledUrl)
+      self.startDetecting()
+    }
   }
   
   required init?(coder aDecoder: NSCoder) {

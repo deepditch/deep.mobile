@@ -22,8 +22,8 @@ export default class loginPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      email: "m@m.m",
-      password: "m",
+      email: "drakesvoboda@gmail.com",
+      password: "asdfasdf",
       alert: ""
     };
   }
@@ -77,9 +77,6 @@ export default class loginPage extends Component {
   }
 
   login() {
-    console.log(this.state);
-   // alert(this.state.email);
-   // alert(this.state.password);
     new AuthService()
       .login(this.state.email, this.state.password)
       .then(response => {

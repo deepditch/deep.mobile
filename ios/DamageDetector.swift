@@ -27,18 +27,26 @@ extension Damage {
 
 class DamageDetector: NSObject, CLLocationManagerDelegate {
   var damageDetected: ((_ image: UIImage, _ damages: [Damage], _ coords: CLLocationCoordinate2D, _ course: String) -> Void)?
-  let manager = CLLocationManager()
   var hasMoved: Bool = false
   var location: CLLocation?
+  var roadDamageModel: RoadDamageModel!
+  var manager: CLLocationManager!
   
-  override init() {
+  init(compiledUrl: URL) {
     super.init()
     DispatchQueue.main.async {
+      self.manager = CLLocationManager()
       self.manager.requestWhenInUseAuthorization()
       self.manager.delegate = self
       self.manager.desiredAccuracy = kCLLocationAccuracyBest
       self.manager.activityType = .automotiveNavigation
       self.manager.startUpdatingLocation()
+    }
+    
+    do {
+      roadDamageModel = try RoadDamageModel(contentsOf: compiledUrl)
+    } catch {
+    
     }
   }
   
@@ -58,7 +66,7 @@ class DamageDetector: NSObject, CLLocationManagerDelegate {
 
   lazy var classificationRequest: VNCoreMLRequest = {
     do {
-      let model = try VNCoreMLModel(for: RoadDamageModel().model)
+      let model = try VNCoreMLModel(for: roadDamageModel.model)
 
       let request = VNCoreMLRequest(model: model, completionHandler: { [weak self] request, error in
         self?.processClassifications(for: request, error: error)

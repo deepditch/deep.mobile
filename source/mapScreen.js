@@ -9,41 +9,41 @@ import {
 } from "react-native";
 import { StackNavigator, DrawerNavigator } from "react-navigation";
 
-import MapView, { AnimatedRegion } from 'react-native-maps';
+import MapView, { AnimatedRegion } from "react-native-maps";
 
 export default class mapScreenView extends Component {
   static navigationOptions = function(props) {
-    return{
-        title: "Map",
-     headerLeft:
-  <Text onPress={()=>props.navigation.openDrawer()}>Menu</Text>
-};}
+    return {
+      title: "Map",
+      headerLeft: (
+        <TouchableOpacity onPress={() => props.navigation.openDrawer()}><Text>Menu</Text></TouchableOpacity>
+      )
+    };
+  };
 
-//   constructor(props){
-//       super(props);
+  //   constructor(props){
+  //       super(props);
 
-//       this.state = {
-//           latitude : LATITUDE,
-//           longitude: LONGITUDE,
-//           routeCoordinates: [],
-//           distanceTravelled: 0,
-//           prevLatLng:{},
-//           coordinate: new AnimatedRegion({
-//               latitude: LATITUDE,
-//               longitude:LONGITUDE,
-//           })
-//       };
-//   }
-
-
+  //       this.state = {
+  //           latitude : LATITUDE,
+  //           longitude: LONGITUDE,
+  //           routeCoordinates: [],
+  //           distanceTravelled: 0,
+  //           prevLatLng:{},
+  //           coordinate: new AnimatedRegion({
+  //               latitude: LATITUDE,
+  //               longitude:LONGITUDE,
+  //           })
+  //       };
+  //   }
 
   render() {
     return (
-      <MapView style={style.mappingview}
-      showsUserLocation
-      followsUserLocation 
+      <MapView
+        style={style.mappingview}
+        showsUserLocation
+        followsUserLocation
       />
-
     );
   }
 
@@ -55,8 +55,10 @@ const style = StyleSheet.create({
     padding: 25,
     backgroundColor: "#eee"
   },
-  mappingview:{
-      ...StyleSheet.absoluteFillObject,
-      top:10,
+
+  mappingview: {
+    ...StyleSheet.absoluteFillObject,
+    top: 10
   }
 });
+

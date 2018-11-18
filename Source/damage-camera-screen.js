@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Text, Platform, View } from "react-native";
+import { Text, Platform, View, TouchableOpacity } from "react-native";
 import AuthService from "./services/auth.service";
 import { StyleSheet, Dimensions } from "react-native";
 import DamageCamera from "./damage-camera";
@@ -45,7 +45,7 @@ export default class DamageCameraScreen extends Component {
       return{
           //title: "Map",
        headerLeft:
-    <Text onPress={()=>props.navigation.openDrawer()}>Menu</Text>
+    <TouchableOpacity onPress={()=>props.navigation.openDrawer()}><Text>Menu</Text></TouchableOpacity>
   };}
 
   state = {
