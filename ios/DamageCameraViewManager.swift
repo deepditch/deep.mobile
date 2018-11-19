@@ -12,11 +12,11 @@ import UIKit
 @objc(DamageCameraViewManager)
 class DamageCameraViewManager: RCTViewManager {
   override func view() -> UIView! {
-    return DamageCameraView();
+    return DamageCameraView()
   }
   
   @objc
   override static func requiresMainQueueSetup() -> Bool {
-    return true;
+    return true
   }
 }

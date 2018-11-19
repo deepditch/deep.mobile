@@ -25,29 +25,40 @@ extension Damage {
   }
 }
 
-class DamageDetector: NSObject, CLLocationManagerDelegate {
+class DamageDetector: FrameExtractor, CLLocationManagerDelegate {
   var damageDetected: ((_ image: UIImage, _ damages: [Damage], _ coords: CLLocationCoordinate2D, _ course: String) -> Void)?
   var hasMoved: Bool = false
   var location: CLLocation?
   var roadDamageModel: RoadDamageModel!
   var manager: CLLocationManager!
+  var throttler: Throttler!
   
-  init(compiledUrl: URL) {
-    super.init()
-    DispatchQueue.main.async {
-      self.manager = CLLocationManager()
-      self.manager.requestWhenInUseAuthorization()
-      self.manager.delegate = self
-      self.manager.desiredAccuracy = kCLLocationAccuracyBest
-      self.manager.activityType = .automotiveNavigation
-      self.manager.startUpdatingLocation()
-    }
+  init(previewView: UIView, compiledUrl: URL) {
+    super.init(previewView: previewView)
+    throttler = Throttler(seconds: 0.125, queue: DispatchQueue.global(qos: .userInitiated))
     
     do {
       roadDamageModel = try RoadDamageModel(contentsOf: compiledUrl)
     } catch {
     
     }
+  }
+  
+  override func setupAVCapture() {
+    DispatchQueue.main.async {
+      super.setupAVCapture()
+      self.setupGPS()
+      self.startCaptureSession()
+    }
+  }
+  
+  func setupGPS() {
+    self.manager = CLLocationManager()
+    self.manager.requestWhenInUseAuthorization()
+    self.manager.delegate = self
+    self.manager.desiredAccuracy = kCLLocationAccuracyBest
+    self.manager.activityType = .automotiveNavigation
+    self.manager.startUpdatingLocation()
   }
   
   func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
@@ -69,7 +80,9 @@ class DamageDetector: NSObject, CLLocationManagerDelegate {
       let model = try VNCoreMLModel(for: roadDamageModel.model)
 
       let request = VNCoreMLRequest(model: model, completionHandler: { [weak self] request, error in
-        self?.processClassifications(for: request, error: error)
+        DispatchQueue.main.async { [weak self] in
+          self?.processClassifications(for: request, error: error)
+        }
       })
 
       request.imageCropAndScaleOption = .centerCrop
@@ -80,68 +93,82 @@ class DamageDetector: NSObject, CLLocationManagerDelegate {
     }
   }()
   
-  // Image being held for analysis
   private var currentImage: UIImage?
   
-  // Queue for dispatching vision classification requests
   private let visionQueue = DispatchQueue(label: "com.deep.ditch.visionqueue")
   
-  // Detect road damage in an image. image is dropped if the device has not moved or an image is currently being processed
-  func maybeDetect(for image: UIImage) {
-    guard currentImage == nil, hasMoved else { return } // Drop requests if the previous image is not finished or the device is stationary
-    self.currentImage = image
-    processCurrentImage()
+   private let context = CIContext()
+  
+  private func imageFromSampleBuffer(sampleBuffer: CMSampleBuffer) -> UIImage? {
+    guard let imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else { return nil }
+    let ciImage = CIImage(cvPixelBuffer: imageBuffer)
+    guard let cgImage = context.createCGImage(ciImage, from: ciImage.extent) else { return nil }
+    let img = UIImage(cgImage: cgImage, scale: 1, orientation: UIImageOrientationFromDeviceOrientation())
+    return fixOrientation(for: img)
   }
   
-  func processCurrentImage() {
-    let orientation = CGImagePropertyOrientation(self.currentImage!.imageOrientation)
-    
-    guard let ciImage = CIImage(image: self.currentImage!) else {
-      fatalError("Unable to create \(CIImage.self) from \(String(describing: self.currentImage)).")
+  func fixOrientation(for img: UIImage) -> UIImage {
+    if (img.imageOrientation == .up) {
+      return img
     }
     
-    let handler = VNImageRequestHandler(ciImage: ciImage, orientation: orientation)
+    UIGraphicsBeginImageContextWithOptions(img.size, false, img.scale)
+    let rect = CGRect(x: 0, y: 0, width: img.size.width, height: img.size.height)
+    img.draw(in: rect)
     
-    visionQueue.async { // Image processing happens in a separate queue
-      do {
-        try handler.perform([self.classificationRequest])
-      } catch {
-        print("Failed to perform classification.\n\(error.localizedDescription)")
-      }
+    let normalizedImage = UIGraphicsGetImageFromCurrentImageContext()!
+    UIGraphicsEndImageContext()
+    
+    return normalizedImage
+  }
+  
+  override func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
+    guard self.currentImage == nil, self.hasMoved else { return }
+    guard let pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else { return }
+    
+    self.currentImage = imageFromSampleBuffer(sampleBuffer: sampleBuffer)
+    guard self.currentImage != nil else { return }
+    
+    let exifOrientation = exifOrientationFromDeviceOrientation()
+    
+    let imageRequestHandler = VNImageRequestHandler(cvPixelBuffer: pixelBuffer, orientation: exifOrientation, options: [:])
+    
+    do {
+      try imageRequestHandler.perform([self.classificationRequest])
+    } catch {
+      print(error)
     }
   }
 
-  let directions = ["N", "NE", "E", "SE", "S", "SW", "W", "NW"]
+  let directions = ["N", "NE", "E", "SE", "S", "SW", "W", "NW", "N"]
   
   /// Updates the UI with the results of the classification.
   /// - Tag: ProcessClassifications
   func processClassifications(for request: VNRequest, error: Error?) {
-    DispatchQueue.main.async { [unowned self] in
-      defer { // Executed after function return.
-        // New frame will be processed when a new image is recieved and the device has moved
-        self.currentImage = nil
-        self.hasMoved = false
-      }
-      
-      guard self.currentImage != nil, self.location != nil else {
-        print("The image or location was lost somehow")
-        return
-      }
-      
-      guard let results = request.results else {
-        print("Unable to classify image.\n\(error!.localizedDescription)")
-        return
-      }
+    defer { // Executed after function return.
+      // New frame will be processed when a new image is recieved and the device has moved
+      self.currentImage = nil
+      self.hasMoved = false
+    }
+    
+    guard self.currentImage != nil, self.location != nil else {
+      print("The image or location was lost somehow")
+      return
+    }
+    
+    guard let results = request.results else {
+      print("Unable to classify image.\n\(error!.localizedDescription)")
+      return
+    }
 
-      let classifications = results as! [VNCoreMLFeatureValueObservation]
-      let obs: VNCoreMLFeatureValueObservation = (classifications.first)!
-      let outputs: MLMultiArray = obs.featureValue.multiArrayValue!
-      let damages: [Damage] = self.mapOutputsToDamages(for: outputs)
-      
-      if damages.count > 0 { // Damage has been detected in the image
-        let heading = self.directions[Int((self.location!.course / 45).rounded()) % 8]
-        self.damageDetected?(self.currentImage!, damages, self.location!.coordinate, heading)
-      }
+    let classifications = results as! [VNCoreMLFeatureValueObservation]
+    let obs: VNCoreMLFeatureValueObservation = (classifications.first)!
+    let outputs: MLMultiArray = obs.featureValue.multiArrayValue!
+    let damages: [Damage] = self.mapOutputsToDamages(for: outputs)
+    
+    if damages.count > 0 { // Damage has been detected in the image
+      let heading = self.directions[Int((Float(Int(self.location!.course) % 360) / 45).rounded())]
+      self.damageDetected?(self.currentImage!, damages, self.location!.coordinate, heading)
     }
   }
   
@@ -197,6 +224,25 @@ class DamageDetector: NSObject, CLLocationManagerDelegate {
     }
     
     return damages
+  }
+  
+  public func UIImageOrientationFromDeviceOrientation() -> UIImage.Orientation {
+    let curDeviceOrientation = UIDevice.current.orientation
+    let exifOrientation: UIImage.Orientation
+    
+    switch curDeviceOrientation {
+    case UIDeviceOrientation.portraitUpsideDown:  // Device oriented vertically, home button on the top
+      exifOrientation = .right
+    case UIDeviceOrientation.landscapeLeft:       // Device oriented horizontally, home button on the right
+      exifOrientation = .down
+    case UIDeviceOrientation.portrait:            // Device oriented vertically, home button on the bottom
+      exifOrientation = .left
+    case UIDeviceOrientation.landscapeRight:      // Device oriented horizontally, home button on the left
+      exifOrientation = .up
+    default:
+      exifOrientation = .up
+    }
+    return exifOrientation
   }
 }
 

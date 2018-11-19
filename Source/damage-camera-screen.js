@@ -10,7 +10,9 @@ class DamageLabels extends Component {
       <>
         {this.props.damages &&
           this.props.damages.map(damage => (
-            <Text style={styles.pop}>{damage.type}: {damage.description} ({damage.confidence})</Text>
+            <Text style={styles.pop}>
+              {damage.type}: {damage.description} ({damage.confidence})
+            </Text>
           ))}
       </>
     );
@@ -40,13 +42,17 @@ class UploadMSG extends Component {
 
 export default class DamageCameraScreen extends Component {
   //static navigationOptions = {
-    //title: "Camera"
-    static navigationOptions = function(props) {
-      return{
-          //title: "Map",
-       headerLeft:
-    <TouchableOpacity onPress={()=>props.navigation.openDrawer()}><Text>Menu</Text></TouchableOpacity>
-  };}
+  //title: "Camera"
+  static navigationOptions = function(props) {
+    return {
+      //title: "Map",
+      headerLeft: (
+        <TouchableOpacity onPress={() => props.navigation.openDrawer()}>
+          <Text>Menu</Text>
+        </TouchableOpacity>
+      )
+    };
+  };
 
   state = {
     token: null,
@@ -77,6 +83,34 @@ export default class DamageCameraScreen extends Component {
       });
   }
 
+  _onDownloadProgress(event) {
+    console.log("prog: ", event);
+    clearTimeout(this.progressTimeout);
+    this.setState({ status: "ok", msg: `Downloading... \n ${Math.round(event.progress * 100)}%` });
+    this.progressTimeout = setTimeout(
+      function() {
+        this.setState({ msg: "" });
+      }.bind(this),
+      3000
+    );
+  }
+
+  _onDownloadComplete(event) {
+    console.log(event);
+    clearTimeout(this.progressTimeout);
+    this.setState({ status: "ok", msg: "Download Complete" });
+    this.progressTimeout = setTimeout(
+      function() {
+        this.setState({ msg: "" });
+      }.bind(this),
+      3000
+    );
+  }
+
+  _onError(event) {
+    this.setState({ status: "err", msg: "Model failed to download or compile" });
+  }
+
   _onDamageDetected(event) {
     clearTimeout(this.damagesTimeout);
     this.setState({ damages: event.damages });
@@ -89,8 +123,8 @@ export default class DamageCameraScreen extends Component {
   }
 
   _onDamageReported(event) {
+    console.log("Reported: ", event);
     clearTimeout(this.statusTimeout);
-    console.log(event);
     if (event.status == 201 || event.status == 200) {
       this.setState({ status: "ok", msg: "Upload Successful" });
     } else {
@@ -118,6 +152,9 @@ export default class DamageCameraScreen extends Component {
         style={styles.preview}
         onDamageDetected={this._onDamageDetected.bind(this)}
         onDamageReported={this._onDamageReported.bind(this)}
+        onDownloadComplete={this._onDownloadComplete.bind(this)}
+        onDownloadProgress={this._onDownloadProgress.bind(this)}
+        onError={this._onError.bind(this)}
         authToken={this.state.token}
       >
         <UploadMSG msg={this.state.msg} status={this.state.status} />
