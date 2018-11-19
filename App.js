@@ -16,19 +16,19 @@ import loginPage from "./Source/Login/loginPage"; //import the js files you crea
 import registrationPage from "./Source/Login/registrationPage"; //import the js files you create here.
 import DamageCameraScreen from "./Source/damage-camera-screen";
 import mapScreenView from "./Source/mapScreen";
-import { StackNavigator, DrawerNavigator, DrawerItems } from "react-navigation";
+import { createStackNavigator, createDrawerNavigator, DrawerItems } from "react-navigation";
 
 import { PermissionsAndroid } from "react-native";
 import AuthService from "./Source/services/auth.service";
 
-const cameraScreen = StackNavigator({
+const cameraScreen = createStackNavigator({
   Camera: { screen: DamageCameraScreen },
 
 },
   //{headerMode:"none",}
 );
 
-const mapscreen = StackNavigator({
+const mapscreen = createStackNavigator({
   Map: { screen: mapScreenView },
 },
   {
@@ -36,7 +36,7 @@ const mapscreen = StackNavigator({
   }
 );
 
-const DrawerStack = DrawerNavigator({
+const DrawerStack = createDrawerNavigator({
   Map: { screen: mapscreen },
   Camera: { screen: cameraScreen },
 },
@@ -75,12 +75,12 @@ const DrawerStack = DrawerNavigator({
 
 );
 
-const LoginStack = StackNavigator({
+const LoginStack = createStackNavigator({
   Home: { screen: loginPage },
   Register: { screen: registrationPage }
 });
 
-const DrawerNavigation = StackNavigator({
+const DrawerNavigation = createStackNavigator({
   DrawerStack: { screen: DrawerStack },
 },
   {
@@ -88,7 +88,7 @@ const DrawerNavigation = StackNavigator({
   }
 )
 
-const NavApp = StackNavigator(
+const NavApp = createStackNavigator(
   {
     loginStack: { screen: LoginStack },
     drawerStack: { screen: DrawerNavigation }
