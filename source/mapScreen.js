@@ -1,7 +1,19 @@
 import React, { Component } from "react";
-import { StyleSheet, Text, View, TouchableOpacity, Button } from "react-native";
+import { StyleSheet, Text, View, TouchableOpacity, Image } from "react-native";
 import MapView, { AnimatedRegion } from "react-native-maps";
 import DamageService from "./services/damage.service";
+
+
+const imageUrls = {
+  "D00": require("../images/pins/D00.png"),
+  "D01": require("../images/pins/D01.png"),
+  "D10": require("../images/pins/D10.png"),
+  "D11": require("../images/pins/D11.png"),
+  "D20": require("../images/pins/D20.png"),
+  "D40": require("../images/pins/D40.png"),
+  "D43": require("../images/pins/D43.png"),
+  "D44": require("../images/pins/D44.png"),
+}
 
 export default class mapScreenView extends Component {
   static navigationOptions = function(props) {
@@ -20,24 +32,8 @@ export default class mapScreenView extends Component {
   };
 
   componentDidMount() {
-    this.getDamageMarkers()
+    this.getDamageMarkers();
   }
-
-  //   constructor(props){
-  //       super(props);
-
-  //       this.state = {
-  //           latitude : LATITUDE,
-  //           longitude: LONGITUDE,
-  //           routeCoordinates: [],
-  //           distanceTravelled: 0,
-  //           prevLatLng:{},
-  //           coordinate: new AnimatedRegion({
-  //               latitude: LATITUDE,
-  //               longitude:LONGITUDE,
-  //           })
-  //       };
-  //   }
 
   getDamageMarkers = () => {
     console.log("DamageService: ", DamageService);
@@ -46,9 +42,10 @@ export default class mapScreenView extends Component {
         return {
           position: {
             latitude: damage.position.latitude,
-            longitude: damage.position.longitude,
+            longitude: damage.position.longitude
           },
-          id: damage.id
+          id: damage.id,
+          type: damage.type
         };
       });
       console.log("Positions: ", positions);
@@ -59,10 +56,15 @@ export default class mapScreenView extends Component {
 
   render() {
     const damageMarkers = this.state.markersPositions.map(markerPosition => (
-      <MapView.Marker coordinate={markerPosition.position} key={markerPosition.id} />
+      <MapView.Marker
+        coordinate={markerPosition.position}
+        key={markerPosition.id}
+      >
+        <Image source={imageUrls[markerPosition.type]} />
+      </MapView.Marker>
     ));
 
-    console.log(damageMarkers)
+    console.log(damageMarkers);
 
     return (
       <View style={style.container}>
@@ -72,7 +74,6 @@ export default class mapScreenView extends Component {
           followsUserLocation
         >
           {damageMarkers}
-
         </MapView>
       </View>
     );
