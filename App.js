@@ -1,78 +1,74 @@
 import React, { Component } from "react";
 import {
-  StyleSheet,
   Text,
   View,
-  TextInput,
   TouchableOpacity,
-  KeyboardAvoidingView,
   SafeAreaView,
-  Button,
   Alert
-
 } from "react-native";
 import { AsyncStorage } from "react-native";
-import loginPage from "./Source/Login/loginPage"; //import the js files you create here.
-import registrationPage from "./Source/Login/registrationPage"; //import the js files you create here.
-import DamageCameraScreen from "./Source/damage-camera-screen";
-import mapScreenView from "./Source/mapScreen";
-import { createStackNavigator, createDrawerNavigator, DrawerItems } from "react-navigation";
+import loginPage from "./source/login/loginPage"; //import the js files you create here.
+import registrationPage from "./source/login/registrationPage"; //import the js files you create here.
+import DamageCameraScreen from "./source/damage-camera-screen";
+import mapScreenView from "./source/mapScreen";
+import {
+  createStackNavigator,
+  createDrawerNavigator,
+  DrawerItems
+} from "react-navigation";
 
-import { PermissionsAndroid } from "react-native";
-import AuthService from "./Source/services/auth.service";
-
-const cameraScreen = createStackNavigator({
-  Camera: { screen: DamageCameraScreen },
-
-},
+const cameraScreen = createStackNavigator(
+  {
+    Camera: { screen: DamageCameraScreen }
+  }
   //{headerMode:"none",}
 );
 
-const mapscreen = createStackNavigator({
-  Map: { screen: mapScreenView },
-},
+const mapscreen = createStackNavigator(
   {
-
-  }
+    Map: { screen: mapScreenView }
+  },
+  {}
 );
 
-const DrawerStack = createDrawerNavigator({
-  Map: { screen: mapscreen },
-  Camera: { screen: cameraScreen },
-},
+const DrawerStack = createDrawerNavigator(
+  {
+    Map: { screen: mapscreen },
+    Camera: { screen: cameraScreen }
+  },
   {
     initialRouteName: "Map",
     headerMode: "none",
 
-    contentComponent: (props) => (
+    contentComponent: props => (
       <View style={{ flex: 1 }}>
-
-        <SafeAreaView forceInset={{ top: 'always', horizontal: 'never' }}>
-          <DrawerItems{...props} />
-          <TouchableOpacity onPress={() => Alert.alert(
-            'Logout',
-            'Are you sure you want to logout?',
-            [
-              {
-                text: 'Yes', onPress: () => {
-                  AsyncStorage.getAllKeys().then(AsyncStorage.multiRemove);
-                  props.navigation.navigate('Home')
+        <SafeAreaView forceInset={{ top: "always", horizontal: "never" }}>
+          <DrawerItems {...props} />
+          <TouchableOpacity
+            onPress={() =>
+              Alert.alert("Logout", "Are you sure you want to logout?", [
+                {
+                  text: "Yes",
+                  onPress: () => {
+                    AsyncStorage.getAllKeys().then(AsyncStorage.multiRemove);
+                    props.navigation.navigate("Home");
+                  }
+                },
+                {
+                  text: "Cancel",
+                  onPress: () => {
+                    return null;
+                  }
                 }
-              },
-              {
-                text: 'Cancel', onPress: () => { return null }
-              },
-            ],
-          )
-          }>
-            <Text style={{ margin: 16, fontWeight: 'bold' }}>Logout</Text>
+              ])
+            }
+          >
+            <Text style={{ margin: 16, fontWeight: "bold" }}>Logout</Text>
           </TouchableOpacity>
         </SafeAreaView>
-
       </View>
     )
   }
-
 );
 
 const LoginStack = createStackNavigator({
@@ -80,13 +76,14 @@ const LoginStack = createStackNavigator({
   Register: { screen: registrationPage }
 });
 
-const DrawerNavigation = createStackNavigator({
-  DrawerStack: { screen: DrawerStack },
-},
+const DrawerNavigation = createStackNavigator(
   {
-    headerMode: "none",
+    DrawerStack: { screen: DrawerStack }
+  },
+  {
+    headerMode: "none"
   }
-)
+);
 
 const NavApp = createStackNavigator(
   {
@@ -102,21 +99,18 @@ const NavApp = createStackNavigator(
   }
 );
 
-
 export default class App extends Component {
   render() {
-
-//   alert(((AuthToken)));
+    //   alert(((AuthToken)));
     //if (AuthToken === null)
     {
-    //return <NavApp />;
-   // return <DrawerStack/>;
+      //return <NavApp />;
+      // return <DrawerStack/>;
+    }
+    //else
+    {
+      return <NavApp />;
+      //return <DrawerStack/>;
+    }
   }
-  //else
-  {
-    
-    return <NavApp />;
-    //return <DrawerStack/>;
-  }
-}
 }

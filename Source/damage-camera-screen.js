@@ -185,7 +185,8 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     color: "#000",
     padding: 10,
-    margin: 5
+    margin: 5,
+    textAlign: "center"
   },
   ok: {
     backgroundColor: "#00ff00"

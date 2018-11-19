@@ -335,7 +335,7 @@
 						TestTargetID = 13B07F861A680F5B00A75B9A;
 					};
 					13B07F861A680F5B00A75B9A = {
-						DevelopmentTeam = XLQC5SKSC8;
+						DevelopmentTeam = 45YSJCFXR6;
 						LastSwiftMigration = 1000;
 					};
 					2D02E47A1E0B4A5D006451C7 = {
@@ -633,7 +633,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = NO;
-				DEVELOPMENT_TEAM = XLQC5SKSC8;
+				DEVELOPMENT_TEAM = 45YSJCFXR6;
 				GCC_PREFIX_HEADER = "";
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -650,7 +650,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = org.reactjs.native.example.deep.mobile;
+				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.deep-mobile";
 				PRODUCT_NAME = deep.mobile;
 				SWIFT_OBJC_BRIDGING_HEADER = "deep.mobile-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -666,7 +666,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = XLQC5SKSC8;
+				DEVELOPMENT_TEAM = 45YSJCFXR6;
 				GCC_PREFIX_HEADER = "";
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -681,7 +681,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = org.reactjs.native.example.deep.mobile;
+				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.deep-mobile";
 				PRODUCT_NAME = deep.mobile;
 				SWIFT_OBJC_BRIDGING_HEADER = "deep.mobile-Bridging-Header.h";
 				SWIFT_VERSION = 4.2;
