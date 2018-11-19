@@ -62,8 +62,10 @@ getDamageMarkeres=()=>{
 }
   
   render() {
-
-
+    markersPositions = this.state.markersPositions;
+const damageMarkers = markersPositions.map(markerPosition=> (
+<MapView.Marker coordinate = {markerPosition} key= {markerPosition.id}/>
+));
     return (
       <View style={style.container}>
      
@@ -72,7 +74,7 @@ getDamageMarkeres=()=>{
           showsUserLocation
          // followsUserLocation
         >
-        
+        {damageMarkers}
         <MapView.Marker coordinate={{latitude:37,
         longitude:-100}}/>
         </MapView>
