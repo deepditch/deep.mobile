@@ -48,6 +48,7 @@ class MLModelService {
     }
     
     let resultDictionary = NSMutableDictionary(contentsOfFile: path)
+    
     print("Loaded MlModelCache file is --> \(resultDictionary?.description ?? "")")
     
     let myDict = NSDictionary(contentsOfFile: path)
@@ -117,17 +118,21 @@ class MLModelService {
   }
   
   // Downloads and compiles the model stored on the server at urlString, calls completion with the compiled model url
-  func downloadAndCompileMlModel(at urlString: String, completion: @escaping (URL) -> Void) {
+  func downloadAndCompileMlModel(at urlString: String, completion: @escaping (URL) -> Void,
+                                 progress: @escaping (Float) -> Void, error: @escaping (Error?) -> Void) {
     if let url = NSURL(string: urlString) {
       let modelUrl = URL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent(url.lastPathComponent!)
-      Downloader.load(url: url as URL, to: modelUrl) {
-        do {
-          let compiledUrl = try MLModel.compileModel(at: modelUrl)
-          completion(compiledUrl)
-        } catch let error {
-          print(error)
-        }
-      }
+      Downloader().load(from: url as URL, to: modelUrl,
+        completion: { localUrl in
+          do {
+            let compiledUrl = try MLModel.compileModel(at: localUrl)
+            completion(compiledUrl)
+          } catch let error {
+            print(error)
+          }
+        },
+        progress: progress,
+        error: error)
     }
   }
   
@@ -157,14 +162,18 @@ class MLModelService {
   }
   
   // Calls completion with either the cached modelrc file or a new modelrc file downloaded from the server
-  func getModel(completion: @escaping (URL) -> Void) {
+  func getModel(completion: @escaping (URL) -> Void,
+                progress: @escaping (Float) -> Void, error: @escaping (Error?) -> Void) {
     getMlModelUrlFromServer() { [unowned self] urlString in
       if self.shouldDownloadNewModel(at: urlString) {
-        self.downloadAndCompileMlModel(at: urlString) { [unowned self] compiledUrl in
-          self.saveCompiledMlModel(at: compiledUrl) { localUrl in
-            completion(localUrl)
-          }
-        }
+        self.downloadAndCompileMlModel(at: urlString,
+          completion: { [unowned self] compiledUrl in
+            self.saveCompiledMlModel(at: compiledUrl) { localUrl in
+              completion(localUrl)
+            }
+          },
+          progress: progress,
+          error: error)
       } else {
         completion(self.getCachedMlModelUrl())
       }
