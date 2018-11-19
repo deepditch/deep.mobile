@@ -8,6 +8,7 @@ import {
   KeyboardAvoidingView
 } from "react-native";
 
+import { AsyncStorage } from "react-native";
 
 
 import AuthService from "../services/auth.service";
@@ -22,8 +23,8 @@ export default class loginPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      email: "drakesvoboda@gmail.com",
-      password: "asdfasdf",
+      email: "",
+      password: "",
       alert: ""
     };
   }
@@ -34,6 +35,7 @@ export default class loginPage extends Component {
         <View>
           <Text style={InputStyle.label}>Email</Text>
           <TextInput
+            //clearButtonMode ="always"
             style={InputStyle.input}
             placeholder="Email"
             label="Email"
@@ -46,6 +48,7 @@ export default class loginPage extends Component {
           />
           <Text style={InputStyle.label}>Password</Text>
           <TextInput
+          //clearButtonMode ="always"
             style={InputStyle.input}
             placeholder="Password"
             label="Password"
@@ -72,11 +75,18 @@ export default class loginPage extends Component {
           </TouchableOpacity>
           <Text>{this.state.alert}</Text>
         </View>
+
       </KeyboardAvoidingView>
     );
   }
 
   login() {
+
+    AsyncStorage.setItem('email', this.state.email).done();
+    AsyncStorage.setItem('password',this.state.password).done();
+    //this.setState({email:email, savedEmail:email, password:password,savedPass:password})
+
+
     new AuthService()
       .login(this.state.email, this.state.password)
       .then(response => {
@@ -87,7 +97,33 @@ export default class loginPage extends Component {
           this.setState({ alert: "Login Failure: " + error.message });
         else this.setState({ alert: "Login Failure" });
       });
+      this.clearAfterSubmit();
+
   }
+  clearAfterSubmit()
+  {
+    this.setState({
+      email:'',
+      password:''
+    })
+  }
+// savedDataExists(){
+//   AsyncStorage.getItem('email').then((email)=>{
+//     this.setState({email:email})
+//   })
+//   AsyncStorage.getItem('password').then((password)=>{
+//     this.setState({password:password})
+//   })
+//}
+  componentDidMount(){
+ //   this.savedDataExists();
+    AsyncStorage.getItem('email').then((email)=>{
+      this.setState({email:email})
+    })
+    AsyncStorage.getItem('password').then((password)=>{
+      this.setState({password:password})
+    })
+  } 
 }
 
 const style = StyleSheet.create({

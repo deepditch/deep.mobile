@@ -19,6 +19,7 @@ import mapScreenView from "./Source/mapScreen";
 import { StackNavigator, DrawerNavigator, DrawerItems } from "react-navigation";
 
 import { PermissionsAndroid } from "react-native";
+import AuthService from "./Source/services/auth.service";
 
 const cameraScreen = StackNavigator({
   Camera: { screen: DamageCameraScreen },
@@ -54,7 +55,7 @@ const DrawerStack = DrawerNavigator({
             [
               {
                 text: 'Yes', onPress: () => {
-                  AsyncStorage.clear();
+                  AsyncStorage.getAllKeys().then(AsyncStorage.multiRemove);
                   props.navigation.navigate('Home')
                 }
               },
@@ -101,9 +102,21 @@ const NavApp = StackNavigator(
   }
 );
 
+
 export default class App extends Component {
   render() {
+
+//   alert(((AuthToken)));
+    //if (AuthToken === null)
+    {
+    //return <NavApp />;
+   // return <DrawerStack/>;
+  }
+  //else
+  {
+    
     return <NavApp />;
+    //return <DrawerStack/>;
   }
 }
-
+}

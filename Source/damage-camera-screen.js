@@ -48,15 +48,22 @@ export default class DamageCameraScreen extends Component {
     <TouchableOpacity onPress={()=>props.navigation.openDrawer()}><Text>Menu</Text></TouchableOpacity>
   };}
 
-  state = {
-    token: null,
-    damages: []
-  };
+  // state = {
+  //   token: null,
+  //   damages: []
+  // };
 
   constructor(props) {
     super(props);
+    this.state = {
+      token: null,
+    damages: []
+    }
+    this.getValue = this.getValue.bind(this);
   }
-
+getValue(){
+  return this.state.token;
+}
   componentDidMount() {
     if (Platform.OS === "ios") {
       //platform.OS detects if it ios or android and runs the respective permissions
