@@ -5,11 +5,12 @@ import {
   View,
   TextInput,
   TouchableOpacity,
+  TouchableHighlight,
   Button,
   KeyboardAvoidingView
 } from "react-native";
 import { StackNavigator, DrawerNavigator } from "react-navigation";
-
+import config from "../project.config"; 
 import MapView, { AnimatedRegion } from "react-native-maps";
 
 export default class mapScreenView extends Component {
@@ -21,7 +22,9 @@ export default class mapScreenView extends Component {
       )
     };
   };
-
+state={
+  markersPositions:[]
+}
 
   //   constructor(props){
   //       super(props);
@@ -39,19 +42,43 @@ export default class mapScreenView extends Component {
   //       };
   //   }
 
-
+getDamageMarkeres=()=>{
+  fetch(config.API_BASE_PATH+"/road-damage")
+  .then(res=>res.json())
+  .then(parsedRes=>{
+    const markersArray=[];
+    for(const key in parsedRes)
+    {
+      markersArray.push({
+        latitude: parsedRes[key].position.latitude,
+        longitude: parsedRes[key].position.longitude,
+        id:key
+      })
+    }
+    this.setState({
+      markersPositions:markersArray
+    })
+  })
+}
   
   render() {
+
+
     return (
       <View style={style.container}>
+     
         <MapView
           style={style.mappingview}
           showsUserLocation
          // followsUserLocation
         >
+        
         <MapView.Marker coordinate={{latitude:37,
         longitude:-100}}/>
         </MapView>
+        <View style={{position:"absolute",top:'90%', alignItems:"center"}}>
+            <Button title="Get damage locations" onPress={this.getDamageMarkeres.bind(this)}/>
+          </View>
       </View>
     );
   }
