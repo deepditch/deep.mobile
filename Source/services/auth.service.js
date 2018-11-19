@@ -83,6 +83,7 @@ export default class AuthService {
   async getToken() {
     try {
       const token = await AsyncStorage.getItem("@auth:token");
+      console.log(token);
       if (token !== null) {
         return token;
       }

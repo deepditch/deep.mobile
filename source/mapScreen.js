@@ -43,17 +43,29 @@ state={
   //   }
 
 getDamageMarkeres=()=>{
-  fetch(config.API_BASE_PATH+"/road-damage")
+  
+  const requestBody = {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      authorization:"Bearer " + "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMjA5LjEyNi4zMC4yNDcvYXBpL2xvZ2luIiwiaWF0IjoxNTQyNjQwNDQzLCJleHAiOjE1NDI2NDQwNDMsIm5iZiI6MTU0MjY0MDQ0MywianRpIjoiN2hSaWdYclVlQVE4QTR1eCIsInN1YiI6MjIsInBydiI6Ijg3ZTBhZjFlZjlmZDE1ODEyZmRlYzk3MTUzYTE0ZTBiMDQ3NTQ2YWEifQ.xxY6YTBJ960p_a03YmraDFmRvbjlSqdeiz3tyf6L3mw"
+      },
+    //body: JSON.stringify(data)
+  };
+
+  fetch(config.API_BASE_PATH+"/road-damage", requestBody)
   .then(res=>res.json())
   .then(parsedRes=>{
+    console.log((parsedRes))
     const markersArray=[];
     for(const key in parsedRes)
     {
       markersArray.push({
-        latitude: parsedRes[key].position.latitude,
-        longitude: parsedRes[key].position.longitude,
+        position: parsedRes[key].position,
+        
         id:key
       })
+      console.log(position);
     }
     this.setState({
       markersPositions:markersArray
