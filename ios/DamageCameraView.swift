@@ -9,42 +9,28 @@ import UIKit
 import CoreML
 import CoreLocation
 
-class DamageCameraView: UIImageView {
+class DamageCameraView: UIView {
   var onDamageDetected: RCTDirectEventBlock?
   var onDamageReported: RCTDirectEventBlock?
-  var frameExtractor: FrameExtractor!
+  var onDownloadProgress: RCTDirectEventBlock?
+  var onDownloadComplete: RCTDirectEventBlock?
+  var onError: RCTDirectEventBlock?
   var damageDetector: DamageDetector?
   var damageService: DamageService?
   var mlmodelService: MLModelService?
-  var throttler: Throttler!
   
-  init() {
-    super.init(image: nil)
+  override init(frame: CGRect) {
+    super.init(frame: frame)
   }
   
   func startDetecting() {
-    frameExtractor = FrameExtractor()
-    
-    throttler = Throttler(seconds: 0.125, queue: DispatchQueue.global(qos: .userInitiated)) // Damage detection is run a maximum of 8 times per second
-    
-    frameExtractor.frameCaptured = { [unowned self] (image: UIImage?) in
-      self.image = image // Update the UI
-      
-      guard self.damageDetector != nil else { return }
-      
-      self.throttler.throttle {
-        guard self.damageDetector != nil else { return }
-        self.damageDetector!.maybeDetect(for: image!)
-      }
-    }
-    
     self.damageDetector!.damageDetected = { [unowned self] (image: UIImage, damages: [Damage], coords: CLLocationCoordinate2D, course: String) in
-      self.damageService!.maybeReport(image: image, damages: damages, latitude: coords.latitude, longitude: coords.longitude, course: course) { result in
+       self.damageService!.maybeReport(image: image, damages: damages, latitude: coords.latitude, longitude: coords.longitude, course: course) { result in
         if(self.onDamageReported != nil) {
           switch result {
           case let .success(response):
-            let data = response.data // Data, your JSON response is probably in here!
-            let statusCode = response.statusCode // Int - 200, 401, 500, etc
+            let data = response.data
+            let statusCode = response.statusCode
             
             self.onDamageReported!([
               "data": data,
@@ -81,15 +67,40 @@ class DamageCameraView: UIImageView {
     onDamageReported = callback
   }
   
+  @objc(setOnDownloadProgress:) // For react native to set the damage reported callback
+  public func setOnDownloadProgress(callback: @escaping RCTDirectEventBlock) {
+    onDownloadProgress = callback
+  }
+  
+  @objc(setOnDownloadComplete:) // For react native to set the damage reported callback
+  public func setOnDownloadComplete(callback: @escaping RCTDirectEventBlock) {
+    onDownloadComplete = callback
+  }
+  
+  @objc(setOnError:) // For react native to set the damage reported callback
+  public func setOnError(callback: @escaping RCTDirectEventBlock) {
+    onError = callback
+  }
+  
   @objc(setAuthToken:) // For react native to set the auth token
   public func setAuthToken(token: NSString) {
     damageService = DamageService(with: token as String)
     mlmodelService = MLModelService(with: token as String)
     
-    mlmodelService!.getModel() { compiledUrl in
-      self.damageDetector = DamageDetector(compiledUrl: compiledUrl)
-      self.startDetecting()
-    }
+    mlmodelService!.getModel(
+      completion: { compiledUrl in
+        self.damageDetector = DamageDetector(previewView: self, compiledUrl: compiledUrl)
+        self.startDetecting()
+      },
+      progress: { progress in
+        guard self.onDownloadProgress != nil else { return }
+        self.onDownloadProgress!(["progress": progress])
+      },
+      error: { error in
+        guard self.onError != nil else { return }
+        self.onError!(["error": "Error retrieving the damage detection model"])
+      }
+    )
   }
   
   required init?(coder aDecoder: NSCoder) {

@@ -18,11 +18,35 @@ export default class DamageCamera extends Component {
     this.props.onDamageReported(event.nativeEvent);
   };
 
+  _onDownloadProgress = event => {
+    if (!this.props.onDamageReported) {
+      return;
+    }
+    this.props.onDownloadProgress(event.nativeEvent);
+  };
+
+  _onDownloadComplete = event => {
+    if (!this.props.onDamageReported) {
+      return;
+    }
+    this.props.onDownloadComplete(event.nativeEvent);
+  };
+
+  _onError = event => {
+    if (!this.props.onDamageReported) {
+      return;
+    }
+    this.props.onError(event.nativeEvent);
+  };
+
   render() {
     const nativeProps = {
       ...this.props,
       onDamageDetected: this._onDamageDetected,
-      onDamageReported: this._onDamageReported
+      onDamageReported: this._onDamageReported,
+      onDownloadProgress: this._onDownloadProgress,
+      onDownloadComplete: this._onDownloadComplete,
+      onError: this._onError
     };
     return <DamageCameraView {...nativeProps} />;
   }
