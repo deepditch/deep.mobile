@@ -5,6 +5,7 @@ import {
   View,
   TextInput,
   TouchableOpacity,
+  Button,
   KeyboardAvoidingView
 } from "react-native";
 import { StackNavigator, DrawerNavigator } from "react-navigation";
@@ -12,7 +13,7 @@ import { StackNavigator, DrawerNavigator } from "react-navigation";
 import MapView, { AnimatedRegion } from "react-native-maps";
 
 export default class mapScreenView extends Component {
-  static navigationOptions = function(props) {
+  static navigationOptions = function (props) {
     return {
       title: "Map",
       headerLeft: (
@@ -20,6 +21,7 @@ export default class mapScreenView extends Component {
       )
     };
   };
+
 
   //   constructor(props){
   //       super(props);
@@ -37,13 +39,20 @@ export default class mapScreenView extends Component {
   //       };
   //   }
 
+
+  
   render() {
     return (
-      <MapView
-        style={style.mappingview}
-        showsUserLocation
-        followsUserLocation
-      />
+      <View style={style.container}>
+        <MapView
+          style={style.mappingview}
+          showsUserLocation
+         // followsUserLocation
+        >
+        <MapView.Marker coordinate={{latitude:37,
+        longitude:-100}}/>
+        </MapView>
+      </View>
     );
   }
 
@@ -51,14 +60,21 @@ export default class mapScreenView extends Component {
 
 const style = StyleSheet.create({
   container: {
-    flex: 1,
-    padding: 25,
-    backgroundColor: "#eee"
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    justifyContent: 'flex-end',
+    alignItems: 'center',
   },
 
   mappingview: {
-    ...StyleSheet.absoluteFillObject,
-    top: 10
-  }
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+  },
 });
 
