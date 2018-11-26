@@ -81,10 +81,8 @@ export default class loginPage extends Component {
   }
 
   login() {
-
     AsyncStorage.setItem('email', this.state.email).done();
     AsyncStorage.setItem('password',this.state.password).done();
-    //this.setState({email:email, savedEmail:email, password:password,savedPass:password})
 
 
     new AuthService()
@@ -98,8 +96,8 @@ export default class loginPage extends Component {
         else this.setState({ alert: "Login Failure" });
       });
       this.clearAfterSubmit();
-
   }
+
   clearAfterSubmit()
   {
     this.setState({
@@ -107,16 +105,8 @@ export default class loginPage extends Component {
       password:''
     })
   }
-// savedDataExists(){
-//   AsyncStorage.getItem('email').then((email)=>{
-//     this.setState({email:email})
-//   })
-//   AsyncStorage.getItem('password').then((password)=>{
-//     this.setState({password:password})
-//   })
-//}
+
   componentDidMount(){
- //   this.savedDataExists();
     AsyncStorage.getItem('email').then((email)=>{
       this.setState({email:email})
     })

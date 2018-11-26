@@ -232,13 +232,13 @@ class DamageDetector: FrameExtractor, CLLocationManagerDelegate {
     
     switch curDeviceOrientation {
     case UIDeviceOrientation.portraitUpsideDown:  // Device oriented vertically, home button on the top
-      exifOrientation = .right
-    case UIDeviceOrientation.landscapeLeft:       // Device oriented horizontally, home button on the right
-      exifOrientation = .down
-    case UIDeviceOrientation.portrait:            // Device oriented vertically, home button on the bottom
       exifOrientation = .left
-    case UIDeviceOrientation.landscapeRight:      // Device oriented horizontally, home button on the left
+    case UIDeviceOrientation.landscapeLeft:       // Device oriented horizontally, home button on the right
       exifOrientation = .up
+    case UIDeviceOrientation.portrait:            // Device oriented vertically, home button on the bottom
+      exifOrientation = .right
+    case UIDeviceOrientation.landscapeRight:      // Device oriented horizontally, home button on the left
+      exifOrientation = .down
     default:
       exifOrientation = .up
     }

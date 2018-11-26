@@ -1,9 +1,18 @@
 import React, { Component } from "react";
-import { requireNativeComponent } from "react-native";
+import { requireNativeComponent, Dimensions } from "react-native";
 
 const DamageCameraView = requireNativeComponent("DamageCameraView");
 
 export default class DamageCamera extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      width: Dimensions.get("window").width,
+      height: Dimensions.get("window").height
+    };
+
+    this.onLayout = this.onLayout.bind(this);
+  }
   _onDamageDetected = event => {
     if (!this.props.onDamageDetected) {
       return;
@@ -39,6 +48,13 @@ export default class DamageCamera extends Component {
     this.props.onError(event.nativeEvent);
   };
 
+  onLayout(e) {
+    this.setState({
+      width: Dimensions.get("window").width,
+      height: Dimensions.get("window").height
+    });
+  }
+
   render() {
     const nativeProps = {
       ...this.props,
@@ -48,6 +64,12 @@ export default class DamageCamera extends Component {
       onDownloadComplete: this._onDownloadComplete,
       onError: this._onError
     };
-    return <DamageCameraView {...nativeProps} />;
+    return (
+      <DamageCameraView
+        onLayout={this.onLayout}
+        style={{ width: this.state.width }}
+        {...nativeProps}
+      />
+    );
   }
 }

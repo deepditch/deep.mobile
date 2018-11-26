@@ -63,13 +63,13 @@ export default class DamageCameraScreen extends Component {
     super(props);
     this.state = {
       token: null,
-    damages: []
-    }
+      damages: []
+    };
     this.getValue = this.getValue.bind(this);
   }
-getValue(){
-  return this.state.token;
-}
+  getValue() {
+    return this.state.token;
+  }
   componentDidMount() {
     if (Platform.OS === "ios") {
       //platform.OS detects if it ios or android and runs the respective permissions
@@ -91,9 +91,11 @@ getValue(){
   }
 
   _onDownloadProgress(event) {
-    console.log("prog: ", event);
     clearTimeout(this.progressTimeout);
-    this.setState({ status: "ok", msg: `Downloading... \n ${Math.round(event.progress * 100)}%` });
+    this.setState({
+      status: "ok",
+      msg: `Downloading... \n ${Math.round(event.progress * 100)}%`
+    });
     this.progressTimeout = setTimeout(
       function() {
         this.setState({ msg: "" });
@@ -103,7 +105,6 @@ getValue(){
   }
 
   _onDownloadComplete(event) {
-    console.log(event);
     clearTimeout(this.progressTimeout);
     this.setState({ status: "ok", msg: "Download Complete" });
     this.progressTimeout = setTimeout(
@@ -115,7 +116,10 @@ getValue(){
   }
 
   _onError(event) {
-    this.setState({ status: "err", msg: "Model failed to download or compile" });
+    this.setState({
+      status: "err",
+      msg: "Model failed to download or compile"
+    });
   }
 
   _onDamageDetected(event) {
@@ -130,7 +134,6 @@ getValue(){
   }
 
   _onDamageReported(event) {
-    console.log("Reported: ", event);
     clearTimeout(this.statusTimeout);
     if (event.status == 201 || event.status == 200) {
       this.setState({ status: "ok", msg: "Upload Successful" });

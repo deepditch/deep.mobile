@@ -15,13 +15,19 @@ class DamageCameraView: UIView {
   var onDownloadProgress: RCTDirectEventBlock?
   var onDownloadComplete: RCTDirectEventBlock?
   var onError: RCTDirectEventBlock?
-  var damageDetector: DamageDetector?
   var damageService: DamageService?
-  var mlmodelService: MLModelService?
+  var mlmodelService: MLModelService?  
+  var damageDetector: DamageDetector?
   
   override init(frame: CGRect) {
     super.init(frame: frame)
   }
+  
+  //override func layoutSubviews() {
+   // super.layoutSubviews()
+   // guard damageDetector != nil else { return }
+   // damageDetector?.previewView.frame = bounds
+  //}
   
   func startDetecting() {
     self.damageDetector!.damageDetected = { [unowned self] (image: UIImage, damages: [Damage], coords: CLLocationCoordinate2D, course: String) in
@@ -105,5 +111,19 @@ class DamageCameraView: UIView {
   
   required init?(coder aDecoder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
+  }
+}
+
+
+extension UIView {
+  var parentViewController: UIViewController? {
+    var parentResponder: UIResponder? = self
+    while parentResponder != nil {
+      parentResponder = parentResponder!.next
+      if let viewController = parentResponder as? UIViewController {
+        return viewController
+      }
+    }
+    return nil
   }
 }
