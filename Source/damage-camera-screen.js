@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Text, Platform, View, TouchableOpacity } from "react-native";
 import AuthService from "./services/auth.service";
+import DamageService from "./services/damage.service";
 import { StyleSheet, Dimensions } from "react-native";
 import DamageCamera from "./damage-camera";
 
@@ -54,22 +55,17 @@ export default class DamageCameraScreen extends Component {
     };
   };
 
-  // state = {
-  //   token: null,
-  //   damages: []
-  // };
-
   constructor(props) {
     super(props);
     this.state = {
       token: null,
       damages: []
     };
-    this.getValue = this.getValue.bind(this);
+
+    this.reports = [];
+    this.damageService = new DamageService();
   }
-  getValue() {
-    return this.state.token;
-  }
+
   componentDidMount() {
     if (Platform.OS === "ios") {
       //platform.OS detects if it ios or android and runs the respective permissions
@@ -88,6 +84,36 @@ export default class DamageCameraScreen extends Component {
       .catch(err => {
         console.log(err);
       });
+
+    this._interval = setInterval(this.reportDamage.bind(this), 125);
+  }
+
+  reportDamage() {
+    if (this.reports.length == 0) return;
+
+    bestReport = this.reports.reduce(function(a, b) {
+      return a.confidence > b.confidence ? a : b;
+    });
+
+    clearTimeout(this.statusTimeout);
+
+    this.damageService
+      .reportDamage(bestReport)
+      .then(response => {
+        this.setState({ status: "ok", msg: "Upload Successful" });
+      })
+      .catch(error => {
+        this.setState({ status: "err", msg: "Failed To Upload" });
+      });
+
+    this.statusTimeout = setTimeout(
+      function() {
+        this.setState({ msg: "" });
+      }.bind(this),
+      3000
+    );
+
+    this.reports = [];
   }
 
   _onDownloadProgress(event) {
@@ -124,28 +150,17 @@ export default class DamageCameraScreen extends Component {
 
   _onDamageDetected(event) {
     clearTimeout(this.damagesTimeout);
+
     this.setState({ damages: event.damages });
+
     this.damagesTimeout = setTimeout(
       function() {
         this.setState({ damages: [] });
       }.bind(this),
       3000
     );
-  }
 
-  _onDamageReported(event) {
-    clearTimeout(this.statusTimeout);
-    if (event.status == 201 || event.status == 200) {
-      this.setState({ status: "ok", msg: "Upload Successful" });
-    } else {
-      this.setState({ status: "err", msg: "Failed To Upload" });
-    }
-    this.statusTimeout = setTimeout(
-      function() {
-        this.setState({ msg: "" });
-      }.bind(this),
-      3000
-    );
+    this.reports.push(event);
   }
 
   render() {
@@ -161,7 +176,6 @@ export default class DamageCameraScreen extends Component {
       <DamageCamera
         style={styles.preview}
         onDamageDetected={this._onDamageDetected.bind(this)}
-        onDamageReported={this._onDamageReported.bind(this)}
         onDownloadComplete={this._onDownloadComplete.bind(this)}
         onDownloadProgress={this._onDownloadProgress.bind(this)}
         onError={this._onError.bind(this)}

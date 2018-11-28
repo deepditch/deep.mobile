@@ -33,4 +33,25 @@ export default class DamageService {
         });
     });
   }
+
+  async reportDamage(report) {
+    var token = await new AuthService().getToken();
+    const requestBody = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        authorization: "Bearer " + token
+      },
+      body: JSON.stringify(report)
+    };
+
+    return new Promise((resolve, reject) => {
+      fetch(config.API_BASE_PATH + "/road-damage/new", requestBody)
+        .then(this.parseJSON)
+        .then(response => {
+          if (!response.ok) return reject(response.json);
+          return resolve(response.json.data);
+        });
+    });
+  }
 }
