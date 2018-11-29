@@ -6,12 +6,17 @@ import { StyleSheet, Dimensions } from "react-native";
 import DamageCamera from "./damage-camera";
 
 class DamageLabels extends Component {
+  constructor(props) {
+    super(props)
+    this.refs = {};
+  }
+
   render() {
     return (
       <>
         {this.props.damages &&
-          this.props.damages.map(damage => (
-            <Text style={styles.pop}>
+          this.props.damages.map((damage, idx) => (
+            <Text style={styles.pop} key={idx}>
               {damage.type}: {damage.description} ({damage.confidence})
             </Text>
           ))}
@@ -57,6 +62,8 @@ export default class DamageCameraScreen extends Component {
 
   constructor(props) {
     super(props);
+    console.log("init")
+    
     this.state = {
       token: null,
       damages: []
@@ -118,6 +125,7 @@ export default class DamageCameraScreen extends Component {
 
   _onDownloadProgress(event) {
     clearTimeout(this.progressTimeout);
+    console.log(event)
     this.setState({
       status: "ok",
       msg: `Downloading... \n ${Math.round(event.progress * 100)}%`
@@ -164,6 +172,8 @@ export default class DamageCameraScreen extends Component {
   }
 
   render() {
+    console.log("render")
+
     if (!this.state.token) {
       return (
         <View>
@@ -192,9 +202,7 @@ const styles = StyleSheet.create({
   preview: {
     flex: 1,
     justifyContent: "flex-end",
-    alignItems: "center",
-    height: Dimensions.get("window").height,
-    width: Dimensions.get("window").width
+    alignItems: "center"
   },
   pop: {
     flex: 0,

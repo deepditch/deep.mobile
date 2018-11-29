@@ -62,21 +62,22 @@ class DamageCameraView: UIView {
   @objc(setAuthToken:) // For react native to set the auth token
   public func setAuthToken(token: NSString) {
     mlmodelService = MLModelService(with: token as String)
-    
-    mlmodelService!.getModel(
-      completion: { compiledUrl in
-        self.damageDetector = DamageDetector(previewView: self, compiledUrl: compiledUrl)
-        self.startDetecting()
+    DispatchQueue.global(qos: .background).async { [unowned self] in
+      self.mlmodelService!.getModel(
+        completion: { compiledUrl in
+          self.damageDetector = DamageDetector(previewView: self, compiledUrl: compiledUrl)
+          self.startDetecting()
       },
-      progress: { progress in
-        guard self.onDownloadProgress != nil else { return }
-        self.onDownloadProgress!(["progress": progress])
+        progress: { progress in
+          guard self.onDownloadProgress != nil else { return }
+          self.onDownloadProgress!(["progress": progress])
       },
-      error: { error in
-        guard self.onError != nil else { return }
-        self.onError!(["error": "Error retrieving the damage detection model"])
+        error: { error in
+          guard self.onError != nil else { return }
+          self.onError!(["error": "Error retrieving the damage detection model"])
       }
-    )
+      )
+    }
   }
   
   override func layoutSubviews() {

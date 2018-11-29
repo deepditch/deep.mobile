@@ -26,10 +26,16 @@ export default class mapScreenView extends Component {
     };
   };
 
-  state = {
-    markersPositions: [],
-    alert: ""
-  };
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      markersPositions: [],
+      alert: ""
+    };
+  }
+
+  
 
   componentDidMount() {
     this.getDamageMarkers();
