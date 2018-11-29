@@ -62,8 +62,7 @@ export default class DamageCameraScreen extends Component {
 
   constructor(props) {
     super(props);
-    console.log("init")
-    
+
     this.state = {
       token: null,
       damages: []
@@ -124,8 +123,8 @@ export default class DamageCameraScreen extends Component {
   }
 
   _onDownloadProgress(event) {
+    console.log("View: ", event.progress)
     clearTimeout(this.progressTimeout);
-    console.log(event)
     this.setState({
       status: "ok",
       msg: `Downloading... \n ${Math.round(event.progress * 100)}%`
@@ -172,8 +171,6 @@ export default class DamageCameraScreen extends Component {
   }
 
   render() {
-    console.log("render")
-
     if (!this.state.token) {
       return (
         <View>
