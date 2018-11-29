@@ -92,6 +92,19 @@ class FrameExtractor: NSObject, AVCaptureVideoDataOutputSampleBufferDelegate {
     previewLayer = nil
   }
   
+  func configureVideoOrientation() {
+    if let previewLayer = self.previewLayer,
+      let connection = previewLayer.connection {
+      let orientation = UIDevice.current.orientation
+      
+      if connection.isVideoOrientationSupported,
+        let videoOrientation = AVCaptureVideoOrientation(rawValue: orientation.rawValue) {
+        previewLayer.frame = self.previewView.bounds
+        previewLayer.connection?.videoOrientation = videoOrientation
+      }
+    }
+  }
+  
   func captureOutput(_ captureOutput: AVCaptureOutput, didDrop didDropSampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
     // print("frame dropped")
   }

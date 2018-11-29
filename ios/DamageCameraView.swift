@@ -79,11 +79,16 @@ class DamageCameraView: UIView {
     )
   }
   
+  override func layoutSubviews() {
+    super.layoutSubviews()
+    guard self.damageDetector != nil else { return }
+    self.damageDetector!.configureVideoOrientation()
+  }
+  
   required init?(coder aDecoder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
 }
-
 
 extension UIView {
   var parentViewController: UIViewController? {

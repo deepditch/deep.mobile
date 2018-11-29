@@ -1,5 +1,5 @@
 var config = {};
 
-config.API_BASE_PATH = "http://209.126.30.247/api";
+config.API_BASE_PATH = "https://www.deepditch.com/api";
 
 export default config;

@@ -30,12 +30,10 @@ class DamageDetector: FrameExtractor, CLLocationManagerDelegate {
   var hasMoved: Bool = false
   var location: CLLocation?
   var roadDamageModel: RoadDamageModel!
-  var manager: CLLocationManager!
-  var throttler: Throttler!
+  var locationManager: CLLocationManager!
   
   init(previewView: UIView, compiledUrl: URL) {
     super.init(previewView: previewView)
-    throttler = Throttler(seconds: 0.125, queue: DispatchQueue.global(qos: .userInitiated))
     
     do {
       roadDamageModel = try RoadDamageModel(contentsOf: compiledUrl)
@@ -53,12 +51,12 @@ class DamageDetector: FrameExtractor, CLLocationManagerDelegate {
   }
   
   func setupGPS() {
-    self.manager = CLLocationManager()
-    self.manager.requestWhenInUseAuthorization()
-    self.manager.delegate = self
-    self.manager.desiredAccuracy = kCLLocationAccuracyBest
-    self.manager.activityType = .automotiveNavigation
-    self.manager.startUpdatingLocation()
+    self.locationManager = CLLocationManager()
+    self.locationManager.requestWhenInUseAuthorization()
+    self.locationManager.delegate = self
+    self.locationManager.desiredAccuracy = kCLLocationAccuracyBest
+    self.locationManager.activityType = .automotiveNavigation
+    self.locationManager.startUpdatingLocation()
   }
   
   func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
@@ -97,15 +95,7 @@ class DamageDetector: FrameExtractor, CLLocationManagerDelegate {
   
   private let visionQueue = DispatchQueue(label: "com.deep.ditch.visionqueue")
   
-   private let context = CIContext()
-  
-  private func imageFromSampleBuffer(sampleBuffer: CMSampleBuffer) -> UIImage? {
-    guard let imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else { return nil }
-    let ciImage = CIImage(cvPixelBuffer: imageBuffer)
-    guard let cgImage = context.createCGImage(ciImage, from: ciImage.extent) else { return nil }
-    let img = UIImage(cgImage: cgImage, scale: 1, orientation: UIImageOrientationFromDeviceOrientation())
-    return fixOrientation(for: img)
-  }
+  private let context = CIContext()
   
   func fixOrientation(for img: UIImage) -> UIImage {
     if (img.imageOrientation == .up) {
@@ -120,6 +110,14 @@ class DamageDetector: FrameExtractor, CLLocationManagerDelegate {
     UIGraphicsEndImageContext()
     
     return normalizedImage
+  }
+  
+  private func imageFromSampleBuffer(sampleBuffer: CMSampleBuffer) -> UIImage? {
+    guard let imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else { return nil }
+    let ciImage = CIImage(cvPixelBuffer: imageBuffer)
+    guard let cgImage = context.createCGImage(ciImage, from: ciImage.extent) else { return nil }
+    let img = UIImage(cgImage: cgImage, scale: 1, orientation: UIImageOrientationFromDeviceOrientation())
+    return fixOrientation(for: img)
   }
   
   override func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
