@@ -16,7 +16,6 @@ import {
   createDrawerNavigator,
   DrawerItems
 } from "react-navigation";
-import AuthService from "./source/services/auth.service";
 
 const cameraScreen = createStackNavigator(
   {
@@ -104,25 +103,7 @@ const NavApp = createStackNavigator(
 export default class App extends Component {
 
   render() {
-    //   alert(((AuthToken)));
-    //if (AuthToken === null)
-
-
     return <NavApp />;
-
-    // return <DrawerStack/>;
-
-    //else
-
-    // alert(this.state.token);
-    //  if (this.currentToken === "") {
-    // { return <LoginStack />; }
-    // return <DrawerStack />;
-
-    //else if (this.currentToken !== "")
-    // {// return <LoginStack />; }
-    //  return <DrawerStack/>;
-    //  }
   }
 }
 

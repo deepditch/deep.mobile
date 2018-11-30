@@ -27,7 +27,7 @@ export default class loginPage extends Component {
       email: "",
       password: "",
       alert: "",
-      currentToken:"",
+      currentToken: "",
     };
   }
 
@@ -44,13 +44,13 @@ export default class loginPage extends Component {
             textContentType="emailAddress"
             value={this.state.email}
             autoCapitalize="none"
-            keyboardType = "email-address"
+            keyboardType="email-address"
             onChangeText={email => this.setState({ email, alert: "" })}
-            
+
           />
           <Text style={InputStyle.label}>Password</Text>
           <TextInput
-          //clearButtonMode ="always"
+            //clearButtonMode ="always"
             style={InputStyle.input}
             placeholder="Password"
             label="Password"
@@ -60,8 +60,8 @@ export default class loginPage extends Component {
             secureTextEntry={true}
             onChangeText={password => this.setState({ password, alert: "" })}
           />
-          </View>
-          <View style ={ButtonStyle.bContainer}>
+        </View>
+        <View style={ButtonStyle.bContainer}>
           <TouchableOpacity
             onPress={this.login.bind(this)}
             style={[ButtonStyle.button, { marginTop: 10 }]}
@@ -70,8 +70,8 @@ export default class loginPage extends Component {
           </TouchableOpacity>
 
           <TouchableOpacity
-            onPress={()=>this.props.navigation.navigate('Register')}
-            style={[ButtonStyle.button,{ marginTop:10 }]}
+            onPress={() => this.props.navigation.navigate('Register')}
+            style={[ButtonStyle.button, { marginTop: 10 }]}
           >
             <Text style={ButtonStyle.buttonText}>REGISTER</Text>
           </TouchableOpacity>
@@ -84,7 +84,7 @@ export default class loginPage extends Component {
 
   login() {
     AsyncStorage.setItem('email', this.state.email).done();
-    AsyncStorage.setItem('password',this.state.password).done();
+    AsyncStorage.setItem('password', this.state.password).done();
 
 
     new AuthService()
@@ -97,45 +97,24 @@ export default class loginPage extends Component {
           this.setState({ alert: "Login Failure: " + error.message });
         else this.setState({ alert: "Login Failure" });
       });
-      this.clearAfterSubmit();
+    this.clearAfterSubmit();
   }
 
-  clearAfterSubmit()
-  {
+  clearAfterSubmit() {
     this.setState({
-      email:'',
-      password:''
+      email: '',
+      password: ''
     })
   }
 
 
-  // constructor(props) {
-  //   super(props);
-  //   this.state = { currentToken: "" };
-  // }
-
   async componentDidMount() {
-    //var token = await new AuthService().getToken();
-    this.setState({currentToken:await new AuthService().getToken()});
-      //alert (this.state.currentToken);
-   // }
-
-  //componentDidMount(){
-    // AsyncStorage.getItem('email').then((email)=>{
-    //   this.setState({email:email})
-    // })
-    // AsyncStorage.getItem('password').then((password)=>{
-    //   this.setState({password:password})
-    // })
-
-    if (this.state.currentToken!=="")
-    {
+    this.setState({ currentToken: await new AuthService().getToken() });
+    if (this.state.currentToken !== "") {
       this.props.navigation.navigate("Camera");
     }
 
-
-
-  } 
+  }
 }
 
 const style = StyleSheet.create({
