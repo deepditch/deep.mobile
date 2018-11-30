@@ -85,9 +85,10 @@ export default class AuthService {
       const token = await AsyncStorage.getItem("@auth:token");
       if (token !== null) {
         return token;
+      } else {
+        throw "No token";
       }
     } catch (error) {
-      console.log(error);
       throw error;
     }
   }

@@ -40,6 +40,8 @@ class Downloader : NSObject, URLSessionDownloadDelegate {
   {
     let dataFromURL = NSData(contentsOf: location)
     dataFromURL?.write(to: self.destination!, atomically: true)
+    
+    guard completionHandler != nil else { return }
     completionHandler!(self.destination!)
   }
   
@@ -50,16 +52,17 @@ class Downloader : NSObject, URLSessionDownloadDelegate {
                   totalBytesWritten: Int64,
                   totalBytesExpectedToWrite: Int64)
   {
+    guard progressHandler != nil else { return }
     progressHandler!(Float(totalBytesWritten) / Float(totalBytesExpectedToWrite))
   }
   
   // if there is an error during download this will be called
   func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError error: Error?)
   {
-    if(error != nil)
-    {
-      print("Download completed with error: \(error!.localizedDescription)");
-      errorHandler!(error)
-    }
+    guard error != nil else { return }
+    print("Download completed with error: \(error!.localizedDescription)");
+    
+    guard errorHandler != nil else { return }
+    errorHandler!(error)
   }
 }

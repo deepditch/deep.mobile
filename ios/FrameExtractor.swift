@@ -11,12 +11,11 @@ import Vision
 
 class FrameExtractor: NSObject, AVCaptureVideoDataOutputSampleBufferDelegate {
   var bufferSize: CGSize = .zero
-  var rootLayer: CALayer! = nil
   
-  private var previewView: UIView!
-  private let session = AVCaptureSession()
-  private var previewLayer: AVCaptureVideoPreviewLayer! = nil
+  public var previewView: UIView!
+  public var previewLayer: AVCaptureVideoPreviewLayer! = nil
   private let videoDataOutput = AVCaptureVideoDataOutput()
+  private let session = AVCaptureSession()
   
   private let videoDataOutputQueue = DispatchQueue(label: "VideoDataOutput", qos: .userInitiated, attributes: [], autoreleaseFrequency: .workItem)
   
@@ -77,10 +76,10 @@ class FrameExtractor: NSObject, AVCaptureVideoDataOutputSampleBufferDelegate {
     }
     session.commitConfiguration()
     previewLayer = AVCaptureVideoPreviewLayer(session: session)
+    previewLayer.connection?.videoOrientation = .landscapeRight
     previewLayer.videoGravity = AVLayerVideoGravity.resizeAspectFill
-    rootLayer = previewView.layer
-    previewLayer.frame = rootLayer.bounds
-    rootLayer.addSublayer(previewLayer)
+    previewLayer.frame = previewView.bounds
+    previewView.layer.addSublayer(previewLayer)
   }
   
   func startCaptureSession() {
@@ -91,6 +90,19 @@ class FrameExtractor: NSObject, AVCaptureVideoDataOutputSampleBufferDelegate {
   func teardownAVCapture() {
     previewLayer.removeFromSuperlayer()
     previewLayer = nil
+  }
+  
+  func configureVideoOrientation() {
+    if let previewLayer = self.previewLayer,
+      let connection = previewLayer.connection {
+      let orientation = UIDevice.current.orientation
+      
+      if connection.isVideoOrientationSupported,
+        let videoOrientation = AVCaptureVideoOrientation(rawValue: orientation.rawValue) {
+        previewLayer.frame = self.previewView.bounds
+        previewLayer.connection?.videoOrientation = videoOrientation
+      }
+    }
   }
   
   func captureOutput(_ captureOutput: AVCaptureOutput, didDrop didDropSampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
