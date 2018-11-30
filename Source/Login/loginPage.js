@@ -24,14 +24,19 @@ export default class loginPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      email: "classdemo@gmail.com",
+      email: "",
       password: "",
-      alert: "",
+      failAlert: "",
       currentToken: null,
     };
   }
 
   render() {
+    if (this.state.failAlert!=="")
+    {
+alert(this.state.failAlert);
+    }
+
     return (
       <KeyboardAvoidingView style={style.container}>
         <View>
@@ -44,13 +49,16 @@ export default class loginPage extends Component {
             textContentType="emailAddress"
             value={this.state.email}
             autoCapitalize="none"
-            keyboardType="email-address"
-            onChangeText={email => this.setState({ email, alert: "" })}
-
+            keyboardType="url"
+            onChangeText={email => this.setState({ email, failAlert: "" })}
+            returnKeyType = "next"
+            onSubmitEditing = {()=> {this.passwordField.focus();}}
+            blurOnSubmit = {false}
           />
           <Text style={InputStyle.label}>Password</Text>
           <TextInput
             //clearButtonMode ="always"
+            ref={(input)=>{this.passwordField=input}}
             style={InputStyle.input}
             placeholder="Password"
             label="Password"
@@ -58,7 +66,8 @@ export default class loginPage extends Component {
             value={this.state.password}
             autoCapitalize="none"
             secureTextEntry={true}
-            onChangeText={password => this.setState({ password, alert: "" })}
+            onChangeText={password => this.setState({ password, failAlert: "" })}
+            onSubmitEditing = {()=> {this.login();}}
           />
         </View>
         <View style={ButtonStyle.bContainer}>
@@ -75,16 +84,18 @@ export default class loginPage extends Component {
           >
             <Text style={ButtonStyle.buttonText}>REGISTER</Text>
           </TouchableOpacity>
-          <Text>{this.state.alert}</Text>
+  
         </View>
 
       </KeyboardAvoidingView>
     );
+   
+
   }
 
   login() {
-    AsyncStorage.setItem('email', this.state.email).done();
-    AsyncStorage.setItem('password', this.state.password).done();
+   // AsyncStorage.setItem('email', this.state.email).done();
+   // AsyncStorage.setItem('password', this.state.password).done();
 
 
     new AuthService()
@@ -94,15 +105,15 @@ export default class loginPage extends Component {
       })
       .catch(error => {
         if (error.message)
-          this.setState({ alert: "Login Failure: " + error.message });
-        else this.setState({ alert: "Login Failure" });
+          this.setState({ failAlert: "Login Failure: " + error.message });
+        else this.setState({ failAlert: "Login Failure" });
       });
     this.clearAfterSubmit();
   }
 
   clearAfterSubmit() {
     this.setState({
-      email: 'classdemo@gmail.com',
+      email: '',
       password: ''
     })
   }
