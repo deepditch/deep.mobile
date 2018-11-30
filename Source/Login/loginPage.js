@@ -24,10 +24,10 @@ export default class loginPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      email: "",
+      email: "classdemo@gmail.com",
       password: "",
       alert: "",
-      currentToken: "",
+      currentToken: null,
     };
   }
 
@@ -102,7 +102,7 @@ export default class loginPage extends Component {
 
   clearAfterSubmit() {
     this.setState({
-      email: '',
+      email: 'classdemo@gmail.com',
       password: ''
     })
   }
@@ -110,7 +110,7 @@ export default class loginPage extends Component {
 
   async componentDidMount() {
     this.setState({ currentToken: await new AuthService().getToken() });
-    if (this.state.currentToken !== "") {
+    if (this.state.currentToken !== null) {
       this.props.navigation.navigate("Camera");
     }
 
