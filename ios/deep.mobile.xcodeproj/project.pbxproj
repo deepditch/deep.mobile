@@ -31,7 +31,6 @@
 		9BC8A3DC21AB43D600977C8B /* DamageCameraViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B957B263215EB92A00FF2999 /* DamageCameraViewManager.swift */; };
 		9BC8A3DD21AB43D600977C8B /* DamageCameraView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B957B260215EB8DE00FF2999 /* DamageCameraView.swift */; };
 		9BC8A3DE21AB43D600977C8B /* DamageCameraViewBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = B957B265215EB9FA00FF2999 /* DamageCameraViewBridge.m */; };
-		9BC8A3DF21AB498100977C8B /* Pods_deep_mobile.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 15A7342A538FEBAB9D56F031 /* Pods_deep_mobile.framework */; };
 		9BC8A3E121AB5A6800977C8B /* RoadDamageService_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BC8A3E021AB5A6800977C8B /* RoadDamageService_Tests.swift */; };
 		B957B261215EB8DE00FF2999 /* DamageCameraView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B957B260215EB8DE00FF2999 /* DamageCameraView.swift */; };
 		B957B264215EB92A00FF2999 /* DamageCameraViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B957B263215EB92A00FF2999 /* DamageCameraViewManager.swift */; };
@@ -98,7 +97,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9BC8A3DF21AB498100977C8B /* Pods_deep_mobile.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -289,16 +287,16 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 1010;
-				LastUpgradeCheck = 940;
+				LastUpgradeCheck = 1010;
 				ORGANIZATIONNAME = Facebook;
 				TargetAttributes = {
 					13B07F861A680F5B00A75B9A = {
-						DevelopmentTeam = 45YSJCFXR6;
+						DevelopmentTeam = XLQC5SKSC8;
 						LastSwiftMigration = 1000;
 					};
 					9BC8A3C821AB42DB00977C8B = {
 						CreatedOnToolsVersion = 10.1;
-						DevelopmentTeam = 45YSJCFXR6;
+						DevelopmentTeam = XLQC5SKSC8;
 						ProvisioningStyle = Automatic;
 						TestTargetID = 13B07F861A680F5B00A75B9A;
 					};
@@ -485,7 +483,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = NO;
-				DEVELOPMENT_TEAM = 45YSJCFXR6;
+				DEVELOPMENT_TEAM = XLQC5SKSC8;
 				GCC_PREFIX_HEADER = "";
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -502,7 +500,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.deep-mobile";
+				PRODUCT_BUNDLE_IDENTIFIER = org.reactjs.native.example.deep.mobile;
 				PRODUCT_NAME = deep.mobile;
 				SWIFT_OBJC_BRIDGING_HEADER = "deep.mobile-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -518,7 +516,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 45YSJCFXR6;
+				DEVELOPMENT_TEAM = XLQC5SKSC8;
 				GCC_PREFIX_HEADER = "";
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -533,7 +531,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.deep-mobile";
+				PRODUCT_BUNDLE_IDENTIFIER = org.reactjs.native.example.deep.mobile;
 				PRODUCT_NAME = deep.mobile;
 				SWIFT_OBJC_BRIDGING_HEADER = "deep.mobile-Bridging-Header.h";
 				SWIFT_VERSION = 4.2;
@@ -636,6 +634,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
@@ -653,7 +652,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DEBUG_INFORMATION_FORMAT = dwarf;
-				DEVELOPMENT_TEAM = 45YSJCFXR6;
+				DEVELOPMENT_TEAM = XLQC5SKSC8;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				INFOPLIST_FILE = deep.mobileTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
@@ -684,7 +683,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEVELOPMENT_TEAM = 45YSJCFXR6;
+				DEVELOPMENT_TEAM = XLQC5SKSC8;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				INFOPLIST_FILE = deep.mobileTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
@@ -709,7 +708,7 @@
 				13B07F951A680F5B00A75B9A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 		83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "deep.mobile" */ = {
 			isa = XCConfigurationList;
@@ -718,7 +717,7 @@
 				83CBBA211A601CBA00E9B192 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 		9BC8A3D021AB42DC00977C8B /* Build configuration list for PBXNativeTarget "deep.mobileTests" */ = {
 			isa = XCConfigurationList;
@@ -727,7 +726,7 @@
 				9BC8A3D221AB42DC00977C8B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 /* End XCConfigurationList section */
 	};

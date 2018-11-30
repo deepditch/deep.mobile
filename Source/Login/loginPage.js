@@ -5,7 +5,8 @@ import {
   View,
   TextInput,
   TouchableOpacity,
-  KeyboardAvoidingView
+  KeyboardAvoidingView,
+  Alert
 } from "react-native";
 
 import { AsyncStorage } from "react-native";
@@ -25,7 +26,8 @@ export default class loginPage extends Component {
     this.state = {
       email: "",
       password: "",
-      alert: ""
+      alert: "",
+      currentToken:"",
     };
   }
 
@@ -88,7 +90,7 @@ export default class loginPage extends Component {
     new AuthService()
       .login(this.state.email, this.state.password)
       .then(response => {
-        this.props.navigation.navigate("Map");
+        this.props.navigation.navigate("Camera");
       })
       .catch(error => {
         if (error.message)
@@ -106,13 +108,33 @@ export default class loginPage extends Component {
     })
   }
 
-  componentDidMount(){
-    AsyncStorage.getItem('email').then((email)=>{
-      this.setState({email:email})
-    })
-    AsyncStorage.getItem('password').then((password)=>{
-      this.setState({password:password})
-    })
+
+  // constructor(props) {
+  //   super(props);
+  //   this.state = { currentToken: "" };
+  // }
+
+  async componentDidMount() {
+    //var token = await new AuthService().getToken();
+    this.setState({currentToken:await new AuthService().getToken()});
+      //alert (this.state.currentToken);
+   // }
+
+  //componentDidMount(){
+    // AsyncStorage.getItem('email').then((email)=>{
+    //   this.setState({email:email})
+    // })
+    // AsyncStorage.getItem('password').then((password)=>{
+    //   this.setState({password:password})
+    // })
+
+    if (this.state.currentToken!=="")
+    {
+      this.props.navigation.navigate("Camera");
+    }
+
+
+
   } 
 }
 

@@ -16,11 +16,12 @@ import {
   createDrawerNavigator,
   DrawerItems
 } from "react-navigation";
+import AuthService from "./source/services/auth.service";
 
 const cameraScreen = createStackNavigator(
   {
     Camera: { screen: DamageCameraScreen }
-  }
+  },
   //{headerMode:"none",}
 );
 
@@ -33,11 +34,12 @@ const mapscreen = createStackNavigator(
 
 const DrawerStack = createDrawerNavigator(
   {
+    Camera: { screen: cameraScreen },
     Map: { screen: mapscreen },
-    Camera: { screen: cameraScreen }
+
   },
   {
-    initialRouteName: "Map",
+    initialRouteName: "Camera",
     headerMode: "none",
 
     contentComponent: props => (
@@ -100,17 +102,29 @@ const NavApp = createStackNavigator(
 );
 
 export default class App extends Component {
+
   render() {
     //   alert(((AuthToken)));
     //if (AuthToken === null)
-    {
-      //return <NavApp />;
-      // return <DrawerStack/>;
-    }
+
+
+    return <NavApp />;
+
+    // return <DrawerStack/>;
+
     //else
-    {
-      return <NavApp />;
-      //return <DrawerStack/>;
-    }
+
+    // alert(this.state.token);
+    //  if (this.currentToken === "") {
+    // { return <LoginStack />; }
+    // return <DrawerStack />;
+
+    //else if (this.currentToken !== "")
+    // {// return <LoginStack />; }
+    //  return <DrawerStack/>;
+    //  }
   }
 }
+
+
+
