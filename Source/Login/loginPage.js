@@ -32,9 +32,8 @@ export default class loginPage extends Component {
   }
 
   render() {
-    if (this.state.failAlert!=="")
-    {
-alert(this.state.failAlert);
+    if (this.state.failAlert !== "") {
+      alert(this.state.failAlert);
     }
 
     return (
@@ -51,14 +50,14 @@ alert(this.state.failAlert);
             autoCapitalize="none"
             keyboardType="url"
             onChangeText={email => this.setState({ email, failAlert: "" })}
-            returnKeyType = "next"
-            onSubmitEditing = {()=> {this.passwordField.focus();}}
-            blurOnSubmit = {false}
+            returnKeyType="next"
+            onSubmitEditing={() => { this.passwordField.focus(); }}
+            blurOnSubmit={false}
           />
           <Text style={InputStyle.label}>Password</Text>
           <TextInput
             //clearButtonMode ="always"
-            ref={(input)=>{this.passwordField=input}}
+            ref={(input) => { this.passwordField = input }}
             style={InputStyle.input}
             placeholder="Password"
             label="Password"
@@ -67,7 +66,7 @@ alert(this.state.failAlert);
             autoCapitalize="none"
             secureTextEntry={true}
             onChangeText={password => this.setState({ password, failAlert: "" })}
-            onSubmitEditing = {()=> {this.login();}}
+            onSubmitEditing={() => { this.login(); }}
           />
         </View>
         <View style={ButtonStyle.bContainer}>
@@ -84,18 +83,18 @@ alert(this.state.failAlert);
           >
             <Text style={ButtonStyle.buttonText}>REGISTER</Text>
           </TouchableOpacity>
-  
+
         </View>
 
       </KeyboardAvoidingView>
     );
-   
+
 
   }
 
   login() {
-   // AsyncStorage.setItem('email', this.state.email).done();
-   // AsyncStorage.setItem('password', this.state.password).done();
+    // AsyncStorage.setItem('email', this.state.email).done();
+    // AsyncStorage.setItem('password', this.state.password).done();
 
 
     new AuthService()
