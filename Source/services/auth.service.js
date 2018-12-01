@@ -86,7 +86,7 @@ export default class AuthService {
       if (token !== null) {
         return token;
       } else {
-        throw "No token";
+        return null;
       }
     } catch (error) {
       throw error;

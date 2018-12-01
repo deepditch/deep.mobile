@@ -20,7 +20,7 @@ import {
 const cameraScreen = createStackNavigator(
   {
     Camera: { screen: DamageCameraScreen }
-  }
+  },
   //{headerMode:"none",}
 );
 
@@ -33,11 +33,12 @@ const mapscreen = createStackNavigator(
 
 const DrawerStack = createDrawerNavigator(
   {
+    Camera: { screen: cameraScreen },
     Map: { screen: mapscreen },
-    Camera: { screen: cameraScreen }
+
   },
   {
-    initialRouteName: "Map",
+    initialRouteName: "Camera",
     headerMode: "none",
 
     contentComponent: props => (
@@ -100,17 +101,11 @@ const NavApp = createStackNavigator(
 );
 
 export default class App extends Component {
+
   render() {
-    //   alert(((AuthToken)));
-    //if (AuthToken === null)
-    {
-      //return <NavApp />;
-      // return <DrawerStack/>;
-    }
-    //else
-    {
-      return <NavApp />;
-      //return <DrawerStack/>;
-    }
+    return <NavApp />;
   }
 }
+
+
+
