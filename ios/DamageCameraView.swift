@@ -11,9 +11,11 @@ import CoreLocation
 
 class DamageCameraView: UIView {
   var onDamageDetected: RCTDirectEventBlock?
+  var onDamageReported: RCTDirectEventBlock?
   var onDownloadProgress: RCTDirectEventBlock?
   var onDownloadComplete: RCTDirectEventBlock?
   var onError: RCTDirectEventBlock?
+  var damageService: DamageService?
   var mlmodelService: MLModelService?  
   var damageDetector: DamageDetector?
   
@@ -21,21 +23,43 @@ class DamageCameraView: UIView {
     super.init(frame: frame)
   }
   
+  //override func layoutSubviews() {
+   // super.layoutSubviews()
+   // guard damageDetector != nil else { return }
+   // damageDetector?.previewView.frame = bounds
+  //}
+  
   func startDetecting() {
     self.damageDetector!.damageDetected = { [unowned self] (image: UIImage, damages: [Damage], coords: CLLocationCoordinate2D, course: String) in
-      guard self.onDamageDetected != nil else { return }
-      guard let imageData = image.jpegData(compressionQuality: 1.0) else { return }
-      
-      var damageDicts = [[AnyHashable: Any]]()
-      
-      for damage in damages {
-        damageDicts.append(damage.dictionary!)
+       self.damageService!.maybeReport(image: image, damages: damages, latitude: coords.latitude, longitude: coords.longitude, course: course) { result in
+        if(self.onDamageReported != nil) {
+          switch result {
+          case let .success(response):
+            let data = response.data
+            let statusCode = response.statusCode
+            
+            self.onDamageReported!([
+              "data": data,
+              "status": statusCode
+              ]);
+            
+          case let .failure(error): // Server did not recieve request, or server did not send response
+            self.onDamageReported!([
+              "status": "err"
+              ]);
+          }
+        }
       }
       
-      self.onDamageDetected!(["location": ["latitude": coords.latitude, "longitude": coords.longitude],
-                              "direction": course,
-                              "damages": damageDicts,
-                              "image": imageData.base64EncodedString()]);
+      if(self.onDamageDetected != nil) {
+        var list = [[AnyHashable: Any]]()
+        
+        for damage in damages {
+          list.append(damage.dictionary!)
+        }
+        
+        self.onDamageDetected!(["damages": list]);
+      }
     }
   }
   
@@ -43,7 +67,12 @@ class DamageCameraView: UIView {
   public func setOnDamageDetected(callback: @escaping RCTDirectEventBlock) {
     onDamageDetected = callback
   }
-
+  
+  @objc(setOnDamageReported:) // For react native to set the damage reported callback
+  public func setOnDamageReported(callback: @escaping RCTDirectEventBlock) {
+    onDamageReported = callback
+  }
+  
   @objc(setOnDownloadProgress:) // For react native to set the damage reported callback
   public func setOnDownloadProgress(callback: @escaping RCTDirectEventBlock) {
     onDownloadProgress = callback
@@ -61,6 +90,7 @@ class DamageCameraView: UIView {
   
   @objc(setAuthToken:) // For react native to set the auth token
   public func setAuthToken(token: NSString) {
+    damageService = DamageService(with: token as String)
     mlmodelService = MLModelService(with: token as String)
     DispatchQueue.global(qos: .background).async { [unowned self] in
       self.mlmodelService!.getModel(
