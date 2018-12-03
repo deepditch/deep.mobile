@@ -62,6 +62,6 @@ const styles = StyleSheet.create({
         backgroundColor: "#808080",
         height: 30,
         flexDirection: 'row',
-        width: '115%'
+        width: '117%'
     }
 })
