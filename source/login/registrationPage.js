@@ -9,6 +9,7 @@ import {
 } from "react-native";
 
 import AuthService from "../services/auth.service";
+import NetInfoService from "../services/netInfo.service";
 import { ButtonStyle } from "../styles/button.style";
 import { InputStyle } from "../styles/input.style";
 
@@ -34,6 +35,7 @@ export default class registrationPage extends Component {
     }
     return (
       <KeyboardAvoidingView style={style.container} behavior="padding">
+      <NetInfoService/> 
    <View>
           <Text style={InputStyle.label}>User Name</Text>
           <TextInput
