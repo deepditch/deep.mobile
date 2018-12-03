@@ -13,6 +13,7 @@ import { AsyncStorage } from "react-native";
 
 
 import AuthService from "../services/auth.service";
+import NetInfoService from "../services/netInfo.service";
 import { ButtonStyle } from "../styles/button.style";
 import { InputStyle } from "../styles/input.style";
 
@@ -35,10 +36,13 @@ export default class loginPage extends Component {
     if (this.state.failAlert !== "") {
       alert(this.state.failAlert);
     }
-
+    
     return (
       <KeyboardAvoidingView style={style.container}>
+        <NetInfoService/>      
+
         <View>
+          
           <Text style={InputStyle.label}>Email</Text>
           <TextInput
             //clearButtonMode ="always"
@@ -83,10 +87,12 @@ export default class loginPage extends Component {
           >
             <Text style={ButtonStyle.buttonText}>REGISTER</Text>
           </TouchableOpacity>
+          
 
         </View>
-
+        
       </KeyboardAvoidingView>
+      
     );
 
 
