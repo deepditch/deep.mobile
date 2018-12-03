@@ -15,11 +15,11 @@ class DamageCameraView: UIView {
   var onDownloadProgress: RCTDirectEventBlock?
   var onDownloadComplete: RCTDirectEventBlock?
   var onError: RCTDirectEventBlock?
-  var damageService: DamageService?
-  var mlmodelService: MLModelService?  
+  var damageService: DamageService 
   var damageDetector: DamageDetector?
   
   override init(frame: CGRect) {
+    damageService = DamageService()
     super.init(frame: frame)
   }
   
@@ -30,8 +30,8 @@ class DamageCameraView: UIView {
   //}
   
   func startDetecting() {
-    self.damageDetector!.damageDetected = { [unowned self] (image: UIImage, damages: [Damage], coords: CLLocationCoordinate2D, course: String) in
-       self.damageService!.maybeReport(image: image, damages: damages, latitude: coords.latitude, longitude: coords.longitude, course: course) { result in
+    self.damageDetector!.damageDetected = { [unowned self] report in
+      let report = self.damageService.maybeReport(report: report) { result in
         if(self.onDamageReported != nil) {
           switch result {
           case let .success(response):
@@ -54,7 +54,7 @@ class DamageCameraView: UIView {
       if(self.onDamageDetected != nil) {
         var list = [[AnyHashable: Any]]()
         
-        for damage in damages {
+        for damage in report.damages {
           list.append(damage.dictionary!)
         }
         
@@ -88,24 +88,28 @@ class DamageCameraView: UIView {
     onError = callback
   }
   
+  @objc(setPreviousReports:) // For react native to set the auth token
+  public func setPreviousReports(previousReports: NSDictionary) {
+    damageService.setPreviousReports(with: previousReports as! [String: Any])
+  }
+  
   @objc(setAuthToken:) // For react native to set the auth token
   public func setAuthToken(token: NSString) {
-    damageService = DamageService(with: token as String)
-    mlmodelService = MLModelService(with: token as String)
+    damageService.setToken(with: token as String)
     DispatchQueue.global(qos: .background).async { [unowned self] in
-      self.mlmodelService!.getModel(
+      MLModelService(with: token as String).getModel(
         completion: { compiledUrl in
           self.damageDetector = DamageDetector(previewView: self, compiledUrl: compiledUrl)
           self.startDetecting()
-      },
+        },
         progress: { progress in
           guard self.onDownloadProgress != nil else { return }
           self.onDownloadProgress!(["progress": progress])
-      },
+        },
         error: { error in
           guard self.onError != nil else { return }
           self.onError!(["error": "Error retrieving the damage detection model"])
-      }
+        }
       )
     }
   }

@@ -12,6 +12,14 @@ import Vision
 import ARKit
 import CoreLocation
 
+struct DamageReport {
+  var image: UIImage
+  var position: CLLocation
+  var course: String
+  var damages: [Damage]
+  var confidence: Double
+}
+
 struct Damage: Codable {
   var type: String
   var description: String
@@ -26,11 +34,13 @@ extension Damage {
 }
 
 class DamageDetector: FrameExtractor, CLLocationManagerDelegate {
-  var damageDetected: ((_ image: UIImage, _ damages: [Damage], _ coords: CLLocationCoordinate2D, _ course: String) -> Void)?
-  var hasMoved: Bool = false
-  var location: CLLocation?
-  var roadDamageModel: RoadDamageModel!
+  var damageDetected: ((DamageReport) -> Void)?
+  
   var locationManager: CLLocationManager!
+  var location: CLLocation?
+  var hasMoved: Bool = false
+  
+  var roadDamageModel: RoadDamageModel!
   
   init(previewView: UIView, compiledUrl: URL) {
     super.init(previewView: previewView)
@@ -62,7 +72,7 @@ class DamageDetector: FrameExtractor, CLLocationManagerDelegate {
   func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
     guard currentImage == nil, manager.location != nil else { return } // If an image is being processed, don't update the location
 
-    if location == nil || manager.location!.distance(from: location!) > 1 {
+    if location == nil || manager.location!.distance(from: location!) > 10 {
       // We have moved a meter
       location = manager.location!
       hasMoved = true
@@ -166,60 +176,51 @@ class DamageDetector: FrameExtractor, CLLocationManagerDelegate {
     
     if damages.count > 0 { // Damage has been detected in the image
       let heading = self.directions[Int((Float(Int(self.location!.course) % 360) / 45).rounded())]
-      self.damageDetected?(self.currentImage!, damages, self.location!.coordinate, heading)
+      let highestConfidenceDamage = damages.max {a, b in a.confidence < b.confidence}
+      let report = DamageReport(image: self.currentImage!,
+                                position: self.location!,
+                                course: heading,
+                                damages: damages,
+                                confidence: highestConfidenceDamage!.confidence)
+      
+      self.damageDetected?(report)
     }
   }
   
   func mapOutputsToDamages(for outputs: MLMultiArray) -> [Damage] {
     var damages = [Damage]()
     
-    if(outputs[0].doubleValue > 0.5) {
       damages.append(Damage(type: "D00",
                         description: "Crack",
                         confidence: outputs[0].doubleValue))
-    }
-    
-    if(outputs[1].doubleValue > 0.5) {
+
       damages.append(Damage(type: "D01",
                         description: "Crack",
                         confidence: outputs[1].doubleValue))
-    }
     
-    if(outputs[2].doubleValue > 0.5) {
       damages.append(Damage(type: "D10",
                         description:"Crack",
                         confidence: outputs[2].doubleValue))
-    }
     
-    if(outputs[3].doubleValue > 0.5) {
       damages.append(Damage(type: "D11",
                         description: "Crack",
                         confidence: outputs[3].doubleValue))
-    }
-    
-    if(outputs[4].doubleValue > 0.5) {
+
       damages.append(Damage(type: "D20",
                         description: "Alligator Crack",
                         confidence: outputs[4].doubleValue))
-    }
-    
-    if(outputs[5].doubleValue > 0.5) {
+
       damages.append(Damage(type: "D40",
                         description: "Pothole",
                         confidence: outputs[5].doubleValue))
-    }
     
-    if(outputs[6].doubleValue > 0.5) {
       damages.append(Damage(type: "D43",
                         description: "Line Blur",
                         confidence: outputs[6].doubleValue))
-    }
     
-    if(outputs[7].doubleValue > 0.5) {
       damages.append(Damage(type: "D44",
                         description: "Crosswalk Blur",
                         confidence: outputs[7].doubleValue))
-    }
     
     return damages
   }

@@ -3,6 +3,7 @@ import { Text, Platform, View, TouchableOpacity } from "react-native";
 import AuthService from "./services/auth.service";
 import { StyleSheet, Dimensions } from "react-native";
 import DamageCamera from "./damage-camera";
+import DamageService from "./services/damage.service"
 
 class DamageLabels extends Component {
   constructor(props) {
@@ -69,13 +70,16 @@ export default class DamageCameraScreen extends Component {
 
     this.state = {
       token: null,
-      damages: []
+      damages: [],
+      previousReports: {}
     };
     this.getValue = this.getValue.bind(this);
   }
+  
   getValue() {
     return this.state.token;
   }
+
   componentDidMount() {
     if (Platform.OS === "ios") {
       //platform.OS detects if it ios or android and runs the respective permissions
@@ -94,6 +98,8 @@ export default class DamageCameraScreen extends Component {
       .catch(err => {
         console.log(err);
       });
+
+      this.getPreviousReports()
   }
 
   _onDownloadProgress(event) {
@@ -155,6 +161,22 @@ export default class DamageCameraScreen extends Component {
     );
   }
 
+  getPreviousReports() {
+    new DamageService()
+      .getDamages()
+      .then(damages => {
+        var reports = {}
+        damages.forEach(dam => {
+          if (!reports[dam.type]) reports[dam.type] = []
+          reports[dam.type].push([dam.position.latitude, dam.position.longitude])
+        })
+        this.setState({ previousReports: reports });
+      })
+      .catch(error => {
+        this.setState({ alert: "Failed to load damage locations" });
+      });
+  }
+
   render() {
     if (!this.state.token) {
       return (
@@ -173,6 +195,7 @@ export default class DamageCameraScreen extends Component {
         onDownloadProgress={this._onDownloadProgress.bind(this)}
         onError={this._onError.bind(this)}
         authToken={this.state.token}
+        previousReports={this.state.previousReports}
       >
         <UploadMSG msg={this.state.msg} status={this.state.status} />
         <DamageLabels damages={this.state.damages} />
