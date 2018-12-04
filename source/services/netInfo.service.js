@@ -7,14 +7,6 @@ import {
 } from "react-native";
 
 
-function Offline() {
-    return (
-        <View style={styles.container}>
-            <Text>Lost Internet Connection.</Text>
-        </View>
-    )
-}
-
 export default class NetInfoService extends Component {
 
     state = {
@@ -24,7 +16,11 @@ export default class NetInfoService extends Component {
 
     render() {
         if (!this.state.isConnected) {
-            return <Offline />;
+            return (
+                <View style={styles.container}>
+                    <Text>Lost Internet Connection.</Text>
+                </View>
+            )
         }
         else
             return null;
@@ -43,12 +39,12 @@ export default class NetInfoService extends Component {
 
     _handleConnectionChange = isConnected => {
         if (isConnected === true) {
-            this.setState({ isConnected: true });
+           return this.setState({ isConnected: true });
         }
         else {
-            this.setState({ isConnected: false });
+           return this.setState({ isConnected: false });
         }
-        return;
+        
     }
 
 }
