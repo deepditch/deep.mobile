@@ -25,7 +25,7 @@ export default class registrationPage extends Component {
       email: "",
       password: "",
       confirmPassword: "",
-      failAlert: ""
+      failAlert: "",
     };
   }
 
