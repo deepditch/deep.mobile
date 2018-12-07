@@ -9,14 +9,6 @@
 import Foundation
 import Moya
 
-func ScaleImage(image: UIImage, size: CGSize) -> UIImage {
-  UIGraphicsBeginImageContextWithOptions(size, false, 0.0);
-  image.draw(in: CGRect(origin: CGPoint.zero, size: CGSize(width: size.width, height: size.height)))
-  let newImage:UIImage = UIGraphicsGetImageFromCurrentImageContext()!
-  UIGraphicsEndImageContext()
-  return newImage
-}
-
 class DamageService {
   var apiProvider: MoyaProvider<APIHTTPService>?
   var reportToSend: DamageReport?

@@ -8,6 +8,7 @@
 
 import Foundation
 import Moya
+import Result
 
 enum APIHTTPService {
   case report(report: DamageReport)
@@ -79,13 +80,40 @@ extension APIHTTPService: TargetType {
   }
 }
 
-func MakeApiProvider(with token: String) -> MoyaProvider<APIHTTPService> {
-  // Attach JWT to each request
-  let authMiddleware = { (target: APIHTTPService) -> Endpoint in
-    let defaultEndpoint = MoyaProvider.defaultEndpointMapping(for: target)
-    return defaultEndpoint.adding(newHTTPHeaderFields: ["authorization": "Bearer " + token])
+class TokenSource {
+  var token: String
+  init(with jwt: String) {
+    token = "Bearer " + jwt
+  }
+}
+
+struct JWTPlugin: PluginType {
+  let getToken: () -> String?
+  let setToken: (String) -> Void
+  
+  func prepare(_ request: URLRequest, target: TargetType) -> URLRequest {
+    guard let token = getToken() else { return request }
+    
+    var request = request
+    request.addValue(token, forHTTPHeaderField: "Authorization")
+    return request
   }
   
+  func didReceive(_ result: Result<Response, MoyaError>, target: TargetType) {
+    switch result {
+    case .success(let response):
+      let urlResponse = response.response as! HTTPURLResponse
+      guard let token = urlResponse.allHeaderFields["Authorization"] as? String else { return }
+      setToken(token)
+    default: return
+    }
+  }
+}
+
+
+func MakeApiProvider(with token: String) -> MoyaProvider<APIHTTPService> {
   // Initialize moya provider
-  return MoyaProvider(endpointClosure: authMiddleware)
+  let tokenSource = TokenSource(with: token)
+  return MoyaProvider<APIHTTPService>(plugins: [ JWTPlugin(getToken: { return tokenSource.token },
+                                                           setToken: { token in tokenSource.token = token }) ])
 }

@@ -14,9 +14,9 @@
 		42B6601FDF90DECBBCC23261 /* Pods_deep_mobile.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 15A7342A538FEBAB9D56F031 /* Pods_deep_mobile.framework */; };
 		9B0BCCFF216E85E4009D2503 /* FrameExtractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B0BCCFE216E85E4009D2503 /* FrameExtractor.swift */; };
 		9B0BCD36216E92E3009D2503 /* DamageHTTPService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B0BCD35216E92E3009D2503 /* DamageHTTPService.swift */; };
-		9B238AAA217A371000E7AAC3 /* CGImagePropertyOrientation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B238AA9217A371000E7AAC3 /* CGImagePropertyOrientation.swift */; };
 		9B2DE4782198C3F000C232FF /* Downloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B2DE4772198C3F000C232FF /* Downloader.swift */; };
 		9B814608216FDFB900590FCB /* DamageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B814607216FDFB900590FCB /* DamageService.swift */; };
+		9BA85D4821BAFDE100919A1C /* ImageHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BA85D4721BAFDE100919A1C /* ImageHelper.swift */; };
 		9BC1337D219DF58400AE4C95 /* MLModelService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BC1337C219DF58400AE4C95 /* MLModelService.swift */; };
 		9BC8A3CC21AB42DC00977C8B /* deep_mobileTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BC8A3CB21AB42DC00977C8B /* deep_mobileTests.swift */; };
 		9BC8A3D321AB43D600977C8B /* DamageHTTPService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B0BCD35216E92E3009D2503 /* DamageHTTPService.swift */; };
@@ -24,7 +24,6 @@
 		9BC8A3D521AB43D600977C8B /* MLModelService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BC1337C219DF58400AE4C95 /* MLModelService.swift */; };
 		9BC8A3D621AB43D600977C8B /* RoadDamageModel.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = B97BD71721682F4C0043C3DC /* RoadDamageModel.mlmodel */; };
 		9BC8A3D721AB43D600977C8B /* DamageDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = B97BD71121681D700043C3DC /* DamageDetector.swift */; };
-		9BC8A3D821AB43D600977C8B /* CGImagePropertyOrientation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B238AA9217A371000E7AAC3 /* CGImagePropertyOrientation.swift */; };
 		9BC8A3D921AB43D600977C8B /* Throttler.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9726072216D7F1A0066A59C /* Throttler.swift */; };
 		9BC8A3DA21AB43D600977C8B /* FrameExtractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B0BCCFE216E85E4009D2503 /* FrameExtractor.swift */; };
 		9BC8A3DB21AB43D600977C8B /* Downloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B2DE4772198C3F000C232FF /* Downloader.swift */; };
@@ -67,9 +66,9 @@
 		2D1BE70E20D17A58F184918B /* Pods-deep.mobile.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-deep.mobile.debug.xcconfig"; path = "Pods/Target Support Files/Pods-deep.mobile/Pods-deep.mobile.debug.xcconfig"; sourceTree = "<group>"; };
 		9B0BCCFE216E85E4009D2503 /* FrameExtractor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FrameExtractor.swift; sourceTree = "<group>"; };
 		9B0BCD35216E92E3009D2503 /* DamageHTTPService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DamageHTTPService.swift; sourceTree = "<group>"; };
-		9B238AA9217A371000E7AAC3 /* CGImagePropertyOrientation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGImagePropertyOrientation.swift; sourceTree = "<group>"; };
 		9B2DE4772198C3F000C232FF /* Downloader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Downloader.swift; sourceTree = "<group>"; };
 		9B814607216FDFB900590FCB /* DamageService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DamageService.swift; sourceTree = "<group>"; };
+		9BA85D4721BAFDE100919A1C /* ImageHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageHelper.swift; sourceTree = "<group>"; };
 		9BC1337C219DF58400AE4C95 /* MLModelService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MLModelService.swift; sourceTree = "<group>"; };
 		9BC8A3C921AB42DB00977C8B /* deep.mobileTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = deep.mobileTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		9BC8A3CB21AB42DC00977C8B /* deep_mobileTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = deep_mobileTests.swift; sourceTree = "<group>"; };
@@ -197,6 +196,7 @@
 				B9726072216D7F1A0066A59C /* Throttler.swift */,
 				9B0BCCFE216E85E4009D2503 /* FrameExtractor.swift */,
 				9B2DE4772198C3F000C232FF /* Downloader.swift */,
+				9BA85D4721BAFDE100919A1C /* ImageHelper.swift */,
 			);
 			name = Util;
 			sourceTree = "<group>";
@@ -206,7 +206,6 @@
 			children = (
 				B97BD71721682F4C0043C3DC /* RoadDamageModel.mlmodel */,
 				B97BD71121681D700043C3DC /* DamageDetector.swift */,
-				9B238AA9217A371000E7AAC3 /* CGImagePropertyOrientation.swift */,
 			);
 			name = DamageDetector;
 			sourceTree = "<group>";
@@ -423,13 +422,13 @@
 				B957B266215EB9FA00FF2999 /* DamageCameraViewBridge.m in Sources */,
 				9B0BCCFF216E85E4009D2503 /* FrameExtractor.swift in Sources */,
 				13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */,
-				9B238AAA217A371000E7AAC3 /* CGImagePropertyOrientation.swift in Sources */,
 				B97BD71821682F4D0043C3DC /* RoadDamageModel.mlmodel in Sources */,
 				9B2DE4782198C3F000C232FF /* Downloader.swift in Sources */,
 				9B814608216FDFB900590FCB /* DamageService.swift in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
 				9B0BCD36216E92E3009D2503 /* DamageHTTPService.swift in Sources */,
 				B957B264215EB92A00FF2999 /* DamageCameraViewManager.swift in Sources */,
+				9BA85D4821BAFDE100919A1C /* ImageHelper.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -443,7 +442,6 @@
 				9BC8A3D521AB43D600977C8B /* MLModelService.swift in Sources */,
 				9BC8A3D621AB43D600977C8B /* RoadDamageModel.mlmodel in Sources */,
 				9BC8A3D721AB43D600977C8B /* DamageDetector.swift in Sources */,
-				9BC8A3D821AB43D600977C8B /* CGImagePropertyOrientation.swift in Sources */,
 				9BC8A3D921AB43D600977C8B /* Throttler.swift in Sources */,
 				9BC8A3DA21AB43D600977C8B /* FrameExtractor.swift in Sources */,
 				9BC8A3DB21AB43D600977C8B /* Downloader.swift in Sources */,
