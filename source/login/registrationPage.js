@@ -42,7 +42,7 @@ export default class registrationPage extends Component {
             style={InputStyle.input}
             placeholder="User Name"
             label="User Name"
-            textContentType="username"
+            textContentType="givenName"
             autoCorrect={false}
             value={this.state.name}
             autoCapitalize="none"

@@ -9,6 +9,7 @@ import {
 import { AsyncStorage } from "react-native";
 import loginPage from "./source/login/loginPage"; //import the js files you create here.
 import registrationPage from "./source/login/registrationPage"; //import the js files you create here.
+import forgotPasswordPage from "./source/login/forgotPassword";
 import DamageCameraScreen from "./source/damage-camera-screen";
 import mapScreenView from "./source/mapScreen";
 import {
@@ -16,6 +17,8 @@ import {
   createDrawerNavigator,
   DrawerItems
 } from "react-navigation";
+
+
 
 const cameraScreen = createStackNavigator(
   {
@@ -74,7 +77,8 @@ const DrawerStack = createDrawerNavigator(
 
 const LoginStack = createStackNavigator({
   Home: { screen: loginPage },
-  Register: { screen: registrationPage }
+  Register: { screen: registrationPage },
+  ForgotPass: { screen: forgotPasswordPage}
 });
 
 const DrawerNavigation = createStackNavigator(

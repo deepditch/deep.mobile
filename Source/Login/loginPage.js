@@ -36,13 +36,13 @@ export default class loginPage extends Component {
     if (this.state.failAlert !== "") {
       alert(this.state.failAlert);
     }
-    
+
     return (
       <KeyboardAvoidingView style={style.container}>
-        <NetInfoService/>      
+        <NetInfoService />
 
         <View>
-          
+
           <Text style={InputStyle.label}>Email</Text>
           <TextInput
             //clearButtonMode ="always"
@@ -52,12 +52,14 @@ export default class loginPage extends Component {
             textContentType="emailAddress"
             value={this.state.email}
             autoCapitalize="none"
+            autoCorrect={false}
             keyboardType="url"
             onChangeText={email => this.setState({ email, failAlert: "" })}
             returnKeyType="next"
             onSubmitEditing={() => { this.passwordField.focus(); }}
             blurOnSubmit={false}
           />
+
           <Text style={InputStyle.label}>Password</Text>
           <TextInput
             //clearButtonMode ="always"
@@ -68,12 +70,17 @@ export default class loginPage extends Component {
             textContentType="password"
             value={this.state.password}
             autoCapitalize="none"
+            autoCorrect={false}
             secureTextEntry={true}
             onChangeText={password => this.setState({ password, failAlert: "" })}
             onSubmitEditing={() => { this.login(); }}
           />
+
+          
         </View>
+
         <View style={ButtonStyle.bContainer}>
+
           <TouchableOpacity
             onPress={this.login.bind(this)}
             style={[ButtonStyle.button, { marginTop: 10 }]}
@@ -87,12 +94,19 @@ export default class loginPage extends Component {
           >
             <Text style={ButtonStyle.buttonText}>REGISTER</Text>
           </TouchableOpacity>
-          
 
         </View>
-        
+
+        <View>
+        <TouchableOpacity
+           onPress={() => this.props.navigation.navigate('ForgotPass')}
+            style={[ButtonStyle.button, { top: 0 }, {alignSelf:"center"}]}
+          >
+            <Text style={ButtonStyle.buttonText}>Forgot Password?</Text>
+          </TouchableOpacity>
+        </View>
       </KeyboardAvoidingView>
-      
+
     );
 
 

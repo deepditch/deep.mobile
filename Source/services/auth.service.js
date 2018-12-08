@@ -71,6 +71,32 @@ export default class AuthService {
     });
   }
 
+  async forgotPass(email) {
+    const data = {
+      email: email,
+    };
+
+    const requestBody = {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        "x-requested-with": "XMLHttpRequest"
+      },
+      body: JSON.stringify(data)
+    };
+
+    return new Promise((resolve, reject) => {
+      fetch(config.API_BASE_PATH + `/forgot-password?email=${email}`, requestBody)
+        //.then(this.parseJSON)
+        .then(response => {
+          console.log(response)
+          if (!response.ok) return reject(response.json);
+          return resolve(response.json);
+        });
+    });
+  }
+
   async setToken(token) {
     try {
       await AsyncStorage.setItem("@auth:token", token);
