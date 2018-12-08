@@ -104,12 +104,17 @@ class DamageDetector: FrameExtractor, CLLocationManagerDelegate {
   
   // The camera has captured a new frame
   override func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
+    guard let buffer = CMSampleBufferGetImageBuffer(sampleBuffer) else { return }
+    self.inferenceImage(pixelBuffer: buffer)
+  }
+  
+  func inferenceImage(pixelBuffer: CVPixelBuffer) {
     guard self.currentImage == nil, self.hasMoved else { return } // We only process a new frame once the old frame has finished and we have recieved a location update
     
     // Set up a classification request
-    self.currentImage = imageHelper.imageFromSampleBuffer(sampleBuffer: sampleBuffer)
+    self.currentImage = imageHelper.imageFromBuffer(imageBuffer: pixelBuffer)
     guard self.currentImage != nil else { return }
-    guard let pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else { return }
+    
     let imageRequestHandler = VNImageRequestHandler(cvPixelBuffer: pixelBuffer, orientation: exifOrientationFromDeviceOrientation(), options: [:])
     
     do {
@@ -119,7 +124,6 @@ class DamageDetector: FrameExtractor, CLLocationManagerDelegate {
       print(error)
     }
   }
-  
   
   /// Called when self.classificaitonRequests is completed
   /// - Tag: ProcessClassifications

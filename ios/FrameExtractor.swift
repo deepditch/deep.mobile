@@ -34,6 +34,9 @@ class FrameExtractor: NSObject, AVCaptureVideoDataOutputSampleBufferDelegate {
     
     // Select a video device, make an input
     let videoDevice = AVCaptureDevice.DiscoverySession(deviceTypes: [.builtInWideAngleCamera], mediaType: .video, position: .back).devices.first
+    
+    guard videoDevice != nil else { return }
+    
     do {
       deviceInput = try AVCaptureDeviceInput(device: videoDevice!)
     } catch {

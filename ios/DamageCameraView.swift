@@ -51,7 +51,6 @@ class DamageCameraView: UIView {
       }
       
       self.onDamageDetected!(["damages": list]);
-      
     }
   }
   

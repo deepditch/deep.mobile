@@ -28,8 +28,7 @@ class ImageHelper {
     return normalizedImage
   }
   
-  func imageFromSampleBuffer(sampleBuffer: CMSampleBuffer) -> UIImage? {
-    guard let imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else { return nil }
+  func imageFromBuffer(imageBuffer: CVPixelBuffer) -> UIImage? {
     let ciImage = CIImage(cvPixelBuffer: imageBuffer)
     guard let cgImage = context.createCGImage(ciImage, from: ciImage.extent) else { return nil }
     let img = UIImage(cgImage: cgImage, scale: 1, orientation: UIImageOrientationFromDeviceOrientation())

@@ -8,6 +8,7 @@
 
 import Foundation
 import Moya
+import CoreLocation
 
 class DamageService {
   var apiProvider: MoyaProvider<APIHTTPService>?
@@ -33,7 +34,8 @@ class DamageService {
   
   func setPreviousReports(with previousReports: [String: Any]) {
     for (key, reports) in previousReports {
-      PreviousReports[key] = (reports as! [[Double]]).map { vals in return CLLocation(latitude: vals[0], longitude: vals[1])}
+      PreviousReports[key] = (reports as! [[Double]]).map { vals in return CLLocation(latitude: vals[0], longitude: vals[1])
+      }
     }
   }
   
