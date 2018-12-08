@@ -30,6 +30,8 @@
 		9BBAE8A021BC309000504FB3 /* Downloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B2DE4772198C3F000C232FF /* Downloader.swift */; };
 		9BBAE8A121BC309000504FB3 /* ImageHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BA85D4721BAFDE100919A1C /* ImageHelper.swift */; };
 		9BBAE8A821BC424000504FB3 /* RoadDamageModel.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = B97BD71721682F4C0043C3DC /* RoadDamageModel.mlmodel */; };
+		9BBAE8AD21BC4DC100504FB3 /* TokenSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BBAE8AC21BC4DC100504FB3 /* TokenSource.swift */; };
+		9BBAE8B021BC545F00504FB3 /* TokenSourceBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BBAE8AF21BC545F00504FB3 /* TokenSourceBridge.m */; };
 		9BC1337D219DF58400AE4C95 /* MLModelService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BC1337C219DF58400AE4C95 /* MLModelService.swift */; };
 		B78F035174932D44ED413412 /* Pods_deep_mobile.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 15A7342A538FEBAB9D56F031 /* Pods_deep_mobile.framework */; };
 		B957B261215EB8DE00FF2999 /* DamageCameraView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B957B260215EB8DE00FF2999 /* DamageCameraView.swift */; };
@@ -61,6 +63,8 @@
 		9B814607216FDFB900590FCB /* DamageService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DamageService.swift; sourceTree = "<group>"; };
 		9BA85D4721BAFDE100919A1C /* ImageHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageHelper.swift; sourceTree = "<group>"; };
 		9BBAE89321BC2D0000504FB3 /* test_image.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = test_image.png; sourceTree = "<group>"; };
+		9BBAE8AC21BC4DC100504FB3 /* TokenSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenSource.swift; sourceTree = "<group>"; };
+		9BBAE8AF21BC545F00504FB3 /* TokenSourceBridge.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TokenSourceBridge.m; sourceTree = "<group>"; };
 		9BC1337C219DF58400AE4C95 /* MLModelService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MLModelService.swift; sourceTree = "<group>"; };
 		9BC8A3C921AB42DB00977C8B /* deep.mobileTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = deep.mobileTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		9BC8A3CB21AB42DC00977C8B /* deep_mobileTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = deep_mobileTests.swift; sourceTree = "<group>"; };
@@ -214,6 +218,8 @@
 				9B0BCD35216E92E3009D2503 /* DamageHTTPService.swift */,
 				9B814607216FDFB900590FCB /* DamageService.swift */,
 				9BC1337C219DF58400AE4C95 /* MLModelService.swift */,
+				9BBAE8AC21BC4DC100504FB3 /* TokenSource.swift */,
+				9BBAE8AF21BC545F00504FB3 /* TokenSourceBridge.m */,
 			);
 			name = Service;
 			sourceTree = "<group>";
@@ -441,7 +447,9 @@
 				9B0BCCFF216E85E4009D2503 /* FrameExtractor.swift in Sources */,
 				13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */,
 				B97BD71821682F4D0043C3DC /* RoadDamageModel.mlmodel in Sources */,
+				9BBAE8AD21BC4DC100504FB3 /* TokenSource.swift in Sources */,
 				9B2DE4782198C3F000C232FF /* Downloader.swift in Sources */,
+				9BBAE8B021BC545F00504FB3 /* TokenSourceBridge.m in Sources */,
 				9B814608216FDFB900590FCB /* DamageService.swift in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
 				9B0BCD36216E92E3009D2503 /* DamageHTTPService.swift in Sources */,

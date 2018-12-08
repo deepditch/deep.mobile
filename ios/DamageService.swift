@@ -26,10 +26,7 @@ class DamageService {
   
   init() {
     throttler = Throttler(seconds: 7.5) // Reports are sent a maximum of 8 times per minute
-  }
-  
-  func setToken(with token: String) {
-    apiProvider = MakeApiProvider(with: token)
+    apiProvider = MakeApiProvider()
   }
   
   func setPreviousReports(with previousReports: [String: Any]) {

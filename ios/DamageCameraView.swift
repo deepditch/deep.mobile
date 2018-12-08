@@ -21,6 +21,23 @@ class DamageCameraView: UIView {
   override init(frame: CGRect) {
     damageService = DamageService()
     super.init(frame: frame)
+    
+    DispatchQueue.global(qos: .background).async { [unowned self] in // Download and initialize the machine learning model on a background queue as to not block the ui thread
+      MLModelService().getModel(
+        completion: { modelUrl in
+          self.damageDetector = DamageDetector(previewView: self, model: modelUrl) // Initialize the DamageDetector with a model. self displays preview frames from the camera
+          self.configureDetection()
+        },
+        progress: { progress in
+          guard self.onDownloadProgress != nil else { return }
+          self.onDownloadProgress!(["progress": progress]) // Send download progress to the React Native layer
+        },
+        errorHandler: { error in
+          guard self.onError != nil else { return }
+          self.onError!(["error": "Error retrieving the damage detection model"]) // Send error the the React Native layer
+        }
+      )
+    }
   }
   
   func configureDetection() { // Attatch a callback for when damage is detected by the damageDetector
@@ -82,28 +99,6 @@ class DamageCameraView: UIView {
   @objc(setPreviousReports:) // For react native to set the previous reports
   public func setPreviousReports(previousReports: NSDictionary) {
     damageService.setPreviousReports(with: previousReports as! [String: Any])
-  }
-  
-  @objc(setAuthToken:) // For react native to set the auth token
-  public func setAuthToken(token: NSString) {
-    damageService.setToken(with: token as String)
-    
-    DispatchQueue.global(qos: .background).async { [unowned self] in // Download and initialize the machine learning model on a background queue as to not block the ui thread
-      MLModelService(with: token as String).getModel(
-        completion: { modelUrl in
-          self.damageDetector = DamageDetector(previewView: self, model: modelUrl) // Initialize the DamageDetector with a model. self displays preview frames from the camera
-          self.configureDetection()
-        },
-        progress: { progress in
-          guard self.onDownloadProgress != nil else { return }
-          self.onDownloadProgress!(["progress": progress]) // Send download progress to the React Native layer
-        },
-        errorHandler: { error in
-          guard self.onError != nil else { return }
-          self.onError!(["error": "Error retrieving the damage detection model"]) // Send error the the React Native layer
-        }
-      )
-    }
   }
   
   // called when the layout of the view is changed (device rotation)

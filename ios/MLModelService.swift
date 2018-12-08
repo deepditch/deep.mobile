@@ -24,8 +24,8 @@ class MLModelService {
   let CachedModelURLKey: String = "CachedModelUrl"
   var CachedModelURL: String = ""
   
-  init(with token: String) {
-    apiProvider = MakeApiProvider(with: token)
+  init() {
+    apiProvider = MakeApiProvider()
     CachedModelURL = loadCachedModelUrl()
   }
   

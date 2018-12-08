@@ -1,5 +1,8 @@
-import { AsyncStorage } from "react-native";
 import config from "../../project.config";
+
+import { NativeModules } from 'react-native';
+var TokenSource = NativeModules.TokenSource;
+
 
 export default class AuthService {
   async parseJSON(response) {
@@ -73,7 +76,7 @@ export default class AuthService {
 
   async setToken(token) {
     try {
-      await AsyncStorage.setItem("@auth:token", token);
+      await TokenSource.set(token);
     } catch (error) {
       console.log(error);
       throw err;
@@ -82,7 +85,7 @@ export default class AuthService {
 
   async getToken() {
     try {
-      const token = await AsyncStorage.getItem("@auth:token");
+      const token = await TokenSource.get();
       if (token !== null) {
         return token;
       } else {

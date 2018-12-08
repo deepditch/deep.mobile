@@ -80,13 +80,6 @@ extension APIHTTPService: TargetType {
   }
 }
 
-class TokenSource {
-  var token: String
-  init(with jwt: String) {
-    token = "Bearer " + jwt
-  }
-}
-
 struct JWTPlugin: PluginType {
   let getToken: () -> String?
   let setToken: (String) -> Void
@@ -95,7 +88,7 @@ struct JWTPlugin: PluginType {
     guard let token = getToken() else { return request }
     
     var request = request
-    request.addValue(token, forHTTPHeaderField: "Authorization")
+    request.addValue("Bearer " + token, forHTTPHeaderField: "Authorization")
     return request
   }
   
@@ -104,16 +97,24 @@ struct JWTPlugin: PluginType {
     case .success(let response):
       let urlResponse = response.response as! HTTPURLResponse
       guard let token = urlResponse.allHeaderFields["Authorization"] as? String else { return }
-      setToken(token)
+      
+      var trimmedToken = token
+      
+      if token.hasPrefix("Bearer ") {
+        trimmedToken = String(token.dropFirst("Bearer ".count))
+      }
+      
+      setToken(trimmedToken)
+      
     default: return
     }
   }
 }
 
 
-func MakeApiProvider(with token: String) -> MoyaProvider<APIHTTPService> {
+func MakeApiProvider() -> MoyaProvider<APIHTTPService> {
   // Initialize moya provider
-  let tokenSource = TokenSource(with: token)
-  return MoyaProvider<APIHTTPService>(plugins: [ JWTPlugin(getToken: { return tokenSource.token },
-                                                           setToken: { token in tokenSource.token = token }) ])
+  let tokenSource = TokenSource()
+  return MoyaProvider<APIHTTPService>(plugins: [ JWTPlugin(getToken: { return tokenSource.get() },
+                                                           setToken: { token in tokenSource.set(with: token) }) ])
 }
