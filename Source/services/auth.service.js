@@ -77,13 +77,13 @@ export default class AuthService {
     };
 
     const requestBody = {
-      method: "POST",
+      method: "GET",
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
         "x-requested-with": "XMLHttpRequest"
       },
-      body: JSON.stringify(data)
+     // body: JSON.stringify(data)
     };
 
     return new Promise((resolve, reject) => {

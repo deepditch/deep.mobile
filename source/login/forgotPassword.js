@@ -21,7 +21,7 @@ export default class forgotPasswordPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      email: "wace@nando1.com",
+      email: "",
       failAlert: "",
     };
   }
