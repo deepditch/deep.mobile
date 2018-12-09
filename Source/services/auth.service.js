@@ -76,19 +76,8 @@ export default class AuthService {
       email: email,
     };
 
-    const requestBody = {
-      method: "GET",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-        "x-requested-with": "XMLHttpRequest"
-      },
-     // body: JSON.stringify(data)
-    };
-
     return new Promise((resolve, reject) => {
-      fetch(config.API_BASE_PATH + `/forgot-password?email=${email}`, requestBody)
-        //.then(this.parseJSON)
+      fetch(config.API_BASE_PATH + `/forgot-password?email=${email}`, {method:"GET"})
         .then(response => {
           console.log(response)
           if (!response.ok) return reject(response.json);
