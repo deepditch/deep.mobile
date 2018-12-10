@@ -35,8 +35,6 @@ export default class mapScreenView extends Component {
     };
   }
 
-  
-
   componentDidMount() {
     this.getDamageMarkers();
   }
