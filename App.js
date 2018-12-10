@@ -9,6 +9,7 @@ import {
 import { AsyncStorage } from "react-native";
 import loginPage from "./source/login/loginPage"; //import the js files you create here.
 import registrationPage from "./source/login/registrationPage"; //import the js files you create here.
+import forgotPasswordPage from "./source/login/forgotPassword";
 import DamageCameraScreen from "./source/damage-camera-screen";
 import mapScreenView from "./source/mapScreen";
 import {
@@ -17,10 +18,12 @@ import {
   DrawerItems
 } from "react-navigation";
 
+
+
 const cameraScreen = createStackNavigator(
   {
     Camera: { screen: DamageCameraScreen }
-  }
+  },
   //{headerMode:"none",}
 );
 
@@ -33,11 +36,12 @@ const mapscreen = createStackNavigator(
 
 const DrawerStack = createDrawerNavigator(
   {
+    Camera: { screen: cameraScreen },
     Map: { screen: mapscreen },
-    Camera: { screen: cameraScreen }
+
   },
   {
-    initialRouteName: "Map",
+    initialRouteName: "Camera",
     headerMode: "none",
 
     contentComponent: props => (
@@ -73,7 +77,8 @@ const DrawerStack = createDrawerNavigator(
 
 const LoginStack = createStackNavigator({
   Home: { screen: loginPage },
-  Register: { screen: registrationPage }
+  Register: { screen: registrationPage },
+  ForgotPass: { screen: forgotPasswordPage}
 });
 
 const DrawerNavigation = createStackNavigator(
@@ -100,17 +105,11 @@ const NavApp = createStackNavigator(
 );
 
 export default class App extends Component {
+
   render() {
-    //   alert(((AuthToken)));
-    //if (AuthToken === null)
-    {
-      //return <NavApp />;
-      // return <DrawerStack/>;
-    }
-    //else
-    {
-      return <NavApp />;
-      //return <DrawerStack/>;
-    }
+    return <NavApp />;
   }
 }
+
+
+
