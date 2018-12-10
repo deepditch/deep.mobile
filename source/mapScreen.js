@@ -3,12 +3,6 @@ import { StyleSheet, Text, View, TouchableOpacity, Image } from "react-native";
 import MapView, { AnimatedRegion } from "react-native-maps";
 import DamageService from "./services/damage.service";
 
-/**
- * Map screen. Contain pins, and gets pins location from the web api.
- * It reads the json file from the api, creates an array for the positions of the
- * pins and marks the map with pins.
- */
-
 const imageUrls = {
   D00: require("../images/pins/D00.png"),
   D01: require("../images/pins/D01.png"),

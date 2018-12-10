@@ -6,10 +6,6 @@ import {
     NetInfo,
 } from "react-native";
 
-/**
- * Calling this class simply displayes a message on the screen so that when a user is
- * not connected to the internet they get a message that says they lost connection.
- */
 
 export default class NetInfoService extends Component {
 

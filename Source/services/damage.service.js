@@ -25,7 +25,7 @@ export default class DamageService {
     };
 
     return new Promise((resolve, reject) => {
-      fetch(config.API_BASE_PATH + "/road-damage", requestBody)     // gets the damage locations for pins.
+      fetch(config.API_BASE_PATH + "/road-damage", requestBody)
         .then(this.parseJSON)
         .then(response => {
           if (!response.ok) return reject(response.json);

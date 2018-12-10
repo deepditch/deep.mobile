@@ -13,10 +13,6 @@ import NetInfoService from "../services/netInfo.service";
 import { ButtonStyle } from "../styles/button.style";
 import { InputStyle } from "../styles/input.style";
 
-/*
-Registration screen, contain all the fields needed for a user to register.
-*/
-
 export default class registrationPage extends Component {
   static navigationOptions = {
     title: "Registration"
@@ -119,10 +115,6 @@ export default class registrationPage extends Component {
       </KeyboardAvoidingView>
     );
   }
-
-/*
-On submit it sends the password, email and name to the authservices were it sends a fetch request to the api
-*/
 
   submit() {
     if (this.state.password === this.state.confirmPassword) {
