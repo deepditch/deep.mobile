@@ -27,15 +27,10 @@
 		9BC8A3D921AB43D600977C8B /* Throttler.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9726072216D7F1A0066A59C /* Throttler.swift */; };
 		9BC8A3DA21AB43D600977C8B /* FrameExtractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B0BCCFE216E85E4009D2503 /* FrameExtractor.swift */; };
 		9BC8A3DB21AB43D600977C8B /* Downloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B2DE4772198C3F000C232FF /* Downloader.swift */; };
-		9BC8A3DC21AB43D600977C8B /* DamageCameraViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B957B263215EB92A00FF2999 /* DamageCameraViewManager.swift */; };
-		9BC8A3DD21AB43D600977C8B /* DamageCameraView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B957B260215EB8DE00FF2999 /* DamageCameraView.swift */; };
-		9BC8A3DE21AB43D600977C8B /* DamageCameraViewBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = B957B265215EB9FA00FF2999 /* DamageCameraViewBridge.m */; };
 		9BC8A3E121AB5A6800977C8B /* RoadDamageService_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BC8A3E021AB5A6800977C8B /* RoadDamageService_Tests.swift */; };
 		9BF9D1FD21BEEDAC00986A19 /* ImageHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BF9D1FC21BEEDAC00986A19 /* ImageHelper.swift */; };
 		9BF9D20021BEEDC300986A19 /* TokenSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BF9D1FE21BEEDC300986A19 /* TokenSource.swift */; };
 		9BF9D20121BEEDC300986A19 /* TokenSourceBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BF9D1FF21BEEDC300986A19 /* TokenSourceBridge.m */; };
-		9BF9D20221BEEDD900986A19 /* TokenSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BF9D1FE21BEEDC300986A19 /* TokenSource.swift */; };
-		9BF9D20321BEEDD900986A19 /* TokenSourceBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BF9D1FF21BEEDC300986A19 /* TokenSourceBridge.m */; };
 		9BF9D20521BEEDDE00986A19 /* ImageHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BF9D1FC21BEEDAC00986A19 /* ImageHelper.swift */; };
 		B957B261215EB8DE00FF2999 /* DamageCameraView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B957B260215EB8DE00FF2999 /* DamageCameraView.swift */; };
 		B957B264215EB92A00FF2999 /* DamageCameraViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B957B263215EB92A00FF2999 /* DamageCameraViewManager.swift */; };
@@ -473,8 +468,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				9BF9D20521BEEDDE00986A19 /* ImageHelper.swift in Sources */,
-				9BF9D20221BEEDD900986A19 /* TokenSource.swift in Sources */,
-				9BF9D20321BEEDD900986A19 /* TokenSourceBridge.m in Sources */,
 				9BC8A3E121AB5A6800977C8B /* RoadDamageService_Tests.swift in Sources */,
 				9BC8A3D321AB43D600977C8B /* DamageHTTPService.swift in Sources */,
 				9BC8A3D421AB43D600977C8B /* DamageService.swift in Sources */,
@@ -484,9 +477,6 @@
 				9BC8A3D921AB43D600977C8B /* Throttler.swift in Sources */,
 				9BC8A3DA21AB43D600977C8B /* FrameExtractor.swift in Sources */,
 				9BC8A3DB21AB43D600977C8B /* Downloader.swift in Sources */,
-				9BC8A3DC21AB43D600977C8B /* DamageCameraViewManager.swift in Sources */,
-				9BC8A3DD21AB43D600977C8B /* DamageCameraView.swift in Sources */,
-				9BC8A3DE21AB43D600977C8B /* DamageCameraViewBridge.m in Sources */,
 				9BC8A3CC21AB42DC00977C8B /* deep_mobileTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
