@@ -6,16 +6,17 @@ import {
   TextInput,
   TouchableOpacity,
   KeyboardAvoidingView,
-  Alert
 } from "react-native";
-
-import { AsyncStorage } from "react-native";
-
-
 import AuthService from "../services/auth.service";
 import NetInfoService from "../services/netInfo.service";
 import { ButtonStyle } from "../styles/button.style";
 import { InputStyle } from "../styles/input.style";
+
+/*
+Login screen, contains all the fields pertaining to login. Contains buttons
+login navigates user into the camera screen, register navigates them to registration, and etc.
+*/
+
 
 export default class loginPage extends Component {
   static navigationOptions = {
@@ -32,14 +33,19 @@ export default class loginPage extends Component {
     };
   }
 
+
   render() {
     if (this.state.failAlert !== "") {
       alert(this.state.failAlert);
     }
 
+    // NetInfoService is for any place that requires the user to be notified if they have internet or not
+      
+    
     return (
-      <KeyboardAvoidingView style={style.container}>
-        <NetInfoService />
+      <KeyboardAvoidingView style={style.container}> 
+
+        <NetInfoService />                            
 
         <View>
 
@@ -109,14 +115,13 @@ export default class loginPage extends Component {
 
     );
 
-
   }
 
+  // when login button is pressed it runs login(). login sends the input of email and password to the 
+  // AuthService.login() where a fetch request is called to connect to the web api, and send the data.
+  // if successful they go to camera screen else they get error message.
+
   login() {
-    // AsyncStorage.setItem('email', this.state.email).done();
-    // AsyncStorage.setItem('password', this.state.password).done();
-
-
     new AuthService()
       .login(this.state.email, this.state.password)
       .then(response => {
@@ -129,6 +134,9 @@ export default class loginPage extends Component {
       });
     this.clearAfterSubmit();
   }
+
+// clears the fields after pressing login, app is fine without it, but it here because of how 
+// the Navigation stack behaves.
 
   clearAfterSubmit() {
     this.setState({

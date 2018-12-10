@@ -18,11 +18,16 @@ import {
   DrawerItems
 } from "react-navigation";
 
+/*
+App.js mostly used for stack navigation and drawer navigation. Modify codes in this file 
+if you want to add diffrent screen to drawer menu, or more navigation on the login menu. 
+*/
 
+// for each screen in drawer menu, have create a new stack. Examples are below
 
-const cameraScreen = createStackNavigator(
+const cameraScreen = createStackNavigator(    //creates a camera screen stack.
   {
-    Camera: { screen: DamageCameraScreen }
+    Camera: { screen: DamageCameraScreen }      // it is named Camera, so when navigation you use Camera to navigate to camera screen.
   },
   //{headerMode:"none",}
 );
@@ -33,7 +38,7 @@ const mapscreen = createStackNavigator(
   },
   {}
 );
-
+                                              //DrawerStack add screens to show on the drawer.
 const DrawerStack = createDrawerNavigator(
   {
     Camera: { screen: cameraScreen },
@@ -41,11 +46,12 @@ const DrawerStack = createDrawerNavigator(
 
   },
   {
-    initialRouteName: "Camera",
+    initialRouteName: "Camera",                 // Screen that will be displayed first when stack is called
     headerMode: "none",
-
-    contentComponent: props => (
-      <View style={{ flex: 1 }}>
+                                                //to add items in the drawer like buttons use contentComponents.
+                                                // below is an example of logout.
+    contentComponent: props => (                         
+      <View style={{ flex: 1 }}>                         
         <SafeAreaView forceInset={{ top: "always", horizontal: "never" }}>
           <DrawerItems {...props} />
           <TouchableOpacity
@@ -75,13 +81,15 @@ const DrawerStack = createDrawerNavigator(
   }
 );
 
+// Create any screen that you don't want the user to have access after login in the LoginStack.
+
 const LoginStack = createStackNavigator({
-  Home: { screen: loginPage },
+  Home: { screen: loginPage },                          //opens up the login screen from ./source/login/loginPage
   Register: { screen: registrationPage },
-  ForgotPass: { screen: forgotPasswordPage}
+  ForgotPass: { screen: forgotPasswordPage }
 });
 
-const DrawerNavigation = createStackNavigator(
+const DrawerNavigation = createStackNavigator(          
   {
     DrawerStack: { screen: DrawerStack }
   },
@@ -89,7 +97,7 @@ const DrawerNavigation = createStackNavigator(
     headerMode: "none"
   }
 );
-
+                                                      // main navigator stack, has to load to have full access.
 const NavApp = createStackNavigator(
   {
     loginStack: { screen: LoginStack },

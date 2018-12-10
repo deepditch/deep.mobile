@@ -1,6 +1,10 @@
 import { AsyncStorage } from "react-native";
 import config from "../../project.config";
 
+/**
+ * Most of the fetch request are sent from this file.
+ */
+
 export default class AuthService {
   async parseJSON(response) {
     return new Promise(resolve =>
@@ -14,15 +18,16 @@ export default class AuthService {
     );
   }
 
+
   async register(name, email, password) {
     const data = {
       name: name,
       email: email,
       password: password
     };
-
-    const requestBody = {
-      method: "POST",
+                                      //Retrieves information from the registration page.
+    const requestBody = {             // Request body set up the post request with the required headers
+      method: "POST",                 // from the api endpoints to connect successfully.
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
@@ -32,12 +37,11 @@ export default class AuthService {
     };
 
     return new Promise((resolve, reject) => {
-      fetch(config.API_BASE_PATH + "/register", requestBody)
-        .then(this.parseJSON)
+      fetch(config.API_BASE_PATH + "/register", requestBody)  // makes a fetch request with the user data.
+        .then(this.parseJSON)                                 
         .then(response => {
           console.log(response)
           if (!response.ok) return reject(response.json);
-          // this.setToken(response.json.access_token);
           return resolve(response.json);
         });
     });
@@ -72,12 +76,9 @@ export default class AuthService {
   }
 
   async forgotPass(email) {
-    const data = {
-      email: email,
-    };
 
     return new Promise((resolve, reject) => {
-      fetch(config.API_BASE_PATH + `/forgot-password?email=${email}`, {method:"GET"})
+      fetch(config.API_BASE_PATH + `/forgot-password?email=${email}`, {method:"GET"})   //This fetch sends a query with the GET method.
         .then(response => {
           console.log(response)
           if (!response.ok) return reject(response.json);

@@ -18,6 +18,10 @@ export default class forgotPasswordPage extends Component {
     title: "Forgot Password"
   };
 
+  /*
+  Forgot Password screen, contains only one field, email.
+  */
+
   constructor(props) {
     super(props);
     this.state = {
@@ -61,6 +65,10 @@ export default class forgotPasswordPage extends Component {
       </KeyboardAvoidingView>
     );
   }
+
+/*
+on submit sends the user an email. and sends the user back to the login screen.
+*/
 
   submit() {
     
