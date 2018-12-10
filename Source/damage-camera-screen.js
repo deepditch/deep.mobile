@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import { Text, Platform, View, TouchableOpacity } from "react-native";
 import AuthService from "./services/auth.service";
-import DamageService from "./services/damage.service";
 import { StyleSheet, Dimensions } from "react-native";
 import DamageCamera from "./damage-camera";
+import DamageService from "./services/damage.service"
 
 class DamageLabels extends Component {
   constructor(props) {
@@ -60,16 +60,24 @@ export default class DamageCameraScreen extends Component {
     };
   };
 
+  // state = {
+  //   token: null,
+  //   damages: []
+  // };
+
   constructor(props) {
     super(props);
 
     this.state = {
       token: null,
-      damages: []
+      damages: [],
+      previousReports: {}
     };
-
-    this.reports = [];
-    this.damageService = new DamageService();
+    this.getValue = this.getValue.bind(this);
+  }
+  
+  getValue() {
+    return this.state.token;
   }
 
   componentDidMount() {
@@ -91,35 +99,7 @@ export default class DamageCameraScreen extends Component {
         console.log(err);
       });
 
-    this._interval = setInterval(this.reportDamage.bind(this), 125);
-  }
-
-  reportDamage() {
-    if (this.reports.length == 0) return;
-
-    bestReport = this.reports.reduce(function(a, b) {
-      return a.confidence > b.confidence ? a : b;
-    });
-
-    clearTimeout(this.statusTimeout);
-
-    this.damageService
-      .reportDamage(bestReport)
-      .then(response => {
-        this.setState({ status: "ok", msg: "Upload Successful" });
-      })
-      .catch(error => {
-        this.setState({ status: "err", msg: "Failed To Upload" });
-      });
-
-    this.statusTimeout = setTimeout(
-      function() {
-        this.setState({ msg: "" });
-      }.bind(this),
-      3000
-    );
-
-    this.reports = [];
+      this.getPreviousReports()
   }
 
   _onDownloadProgress(event) {
@@ -157,17 +137,44 @@ export default class DamageCameraScreen extends Component {
 
   _onDamageDetected(event) {
     clearTimeout(this.damagesTimeout);
-
     this.setState({ damages: event.damages });
-
     this.damagesTimeout = setTimeout(
       function() {
         this.setState({ damages: [] });
       }.bind(this),
       3000
     );
+  }
 
-    this.reports.push(event);
+  _onDamageReported(event) {
+    clearTimeout(this.statusTimeout);
+    if (event.status == 201 || event.status == 200) {
+      this.setState({ status: "ok", msg: "Upload Successful" });
+    } else {
+      this.setState({ status: "err", msg: "Failed To Upload" });
+    }
+    this.statusTimeout = setTimeout(
+      function() {
+        this.setState({ msg: "" });
+      }.bind(this),
+      3000
+    );
+  }
+
+  getPreviousReports() {
+    new DamageService()
+      .getDamages()
+      .then(damages => {
+        var reports = {}
+        damages.forEach(dam => {
+          if (!reports[dam.type]) reports[dam.type] = []
+          reports[dam.type].push([dam.position.latitude, dam.position.longitude])
+        })
+        this.setState({ previousReports: reports });
+      })
+      .catch(error => {
+        this.setState({ alert: "Failed to load damage locations" });
+      });
   }
 
   render() {
@@ -183,10 +190,12 @@ export default class DamageCameraScreen extends Component {
       <DamageCamera
         style={styles.preview}
         onDamageDetected={this._onDamageDetected.bind(this)}
+        onDamageReported={this._onDamageReported.bind(this)}
         onDownloadComplete={this._onDownloadComplete.bind(this)}
         onDownloadProgress={this._onDownloadProgress.bind(this)}
         onError={this._onError.bind(this)}
         authToken={this.state.token}
+        previousReports={this.state.previousReports}
       >
         <UploadMSG msg={this.state.msg} status={this.state.status} />
         <DamageLabels damages={this.state.damages} />

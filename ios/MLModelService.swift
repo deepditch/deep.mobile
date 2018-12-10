@@ -10,7 +10,7 @@ import Foundation
 import Moya
 import CoreML
 
-struct MLModelResponse : Decodable {
+struct MLModelResponse: Decodable {
   struct MLModelResponseData: Decodable {
     let url: String?
   }
@@ -164,10 +164,10 @@ class MLModelService {
   // Calls completion with either the cached modelrc file or a new modelrc file downloaded from the server
   func getModel(completion: @escaping (URL) -> Void,
                 progress: @escaping (Float) -> Void, error: @escaping (Error?) -> Void) {
-    getMlModelUrlFromServer() { [unowned self] urlString in
+    getMlModelUrlFromServer() { urlString in
       if self.shouldDownloadNewModel(at: urlString) {
         self.downloadAndCompileMlModel(at: urlString,
-          completion: { [unowned self] compiledUrl in
+          completion: { compiledUrl in
             self.saveCompiledMlModel(at: compiledUrl) { localUrl in
               completion(localUrl)
             }

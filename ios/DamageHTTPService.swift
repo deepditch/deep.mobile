@@ -10,7 +10,7 @@ import Foundation
 import Moya
 
 enum APIHTTPService {
-  case report(_ image: UIImage, _ latitude: Double, _ longitude: Double, _ course: String, _ damages: [Damage])
+  case report(report: DamageReport)
   case getModel()
 }
 
@@ -44,19 +44,20 @@ extension APIHTTPService: TargetType {
   
   var task: Task {
     switch self {
-    case let .report(image, latitude, longitude, course, damages):
-      guard let imageData = image.jpegData(compressionQuality: 1.0) else { return .requestPlain }
+    case let .report(report):
+      guard let imageData = report.image.jpegData(compressionQuality: 1.0) else { return .requestPlain }
       
       var damageDicts = [[AnyHashable: Any]]()
       
-      for damage in damages {
+      for damage in report.damages {
         damageDicts.append(damage.dictionary!)
       }
       
-      let params = ["location": ["latitude": latitude, "longitude": longitude],
-                    "direction": course,
+      let params = ["location": ["latitude": report.position.coordinate.latitude,
+                                 "longitude": report.position.coordinate.longitude],
+                    "direction": report.course,
                     "damages": damageDicts,
-                    "image": imageData.base64EncodedString()] as [String : Any]
+                    "image": imageData.base64EncodedString()] as [String: Any]
       
       return .requestParameters(parameters: params, encoding: JSONEncoding.default)
     case .getModel:
@@ -71,15 +72,14 @@ extension APIHTTPService: TargetType {
     case .getModel():
       return ["Content-type": "application/json"]
     }
-
   }
   
   var sampleData: Data {
-    return "There is No smaple Data".data(using: String.Encoding.utf8)!
+    return "There is no sample Data".data(using: String.Encoding.utf8)!
   }
 }
 
-func MakeApiProvider(with token: String) -> MoyaProvider<APIHTTPService>{
+func MakeApiProvider(with token: String) -> MoyaProvider<APIHTTPService> {
   // Attach JWT to each request
   let authMiddleware = { (target: APIHTTPService) -> Endpoint in
     let defaultEndpoint = MoyaProvider.defaultEndpointMapping(for: target)
