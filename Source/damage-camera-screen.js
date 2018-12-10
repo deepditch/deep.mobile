@@ -88,6 +88,17 @@ export default class DamageCameraScreen extends Component {
       requestPermissions();
     }
 
+    new AuthService()
+      .getToken()
+      .then(token => {
+        this.setState({
+          token: token
+        });
+      })
+      .catch(err => {
+        console.log(err);
+      });
+
       this.getPreviousReports()
   }
 
@@ -167,6 +178,14 @@ export default class DamageCameraScreen extends Component {
   }
 
   render() {
+    if (!this.state.token) {
+      return (
+        <View>
+          <Text>Loading...</Text>
+        </View>
+      );
+    }
+
     return (
       <DamageCamera
         style={styles.preview}
@@ -175,6 +194,7 @@ export default class DamageCameraScreen extends Component {
         onDownloadComplete={this._onDownloadComplete.bind(this)}
         onDownloadProgress={this._onDownloadProgress.bind(this)}
         onError={this._onError.bind(this)}
+        authToken={this.state.token}
         previousReports={this.state.previousReports}
       >
         <UploadMSG msg={this.state.msg} status={this.state.status} />

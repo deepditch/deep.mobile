@@ -34,22 +34,22 @@ extension Damage {
 }
 
 class DamageDetector: FrameExtractor, CLLocationManagerDelegate {
-  private var roadDamageModel: RoadDamageModel!
-  private var currentImage: UIImage?
   var damageDetected: ((DamageReport) -> Void)?
-  
-  private let imageHelper = ImageHelper()
   
   var locationManager: CLLocationManager!
   var location: CLLocation?
   var hasMoved: Bool = false
   
-  init(previewView: UIView, model compiledModel: URL) {
+  var roadDamageModel: RoadDamageModel!
+  
+  init(previewView: UIView, compiledUrl: URL) {
     super.init(previewView: previewView)
     
     do {
-      roadDamageModel = try RoadDamageModel(contentsOf: compiledModel)
-    } catch { }
+      roadDamageModel = try RoadDamageModel(contentsOf: compiledUrl)
+    } catch {
+    
+    }
   }
   
   override func setupAVCapture() {
@@ -60,7 +60,6 @@ class DamageDetector: FrameExtractor, CLLocationManagerDelegate {
     }
   }
   
-  // Setup location services
   func setupGPS() {
     self.locationManager = CLLocationManager()
     self.locationManager.requestWhenInUseAuthorization()
@@ -70,11 +69,11 @@ class DamageDetector: FrameExtractor, CLLocationManagerDelegate {
     self.locationManager.startUpdatingLocation()
   }
   
-  // Called on a location update
   func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
     guard currentImage == nil, manager.location != nil else { return } // If an image is being processed, don't update the location
 
     if location == nil || manager.location!.distance(from: location!) > 10 {
+      // We have moved a meter
       location = manager.location!
       hasMoved = true
     }
@@ -102,30 +101,56 @@ class DamageDetector: FrameExtractor, CLLocationManagerDelegate {
     }
   }()
   
-  // The camera has captured a new frame
-  override func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
-    guard let buffer = CMSampleBufferGetImageBuffer(sampleBuffer) else { return }
-    self.inferenceImage(pixelBuffer: buffer)
+  private var currentImage: UIImage?
+  
+  private let visionQueue = DispatchQueue(label: "com.deep.ditch.visionqueue")
+  
+  private let context = CIContext()
+  
+  func fixOrientation(for img: UIImage) -> UIImage {
+    if (img.imageOrientation == .up) {
+      return img
+    }
+    
+    UIGraphicsBeginImageContextWithOptions(img.size, false, img.scale)
+    let rect = CGRect(x: 0, y: 0, width: img.size.width, height: img.size.height)
+    img.draw(in: rect)
+    
+    let normalizedImage = UIGraphicsGetImageFromCurrentImageContext()!
+    UIGraphicsEndImageContext()
+    
+    return normalizedImage
   }
   
-  func inferenceImage(pixelBuffer: CVPixelBuffer) {
-    guard self.currentImage == nil, self.hasMoved else { return } // We only process a new frame once the old frame has finished and we have recieved a location update
+  private func imageFromSampleBuffer(sampleBuffer: CMSampleBuffer) -> UIImage? {
+    guard let imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else { return nil }
+    let ciImage = CIImage(cvPixelBuffer: imageBuffer)
+    guard let cgImage = context.createCGImage(ciImage, from: ciImage.extent) else { return nil }
+    let img = UIImage(cgImage: cgImage, scale: 1, orientation: UIImageOrientationFromDeviceOrientation())
+    return fixOrientation(for: img)
+  }
+  
+  override func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
+    guard self.currentImage == nil, self.hasMoved else { return }
+    guard let pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else { return }
     
-    // Set up a classification request
-    self.currentImage = imageHelper.imageFromBuffer(imageBuffer: pixelBuffer)
+    self.currentImage = imageFromSampleBuffer(sampleBuffer: sampleBuffer)
     guard self.currentImage != nil else { return }
     
-    let imageRequestHandler = VNImageRequestHandler(cvPixelBuffer: pixelBuffer, orientation: exifOrientationFromDeviceOrientation(), options: [:])
+    let exifOrientation = exifOrientationFromDeviceOrientation()
+    
+    let imageRequestHandler = VNImageRequestHandler(cvPixelBuffer: pixelBuffer, orientation: exifOrientation, options: [:])
     
     do {
-      // Attempt to process the request
       try imageRequestHandler.perform([self.classificationRequest])
     } catch {
       print(error)
     }
   }
+
+  let directions = ["N", "NE", "E", "SE", "S", "SW", "W", "NW", "N"]
   
-  /// Called when self.classificaitonRequests is completed
+  /// Updates the UI with the results of the classification.
   /// - Tag: ProcessClassifications
   func processClassifications(for request: VNRequest, error: Error?) {
     defer { // Executed after function return.
@@ -149,27 +174,19 @@ class DamageDetector: FrameExtractor, CLLocationManagerDelegate {
     let outputs: MLMultiArray = obs.featureValue.multiArrayValue!
     let damages: [Damage] = self.mapOutputsToDamages(for: outputs)
     
-    let heading = self.mapCourseToHeadingString(for: self.location!.course)
-    
-    let highestConfidenceDamage = damages.max {a, b in a.confidence < b.confidence}
-    
-    let report = DamageReport(image: self.currentImage!,
-                              position: self.location!,
-                              course: heading,
-                              damages: damages,
-                              confidence: highestConfidenceDamage!.confidence)
-    
-    self.damageDetected?(report)
+    if damages.count > 0 { // Damage has been detected in the image
+      let heading = self.directions[Int((Float(Int(self.location!.course) % 360) / 45).rounded())]
+      let highestConfidenceDamage = damages.max {a, b in a.confidence < b.confidence}
+      let report = DamageReport(image: self.currentImage!,
+                                position: self.location!,
+                                course: heading,
+                                damages: damages,
+                                confidence: highestConfidenceDamage!.confidence)
+      
+      self.damageDetected?(report)
+    }
   }
   
-  let directions = ["N", "NE", "E", "SE", "S", "SW", "W", "NW", "N"]
-  
-  // Maps a degree measure to its compass direction
-  func mapCourseToHeadingString(for course: Double) -> String {
-    return self.directions[Int((Float(Int(course) % 360) / 45).rounded())]
-  }
-  
-  // Maps the models outputs to a list of Damages
   func mapOutputsToDamages(for outputs: MLMultiArray) -> [Damage] {
     var damages = [Damage]()
     
@@ -206,6 +223,25 @@ class DamageDetector: FrameExtractor, CLLocationManagerDelegate {
                         confidence: outputs[7].doubleValue))
     
     return damages
+  }
+  
+  public func UIImageOrientationFromDeviceOrientation() -> UIImage.Orientation {
+    let curDeviceOrientation = UIDevice.current.orientation
+    let exifOrientation: UIImage.Orientation
+    
+    switch curDeviceOrientation {
+    case UIDeviceOrientation.portraitUpsideDown:  // Device oriented vertically, home button on the top
+      exifOrientation = .left
+    case UIDeviceOrientation.landscapeLeft:       // Device oriented horizontally, home button on the right
+      exifOrientation = .up
+    case UIDeviceOrientation.portrait:            // Device oriented vertically, home button on the bottom
+      exifOrientation = .right
+    case UIDeviceOrientation.landscapeRight:      // Device oriented horizontally, home button on the left
+      exifOrientation = .down
+    default:
+      exifOrientation = .up
+    }
+    return exifOrientation
   }
 }
 
