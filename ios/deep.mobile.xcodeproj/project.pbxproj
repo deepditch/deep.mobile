@@ -16,6 +16,7 @@
 		9B0BCCFF216E85E4009D2503 /* FrameExtractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B0BCCFE216E85E4009D2503 /* FrameExtractor.swift */; };
 		9B0BCD36216E92E3009D2503 /* DamageHTTPService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B0BCD35216E92E3009D2503 /* DamageHTTPService.swift */; };
 		9B2DE4782198C3F000C232FF /* Downloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B2DE4772198C3F000C232FF /* Downloader.swift */; };
+		9B77F31721BF137900D705DA /* test_image.png in Resources */ = {isa = PBXBuildFile; fileRef = 9B77F31621BF137900D705DA /* test_image.png */; };
 		9B814608216FDFB900590FCB /* DamageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B814607216FDFB900590FCB /* DamageService.swift */; };
 		9BC1337D219DF58400AE4C95 /* MLModelService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BC1337C219DF58400AE4C95 /* MLModelService.swift */; };
 		9BC8A3CC21AB42DC00977C8B /* deep_mobileTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BC8A3CB21AB42DC00977C8B /* deep_mobileTests.swift */; };
@@ -70,6 +71,7 @@
 		9B0BCCFE216E85E4009D2503 /* FrameExtractor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FrameExtractor.swift; sourceTree = "<group>"; };
 		9B0BCD35216E92E3009D2503 /* DamageHTTPService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DamageHTTPService.swift; sourceTree = "<group>"; };
 		9B2DE4772198C3F000C232FF /* Downloader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Downloader.swift; sourceTree = "<group>"; };
+		9B77F31621BF137900D705DA /* test_image.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = test_image.png; sourceTree = "<group>"; };
 		9B814607216FDFB900590FCB /* DamageService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DamageService.swift; sourceTree = "<group>"; };
 		9BC1337C219DF58400AE4C95 /* MLModelService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MLModelService.swift; sourceTree = "<group>"; };
 		9BC8A3C921AB42DB00977C8B /* deep.mobileTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = deep.mobileTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -113,6 +115,7 @@
 			isa = PBXGroup;
 			children = (
 				00E356F21AD99517003FC87E /* deep.mobile.tests.m */,
+				9B77F31621BF137900D705DA /* test_image.png */,
 				00E356F01AD99517003FC87E /* Supporting Files */,
 			);
 			path = deep.mobileTests;
@@ -347,6 +350,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9B77F31721BF137900D705DA /* test_image.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
