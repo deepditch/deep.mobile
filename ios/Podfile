@@ -33,5 +33,10 @@ target 'deep.mobile' do
   pod 'Folly', :podspec => '../node_modules/react-native/third-party-podspecs/Folly.podspec'
   
   pod 'react-native-maps', :path => '../node_modules/react-native-maps'
+  
+  target 'deep.mobileTests' do
+      inherit! :search_paths
+  end
+
 
 end
