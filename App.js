@@ -1,61 +1,96 @@
 import React, { Component } from "react";
 import {
-  StyleSheet,
   Text,
   View,
-  TextInput,
-  TouchableHeightlight,
-  KeyboardAvoidingView
+  TouchableOpacity,
+  SafeAreaView,
+  Alert
 } from "react-native";
-
+import { AsyncStorage } from "react-native";
 import loginPage from "./source/login/loginPage"; //import the js files you create here.
 import registrationPage from "./source/login/registrationPage"; //import the js files you create here.
+import forgotPasswordPage from "./source/login/forgotPassword";
 import DamageCameraScreen from "./source/damage-camera-screen";
 import mapScreenView from "./source/mapScreen";
-import { StackNavigator, DrawerNavigator } from "react-navigation";
+import {
+  createStackNavigator,
+  createDrawerNavigator,
+  DrawerItems
+} from "react-navigation";
 
-import { PermissionsAndroid } from "react-native";
 
-const cameraScreen = StackNavigator({
-  Camera: { screen: DamageCameraScreen },
-  
-},
-//{headerMode:"none",}
+
+const cameraScreen = createStackNavigator(
+  {
+    Camera: { screen: DamageCameraScreen }
+  },
+  //{headerMode:"none",}
 );
 
-const mapscreen = StackNavigator({
-  Map: { screen : mapScreenView},
-},
-{
-
-}
+const mapscreen = createStackNavigator(
+  {
+    Map: { screen: mapScreenView }
+  },
+  {}
 );
 
-const DrawerStack = DrawerNavigator({
-  Map: { screen: mapscreen },
-  Camera:{ screen: cameraScreen},
-},
-{
-  initialRouteName: "Map",
-  headerMode: "none",
+const DrawerStack = createDrawerNavigator(
+  {
+    Camera: { screen: cameraScreen },
+    Map: { screen: mapscreen },
 
-}
+  },
+  {
+    initialRouteName: "Camera",
+    headerMode: "none",
+
+    contentComponent: props => (
+      <View style={{ flex: 1 }}>
+        <SafeAreaView forceInset={{ top: "always", horizontal: "never" }}>
+          <DrawerItems {...props} />
+          <TouchableOpacity
+            onPress={() =>
+              Alert.alert("Logout", "Are you sure you want to logout?", [
+                {
+                  text: "Yes",
+                  onPress: () => {
+                    AsyncStorage.getAllKeys().then(AsyncStorage.multiRemove);
+                    props.navigation.navigate("Home");
+                  }
+                },
+                {
+                  text: "Cancel",
+                  onPress: () => {
+                    return null;
+                  }
+                }
+              ])
+            }
+          >
+            <Text style={{ margin: 16, fontWeight: "bold" }}>Logout</Text>
+          </TouchableOpacity>
+        </SafeAreaView>
+      </View>
+    )
+  }
 );
 
-const LoginStack = StackNavigator({
+const LoginStack = createStackNavigator({
   Home: { screen: loginPage },
-  Register: { screen: registrationPage }
+  Register: { screen: registrationPage },
+  ForgotPass: { screen: forgotPasswordPage}
 });
 
-const DrawerNavigation = StackNavigator({
-  DrawerStack: {screen: DrawerStack}, 
-}, 
-{
-  headerMode:"none",   
-}
-)
+const DrawerNavigation = createStackNavigator(
+  {
+    DrawerStack: { screen: DrawerStack }
+  },
+  {
+    headerMode: "none"
+  }
+);
 
-const NavApp = StackNavigator(
+const NavApp = createStackNavigator(
   {
     loginStack: { screen: LoginStack },
     drawerStack: { screen: DrawerNavigation }
@@ -70,8 +105,11 @@ const NavApp = StackNavigator(
 );
 
 export default class App extends Component {
+
   render() {
     return <NavApp />;
   }
 }
+
+
 

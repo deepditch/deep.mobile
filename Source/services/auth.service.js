@@ -1,5 +1,8 @@
-import { AsyncStorage } from "react-native";
 import config from "../../project.config";
+
+import { NativeModules } from 'react-native';
+var TokenSource = NativeModules.TokenSource;
+
 
 export default class AuthService {
   async parseJSON(response) {
@@ -71,9 +74,24 @@ export default class AuthService {
     });
   }
 
+  async forgotPass(email) {
+    const data = {
+      email: email,
+    };
+
+    return new Promise((resolve, reject) => {
+      fetch(config.API_BASE_PATH + `/forgot-password?email=${email}`, {method:"GET"})
+        .then(response => {
+          console.log(response)
+          if (!response.ok) return reject(response.json);
+          return resolve(response.json);
+        });
+    });
+  }
+
   async setToken(token) {
     try {
-      await AsyncStorage.setItem("@auth:token", token);
+      await TokenSource.set(token);
     } catch (error) {
       console.log(error);
       throw err;
@@ -82,12 +100,13 @@ export default class AuthService {
 
   async getToken() {
     try {
-      const token = await AsyncStorage.getItem("@auth:token");
+      const token = await TokenSource.get();
       if (token !== null) {
         return token;
+      } else {
+        return null;
       }
     } catch (error) {
-      console.log(error);
       throw error;
     }
   }

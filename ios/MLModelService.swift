@@ -10,7 +10,7 @@ import Foundation
 import Moya
 import CoreML
 
-struct MLModelResponse : Decodable {
+struct MLModelResponse: Decodable {
   struct MLModelResponseData: Decodable {
     let url: String?
   }
@@ -24,8 +24,8 @@ class MLModelService {
   let CachedModelURLKey: String = "CachedModelUrl"
   var CachedModelURL: String = ""
   
-  init(with token: String) {
-    apiProvider = MakeApiProvider(with: token)
+  init() {
+    apiProvider = MakeApiProvider()
     CachedModelURL = loadCachedModelUrl()
   }
   
@@ -42,18 +42,19 @@ class MLModelService {
       
       do {
         try fileManager.copyItem(atPath: bundlePath, toPath: path)
-      } catch let error as NSError {
+      } catch let error as Error {
         print("Unable to copy file. ERROR: \(error.localizedDescription)")
       }
     }
     
     let resultDictionary = NSMutableDictionary(contentsOfFile: path)
+    
     print("Loaded MlModelCache file is --> \(resultDictionary?.description ?? "")")
     
     let myDict = NSDictionary(contentsOfFile: path)
     
     if let dict = myDict {
-      return dict.object(forKey: CachedModelURLKey) as! String
+      return dict.object(forKey: CachedModelURLKey) as! String // Return the saved model
     } else {
       print("WARNING: Couldn't create dictionary from MlModelCache! Default values will be used!")
     }
@@ -62,15 +63,16 @@ class MLModelService {
   }
   
   // Update the cached model url saved in MlModelCache.plist
-  func updatedCachedModelUrl(with url: String) {
+  func updatedCachedModelUrl(with url: String, errorHandler: @escaping (Error?) -> Void) {
     
     // Delete the previously cached model
     let fileManager = FileManager.default
     if self.CachedModelURL != "", fileManager.fileExists(atPath: self.CachedModelURL) {
       do {
         try fileManager.removeItem(atPath: self.CachedModelURL)
-      } catch let error {
-        print(error);
+      } catch let error as Error {
+        print(error)
+        errorHandler(error)
       }
     }
     
@@ -98,8 +100,8 @@ class MLModelService {
     return URL(fileURLWithPath: CachedModelURL);
   }
   
-  // Gets the url string of the latest model stored on the server, calls completion with the url string retrieved from the server
-  func getMlModelUrlFromServer(completion: @escaping (String) -> Void) {
+  // Gets the url string of the latest model stored on the server, calls completion with the url string
+  func getMlModelUrlFromServer(completion: @escaping (String) -> Void, errorHandler: @escaping (Error?) -> Void) {
     apiProvider.request(.getModel()) { result in
       switch result {
       case let .success(response):
@@ -107,37 +109,45 @@ class MLModelService {
           let filteredResponse = try response.filterSuccessfulStatusCodes()
           let responseData = try filteredResponse.map(MLModelResponse.self) // user is of type User
           completion(responseData.data!.url!)
-        } catch let error {
+        } catch let error as Error {
           print(error)
+          errorHandler(error)
         }
       case let .failure(error): // Server did not recieve request, or server did not send response
-        print(error);
+        print(error)
+        errorHandler(error)
       }
     }
   }
   
   // Downloads and compiles the model stored on the server at urlString, calls completion with the compiled model url
-  func downloadAndCompileMlModel(at urlString: String, completion: @escaping (URL) -> Void) {
+  func downloadAndCompileMlModel(at urlString: String, completion: @escaping (URL) -> Void, progress: @escaping (Float) -> Void, errorHandler: @escaping (Error?) -> Void) {
     if let url = NSURL(string: urlString) {
       let modelUrl = URL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent(url.lastPathComponent!)
-      Downloader.load(url: url as URL, to: modelUrl) {
-        do {
-          let compiledUrl = try MLModel.compileModel(at: modelUrl)
-          completion(compiledUrl)
-        } catch let error {
-          print(error)
-        }
-      }
+      Downloader().load(from: url as URL, to: modelUrl,
+        completion: { localUrl in
+          do {
+            // The downloaded .mlmodel file needs to be compiled to a .modelrc file
+            let compiledUrl = try MLModel.compileModel(at: localUrl)
+            self.saveCompiledMlModel(at: compiledUrl, completion: completion, errorHandler: errorHandler)
+          } catch let error as Error {
+            print(error)
+            errorHandler(error)
+          }
+        },
+        progress: progress,
+        error: errorHandler)
     }
   }
   
   // Saves the model locally and updates the cache, calls completion with the saved local url
-  func saveCompiledMlModel(at compiledUrl: URL, completion: @escaping (URL) -> Void) {
+  func saveCompiledMlModel(at compiledUrl: URL, completion: @escaping (URL) -> Void, errorHandler: @escaping (Error?) -> Void) {
     let fileManager = FileManager.default
     let appSupportDirectory = try! fileManager.url(for: .applicationSupportDirectory,
                                                    in: .userDomainMask, appropriateFor: compiledUrl, create: true)
     // create a permanent URL in the app support directory
     let permanentUrl = appSupportDirectory.appendingPathComponent(compiledUrl.lastPathComponent)
+    
     do {
       // if the file exists, replace it. Otherwise, copy the file to the destination.
       if fileManager.fileExists(atPath: permanentUrl.path) {
@@ -147,28 +157,26 @@ class MLModelService {
       }
       
       // Update the url for the cached model
-      self.updatedCachedModelUrl(with: permanentUrl.path)
+      self.updatedCachedModelUrl(with: permanentUrl.path, errorHandler: errorHandler)
       
       // Call completion with local url
       completion(permanentUrl)
-    } catch let error {
+    } catch let error as Error {
       print("Error during copy: \(error.localizedDescription)")
+      errorHandler(error)
     }
   }
   
-  // Calls completion with either the cached modelrc file or a new modelrc file downloaded from the server
-  func getModel(completion: @escaping (URL) -> Void) {
-    getMlModelUrlFromServer() { [unowned self] urlString in
+  // Calls the completion handler with either the cached modelrc file or a new modelrc file downloaded from the server
+  // The progress handler is called with download progress if a new model is downloaded
+  func getModel(completion: @escaping (URL) -> Void, progress: @escaping (Float) -> Void, errorHandler: @escaping (Error?) -> Void) {
+    getMlModelUrlFromServer(completion: { urlString in
       if self.shouldDownloadNewModel(at: urlString) {
-        self.downloadAndCompileMlModel(at: urlString) { [unowned self] compiledUrl in
-          self.saveCompiledMlModel(at: compiledUrl) { localUrl in
-            completion(localUrl)
-          }
-        }
+        self.downloadAndCompileMlModel(at: urlString, completion: completion, progress: progress, errorHandler: errorHandler)
       } else {
         completion(self.getCachedMlModelUrl())
       }
-    }
+    }, errorHandler: errorHandler)
   }
 }
 

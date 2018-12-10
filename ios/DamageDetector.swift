@@ -12,6 +12,14 @@ import Vision
 import ARKit
 import CoreLocation
 
+struct DamageReport {
+  var image: UIImage
+  var position: CLLocation
+  var course: String
+  var damages: [Damage]
+  var confidence: Double
+}
+
 struct Damage: Codable {
   var type: String
   var description: String
@@ -25,36 +33,48 @@ extension Damage {
   }
 }
 
-class DamageDetector: NSObject, CLLocationManagerDelegate {
-  var damageDetected: ((_ image: UIImage, _ damages: [Damage], _ coords: CLLocationCoordinate2D, _ course: String) -> Void)?
-  var hasMoved: Bool = false
-  var location: CLLocation?
-  var roadDamageModel: RoadDamageModel!
-  var manager: CLLocationManager!
+class DamageDetector: FrameExtractor, CLLocationManagerDelegate {
+  private var roadDamageModel: RoadDamageModel!
+  private var currentImage: UIImage?
+  var damageDetected: ((DamageReport) -> Void)?
   
-  init(compiledUrl: URL) {
-    super.init()
-    DispatchQueue.main.async {
-      self.manager = CLLocationManager()
-      self.manager.requestWhenInUseAuthorization()
-      self.manager.delegate = self
-      self.manager.desiredAccuracy = kCLLocationAccuracyBest
-      self.manager.activityType = .automotiveNavigation
-      self.manager.startUpdatingLocation()
-    }
+  private let imageHelper = ImageHelper()
+  
+  var locationManager: CLLocationManager!
+  var location: CLLocation?
+  var hasMoved: Bool = false
+  
+  init(previewView: UIView, model compiledModel: URL) {
+    super.init(previewView: previewView)
     
     do {
-      roadDamageModel = try RoadDamageModel(contentsOf: compiledUrl)
-    } catch {
-    
+      roadDamageModel = try RoadDamageModel(contentsOf: compiledModel)
+    } catch { }
+  }
+  
+  override func setupAVCapture() {
+    DispatchQueue.main.async {
+      super.setupAVCapture()
+      self.setupGPS()
+      self.startCaptureSession()
     }
   }
   
+  // Setup location services
+  func setupGPS() {
+    self.locationManager = CLLocationManager()
+    self.locationManager.requestWhenInUseAuthorization()
+    self.locationManager.delegate = self
+    self.locationManager.desiredAccuracy = kCLLocationAccuracyBest
+    self.locationManager.activityType = .automotiveNavigation
+    self.locationManager.startUpdatingLocation()
+  }
+  
+  // Called on a location update
   func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
     guard currentImage == nil, manager.location != nil else { return } // If an image is being processed, don't update the location
 
-    if location == nil || manager.location!.distance(from: location!) > 1 {
-      // We have moved a meter
+    if location == nil || manager.location!.distance(from: location!) > 10 {
       location = manager.location!
       hasMoved = true
     }
@@ -69,7 +89,9 @@ class DamageDetector: NSObject, CLLocationManagerDelegate {
       let model = try VNCoreMLModel(for: roadDamageModel.model)
 
       let request = VNCoreMLRequest(model: model, completionHandler: { [weak self] request, error in
-        self?.processClassifications(for: request, error: error)
+        DispatchQueue.main.async { [weak self] in
+          self?.processClassifications(for: request, error: error)
+        }
       })
 
       request.imageCropAndScaleOption = .centerCrop
@@ -80,121 +102,108 @@ class DamageDetector: NSObject, CLLocationManagerDelegate {
     }
   }()
   
-  // Image being held for analysis
-  private var currentImage: UIImage?
-  
-  // Queue for dispatching vision classification requests
-  private let visionQueue = DispatchQueue(label: "com.deep.ditch.visionqueue")
-  
-  // Detect road damage in an image. image is dropped if the device has not moved or an image is currently being processed
-  func maybeDetect(for image: UIImage) {
-    guard currentImage == nil, hasMoved else { return } // Drop requests if the previous image is not finished or the device is stationary
-    self.currentImage = image
-    processCurrentImage()
+  // The camera has captured a new frame
+  override func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
+    guard let buffer = CMSampleBufferGetImageBuffer(sampleBuffer) else { return }
+    self.inferenceImage(pixelBuffer: buffer)
   }
   
-  func processCurrentImage() {
-    let orientation = CGImagePropertyOrientation(self.currentImage!.imageOrientation)
+  func inferenceImage(pixelBuffer: CVPixelBuffer) {
+    guard self.currentImage == nil, self.hasMoved else { return } // We only process a new frame once the old frame has finished and we have recieved a location update
     
-    guard let ciImage = CIImage(image: self.currentImage!) else {
-      fatalError("Unable to create \(CIImage.self) from \(String(describing: self.currentImage)).")
-    }
+    // Set up a classification request
+    self.currentImage = imageHelper.imageFromBuffer(imageBuffer: pixelBuffer)
+    guard self.currentImage != nil else { return }
     
-    let handler = VNImageRequestHandler(ciImage: ciImage, orientation: orientation)
+    let imageRequestHandler = VNImageRequestHandler(cvPixelBuffer: pixelBuffer, orientation: exifOrientationFromDeviceOrientation(), options: [:])
     
-    visionQueue.async { // Image processing happens in a separate queue
-      do {
-        try handler.perform([self.classificationRequest])
-      } catch {
-        print("Failed to perform classification.\n\(error.localizedDescription)")
-      }
+    do {
+      // Attempt to process the request
+      try imageRequestHandler.perform([self.classificationRequest])
+    } catch {
+      print(error)
     }
   }
-
-  let directions = ["N", "NE", "E", "SE", "S", "SW", "W", "NW"]
   
-  /// Updates the UI with the results of the classification.
+  /// Called when self.classificaitonRequests is completed
   /// - Tag: ProcessClassifications
   func processClassifications(for request: VNRequest, error: Error?) {
-    DispatchQueue.main.async { [unowned self] in
-      defer { // Executed after function return.
-        // New frame will be processed when a new image is recieved and the device has moved
-        self.currentImage = nil
-        self.hasMoved = false
-      }
-      
-      guard self.currentImage != nil, self.location != nil else {
-        print("The image or location was lost somehow")
-        return
-      }
-      
-      guard let results = request.results else {
-        print("Unable to classify image.\n\(error!.localizedDescription)")
-        return
-      }
-
-      let classifications = results as! [VNCoreMLFeatureValueObservation]
-      let obs: VNCoreMLFeatureValueObservation = (classifications.first)!
-      let outputs: MLMultiArray = obs.featureValue.multiArrayValue!
-      let damages: [Damage] = self.mapOutputsToDamages(for: outputs)
-      
-      if damages.count > 0 { // Damage has been detected in the image
-        let heading = self.directions[Int((self.location!.course / 45).rounded()) % 8]
-        self.damageDetected?(self.currentImage!, damages, self.location!.coordinate, heading)
-      }
+    defer { // Executed after function return.
+      // New frame will be processed when a new image is recieved and the device has moved
+      self.currentImage = nil
+      self.hasMoved = false
     }
+    
+    guard self.currentImage != nil, self.location != nil else {
+      print("The image or location was lost somehow")
+      return
+    }
+    
+    guard let results = request.results else {
+      print("Unable to classify image.\n\(error!.localizedDescription)")
+      return
+    }
+
+    let classifications = results as! [VNCoreMLFeatureValueObservation]
+    let obs: VNCoreMLFeatureValueObservation = (classifications.first)!
+    let outputs: MLMultiArray = obs.featureValue.multiArrayValue!
+    let damages: [Damage] = self.mapOutputsToDamages(for: outputs)
+    
+    let heading = self.mapCourseToHeadingString(for: self.location!.course)
+    
+    let highestConfidenceDamage = damages.max {a, b in a.confidence < b.confidence}
+    
+    let report = DamageReport(image: self.currentImage!,
+                              position: self.location!,
+                              course: heading,
+                              damages: damages,
+                              confidence: highestConfidenceDamage!.confidence)
+    
+    self.damageDetected?(report)
   }
   
+  let directions = ["N", "NE", "E", "SE", "S", "SW", "W", "NW", "N"]
+  
+  // Maps a degree measure to its compass direction
+  func mapCourseToHeadingString(for course: Double) -> String {
+    return self.directions[Int((Float(Int(course) % 360) / 45).rounded())]
+  }
+  
+  // Maps the models outputs to a list of Damages
   func mapOutputsToDamages(for outputs: MLMultiArray) -> [Damage] {
     var damages = [Damage]()
     
-    if(outputs[0].doubleValue > 0.5) {
       damages.append(Damage(type: "D00",
                         description: "Crack",
                         confidence: outputs[0].doubleValue))
-    }
-    
-    if(outputs[1].doubleValue > 0.5) {
+
       damages.append(Damage(type: "D01",
                         description: "Crack",
                         confidence: outputs[1].doubleValue))
-    }
     
-    if(outputs[2].doubleValue > 0.5) {
       damages.append(Damage(type: "D10",
                         description:"Crack",
                         confidence: outputs[2].doubleValue))
-    }
     
-    if(outputs[3].doubleValue > 0.5) {
       damages.append(Damage(type: "D11",
                         description: "Crack",
                         confidence: outputs[3].doubleValue))
-    }
-    
-    if(outputs[4].doubleValue > 0.5) {
+
       damages.append(Damage(type: "D20",
                         description: "Alligator Crack",
                         confidence: outputs[4].doubleValue))
-    }
-    
-    if(outputs[5].doubleValue > 0.5) {
+
       damages.append(Damage(type: "D40",
                         description: "Pothole",
                         confidence: outputs[5].doubleValue))
-    }
     
-    if(outputs[6].doubleValue > 0.5) {
       damages.append(Damage(type: "D43",
                         description: "Line Blur",
                         confidence: outputs[6].doubleValue))
-    }
     
-    if(outputs[7].doubleValue > 0.5) {
       damages.append(Damage(type: "D44",
                         description: "Crosswalk Blur",
                         confidence: outputs[7].doubleValue))
-    }
     
     return damages
   }
