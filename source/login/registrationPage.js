@@ -9,7 +9,6 @@ import {
 } from "react-native";
 
 import AuthService from "../services/auth.service";
-import NetInfoService from "../services/netInfo.service";
 import { ButtonStyle } from "../styles/button.style";
 import { InputStyle } from "../styles/input.style";
 
@@ -25,93 +24,67 @@ export default class registrationPage extends Component {
       email: "",
       password: "",
       confirmPassword: "",
-      failAlert: "",
+      alert: ""
     };
   }
 
   render() {
-    if (this.state.failAlert !== "") {
-      alert(this.state.failAlert);
-    }
     return (
-      <KeyboardAvoidingView style={style.container} behavior="padding">
-      <NetInfoService/> 
-   <View>
+      <KeyboardAvoidingView style={style.container}>
+        <View>
           <Text style={InputStyle.label}>User Name</Text>
           <TextInput
             style={InputStyle.input}
             placeholder="User Name"
             label="User Name"
-            textContentType="givenName"
-            autoCorrect={false}
+            textContentType="name"
             value={this.state.name}
             autoCapitalize="none"
-            onChangeText={name => this.setState({ name, failAlert: "" })}
-           
-            returnKeyType="next"
-            onSubmitEditing={() => { this.emailField.focus(); }}
-            blurOnSubmit={false}
+            onChangeText={name => this.setState({ name, alert: "" })}
           />
           <Text style={InputStyle.label}>Email</Text>
           <TextInput
-            ref={(input) => { this.emailField = input }}
-
             style={InputStyle.input}
             placeholder="Email"
             label="Email"
             textContentType="emailAddress"
-            autoCorrect={false}
             value={this.state.email}
             autoCapitalize="none"
-            keyboardType="url"
-            onChangeText={email => this.setState({ email, failAlert: "" })}
-
-            returnKeyType="next"
-            onSubmitEditing={() => { this.passwordField.focus(); }}
-            blurOnSubmit={false}
+            keyboardType="email-address"
+            onChangeText={email => this.setState({ email, alert: "" })}
           />
           <Text style={InputStyle.label}>Password</Text>
           <TextInput
-            ref={(input) => { this.passwordField = input }}
-
             style={InputStyle.input}
             placeholder="Password"
             label="Password"
             textContentType="password"
-            autoCorrect={false}
             value={this.state.password}
             autoCapitalize="none"
             secureTextEntry={true}
-            onChangeText={password => this.setState({ password, failAlert: "" })}
-
-            returnKeyType="next"
-            onSubmitEditing={() => { this.confirmPasswordField.focus(); }}
-            blurOnSubmit={false}
+            onChangeText={password => this.setState({ password, alert: "" })}
           />
           <Text style={InputStyle.label}>Confirm Password</Text>
           <TextInput
-            ref={(input) => { this.confirmPasswordField = input }}
-
             style={InputStyle.input}
             placeholder="Confirm Password"
             label="Confirm Password"
             textContentType="password"
-            autoCorrect={false}
             value={this.state.confirmPassword}
             autoCapitalize="none"
             secureTextEntry={true}
-            onChangeText={confirmPassword => this.setState({ confirmPassword, failAlert: "" })}
-            onSubmitEditing={() => { this.submit(); }}
-
+            onChangeText={confirmPassword =>
+              this.setState({ confirmPassword, alert: "" })
+            }
           />
           <TouchableOpacity
             onPress={this.submit.bind(this)}
-            style={[ButtonStyle.button, { marginTop: 0 }, { alignSelf:"center" }]}
+            style={[ButtonStyle.button, { marginTop: 20 }, { marginleft: 20 }]}
           >
             <Text style={ButtonStyle.buttonText}>Submit</Text>
           </TouchableOpacity>
-          </View>
-          <View style={{height:60}}/>
+          <Text>{this.state.alert}</Text>
+        </View>
       </KeyboardAvoidingView>
     );
   }
@@ -129,11 +102,11 @@ export default class registrationPage extends Component {
         })
         .catch(error => {
           if (error.message)
-            this.setState({ failAlert: "Registration Failure: " + error.message });
-          else this.setState({ failAlert: "Registration Failure" });
+            this.setState({ alert: "Registration Failure: " + error.message });
+          else this.setState({ alert: "Registration Failure" });
         });
     } else {
-      this.setState({ failAlert: "Password confirmation does not match" });
+      this.setState({ alert: "Password confirmation does not match" });
     }
   }
 }

@@ -71,21 +71,6 @@ export default class AuthService {
     });
   }
 
-  async forgotPass(email) {
-    const data = {
-      email: email,
-    };
-
-    return new Promise((resolve, reject) => {
-      fetch(config.API_BASE_PATH + `/forgot-password?email=${email}`, {method:"GET"})
-        .then(response => {
-          console.log(response)
-          if (!response.ok) return reject(response.json);
-          return resolve(response.json);
-        });
-    });
-  }
-
   async setToken(token) {
     try {
       await AsyncStorage.setItem("@auth:token", token);
@@ -101,7 +86,7 @@ export default class AuthService {
       if (token !== null) {
         return token;
       } else {
-        return null;
+        throw "No token";
       }
     } catch (error) {
       throw error;

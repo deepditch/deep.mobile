@@ -3,8 +3,8 @@ import { StyleSheet } from "react-native";
 export const InputStyle = StyleSheet.create({
   input: {
     color: "#2c3443",
-    paddingTop: 7,
-    paddingBottom: 7,
+    paddingTop: 8,
+    paddingBottom: 8,
     paddingLeft: 12,
     paddingRight: 12,
     borderRadius: 5,
@@ -14,6 +14,6 @@ export const InputStyle = StyleSheet.create({
     borderRadius: 5,
   },
   label: {
-    marginBottom: 3,
+    marginBottom: 5,
   }
 });

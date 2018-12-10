@@ -2,6 +2,7 @@ import { StyleSheet } from "react-native";
 
 export const ButtonStyle = StyleSheet.create({
   bContainer:{
+    flex:1,
     flexDirection: 'row',
     justifyContent: 'space-between'
   },
@@ -12,7 +13,7 @@ export const ButtonStyle = StyleSheet.create({
     paddingLeft: 25,
     paddingRight: 25,
     borderRadius: 5,
-    marginBottom: 25,
+    marginBottom: 15,
     alignSelf: "flex-start"
   },
   buttonText: {
