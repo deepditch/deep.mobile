@@ -2,7 +2,22 @@ import AuthService from "./auth.service";
 import config from "../../project.config";
 
 export default class DamageService {
+  constructor() {
+    this.authService = new AuthService();
+  }
+
   async parseJSON(response) {
+    if (response.headers.authorization) {
+      if (response.headers.authorization.startsWith('Bearer ')) {
+        await this.authService.setToken(response.headers.authorization.substring('Bearer '.length));
+      }
+      else {
+        await this.authService.setToken(response.headers.authorization);
+      }
+      
+    }
+
+    console.log(response);
     return new Promise(resolve =>
       response.json().then(json =>
         resolve({
@@ -15,7 +30,7 @@ export default class DamageService {
   }
 
   async getDamages() {
-    var token = await new AuthService().getToken();
+    var token = await this.authService.getToken();
     const requestBody = {
       method: "GET",
       headers: {
@@ -28,6 +43,7 @@ export default class DamageService {
       fetch(config.API_BASE_PATH + "/road-damage", requestBody)
         .then(this.parseJSON)
         .then(response => {
+          console.log(response);
           if (!response.ok) return reject(response.json);
           return resolve(response.json.data);
         });

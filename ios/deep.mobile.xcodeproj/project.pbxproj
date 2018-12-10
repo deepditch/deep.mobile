@@ -11,29 +11,28 @@
 		13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB11A68108700A75B9A /* LaunchScreen.xib */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
-		15C17CED9E18F4F759D24D44 /* Pods_deep_mobileTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 33595A05C3BA2DBDF6EF833F /* Pods_deep_mobileTests.framework */; };
 		42B6601FDF90DECBBCC23261 /* Pods_deep_mobile.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 15A7342A538FEBAB9D56F031 /* Pods_deep_mobile.framework */; };
+		7A337A77633EE16F9B4B65C8 /* Pods_deep_mobileTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 715CB75DAE1B221BFEA9FC76 /* Pods_deep_mobileTests.framework */; };
 		9B0BCCFF216E85E4009D2503 /* FrameExtractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B0BCCFE216E85E4009D2503 /* FrameExtractor.swift */; };
 		9B0BCD36216E92E3009D2503 /* DamageHTTPService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B0BCD35216E92E3009D2503 /* DamageHTTPService.swift */; };
 		9B2DE4782198C3F000C232FF /* Downloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B2DE4772198C3F000C232FF /* Downloader.swift */; };
+		9B77F31721BF137900D705DA /* test_image.png in Resources */ = {isa = PBXBuildFile; fileRef = 9B77F31621BF137900D705DA /* test_image.png */; };
 		9B814608216FDFB900590FCB /* DamageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B814607216FDFB900590FCB /* DamageService.swift */; };
-		9BA85D4821BAFDE100919A1C /* ImageHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BA85D4721BAFDE100919A1C /* ImageHelper.swift */; };
-		9BBAE89421BC2D0000504FB3 /* test_image.png in Resources */ = {isa = PBXBuildFile; fileRef = 9BBAE89321BC2D0000504FB3 /* test_image.png */; };
-		9BBAE89621BC2FCC00504FB3 /* RoadDamageService_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BC8A3E021AB5A6800977C8B /* RoadDamageService_Tests.swift */; };
-		9BBAE89721BC2FCC00504FB3 /* deep_mobileTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BC8A3CB21AB42DC00977C8B /* deep_mobileTests.swift */; };
-		9BBAE89921BC309000504FB3 /* DamageHTTPService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B0BCD35216E92E3009D2503 /* DamageHTTPService.swift */; };
-		9BBAE89A21BC309000504FB3 /* DamageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B814607216FDFB900590FCB /* DamageService.swift */; };
-		9BBAE89B21BC309000504FB3 /* MLModelService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BC1337C219DF58400AE4C95 /* MLModelService.swift */; };
-		9BBAE89D21BC309000504FB3 /* DamageDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = B97BD71121681D700043C3DC /* DamageDetector.swift */; };
-		9BBAE89E21BC309000504FB3 /* Throttler.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9726072216D7F1A0066A59C /* Throttler.swift */; };
-		9BBAE89F21BC309000504FB3 /* FrameExtractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B0BCCFE216E85E4009D2503 /* FrameExtractor.swift */; };
-		9BBAE8A021BC309000504FB3 /* Downloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B2DE4772198C3F000C232FF /* Downloader.swift */; };
-		9BBAE8A121BC309000504FB3 /* ImageHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BA85D4721BAFDE100919A1C /* ImageHelper.swift */; };
-		9BBAE8A821BC424000504FB3 /* RoadDamageModel.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = B97BD71721682F4C0043C3DC /* RoadDamageModel.mlmodel */; };
-		9BBAE8AD21BC4DC100504FB3 /* TokenSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BBAE8AC21BC4DC100504FB3 /* TokenSource.swift */; };
-		9BBAE8B021BC545F00504FB3 /* TokenSourceBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BBAE8AF21BC545F00504FB3 /* TokenSourceBridge.m */; };
 		9BC1337D219DF58400AE4C95 /* MLModelService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BC1337C219DF58400AE4C95 /* MLModelService.swift */; };
-		B78F035174932D44ED413412 /* Pods_deep_mobile.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 15A7342A538FEBAB9D56F031 /* Pods_deep_mobile.framework */; };
+		9BC8A3CC21AB42DC00977C8B /* deep_mobileTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BC8A3CB21AB42DC00977C8B /* deep_mobileTests.swift */; };
+		9BC8A3D321AB43D600977C8B /* DamageHTTPService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B0BCD35216E92E3009D2503 /* DamageHTTPService.swift */; };
+		9BC8A3D421AB43D600977C8B /* DamageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B814607216FDFB900590FCB /* DamageService.swift */; };
+		9BC8A3D521AB43D600977C8B /* MLModelService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BC1337C219DF58400AE4C95 /* MLModelService.swift */; };
+		9BC8A3D621AB43D600977C8B /* RoadDamageModel.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = B97BD71721682F4C0043C3DC /* RoadDamageModel.mlmodel */; };
+		9BC8A3D721AB43D600977C8B /* DamageDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = B97BD71121681D700043C3DC /* DamageDetector.swift */; };
+		9BC8A3D921AB43D600977C8B /* Throttler.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9726072216D7F1A0066A59C /* Throttler.swift */; };
+		9BC8A3DA21AB43D600977C8B /* FrameExtractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B0BCCFE216E85E4009D2503 /* FrameExtractor.swift */; };
+		9BC8A3DB21AB43D600977C8B /* Downloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B2DE4772198C3F000C232FF /* Downloader.swift */; };
+		9BC8A3E121AB5A6800977C8B /* RoadDamageService_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BC8A3E021AB5A6800977C8B /* RoadDamageService_Tests.swift */; };
+		9BF9D1FD21BEEDAC00986A19 /* ImageHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BF9D1FC21BEEDAC00986A19 /* ImageHelper.swift */; };
+		9BF9D20021BEEDC300986A19 /* TokenSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BF9D1FE21BEEDC300986A19 /* TokenSource.swift */; };
+		9BF9D20121BEEDC300986A19 /* TokenSourceBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BF9D1FF21BEEDC300986A19 /* TokenSourceBridge.m */; };
+		9BF9D20521BEEDDE00986A19 /* ImageHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BF9D1FC21BEEDAC00986A19 /* ImageHelper.swift */; };
 		B957B261215EB8DE00FF2999 /* DamageCameraView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B957B260215EB8DE00FF2999 /* DamageCameraView.swift */; };
 		B957B264215EB92A00FF2999 /* DamageCameraViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B957B263215EB92A00FF2999 /* DamageCameraViewManager.swift */; };
 		B957B266215EB9FA00FF2999 /* DamageCameraViewBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = B957B265215EB9FA00FF2999 /* DamageCameraViewBridge.m */; };
@@ -42,10 +41,21 @@
 		B97BD71821682F4D0043C3DC /* RoadDamageModel.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = B97BD71721682F4C0043C3DC /* RoadDamageModel.mlmodel */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		9BC8A3CE21AB42DC00977C8B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 83CBB9F71A601CBA00E9B192 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 13B07F861A680F5B00A75B9A;
+			remoteInfo = deep.mobile;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
 		008F07F21AC5B25A0029DE68 /* main.jsbundle */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file; name = main.jsbundle; path = deep.mobile/main.jsbundle; sourceTree = "<group>"; };
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00E356F21AD99517003FC87E /* deep.mobile.tests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = deep.mobile.tests.m; sourceTree = "<group>"; };
+		0D0CA4902BB2789DE92F1497 /* Pods-deep.mobileTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-deep.mobileTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-deep.mobileTests/Pods-deep.mobileTests.debug.xcconfig"; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* deep.mobile.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = deep.mobile.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = deep.mobile/AppDelegate.h; sourceTree = "<group>"; };
 		13B07FB01A68108700A75B9A /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = deep.mobile/AppDelegate.m; sourceTree = "<group>"; };
@@ -56,20 +66,21 @@
 		15A7342A538FEBAB9D56F031 /* Pods_deep_mobile.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_deep_mobile.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D16E6891FA4F8E400B85C8A /* libReact.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libReact.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D1BE70E20D17A58F184918B /* Pods-deep.mobile.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-deep.mobile.debug.xcconfig"; path = "Pods/Target Support Files/Pods-deep.mobile/Pods-deep.mobile.debug.xcconfig"; sourceTree = "<group>"; };
-		33595A05C3BA2DBDF6EF833F /* Pods_deep_mobileTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_deep_mobileTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		715CB75DAE1B221BFEA9FC76 /* Pods_deep_mobileTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_deep_mobileTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		73228D887C035B6884C9D21E /* Pods-deep.mobileTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-deep.mobileTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-deep.mobileTests/Pods-deep.mobileTests.release.xcconfig"; sourceTree = "<group>"; };
 		9B0BCCFE216E85E4009D2503 /* FrameExtractor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FrameExtractor.swift; sourceTree = "<group>"; };
 		9B0BCD35216E92E3009D2503 /* DamageHTTPService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DamageHTTPService.swift; sourceTree = "<group>"; };
 		9B2DE4772198C3F000C232FF /* Downloader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Downloader.swift; sourceTree = "<group>"; };
+		9B77F31621BF137900D705DA /* test_image.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = test_image.png; sourceTree = "<group>"; };
 		9B814607216FDFB900590FCB /* DamageService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DamageService.swift; sourceTree = "<group>"; };
-		9BA85D4721BAFDE100919A1C /* ImageHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageHelper.swift; sourceTree = "<group>"; };
-		9BBAE89321BC2D0000504FB3 /* test_image.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = test_image.png; sourceTree = "<group>"; };
-		9BBAE8AC21BC4DC100504FB3 /* TokenSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenSource.swift; sourceTree = "<group>"; };
-		9BBAE8AF21BC545F00504FB3 /* TokenSourceBridge.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TokenSourceBridge.m; sourceTree = "<group>"; };
 		9BC1337C219DF58400AE4C95 /* MLModelService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MLModelService.swift; sourceTree = "<group>"; };
 		9BC8A3C921AB42DB00977C8B /* deep.mobileTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = deep.mobileTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		9BC8A3CB21AB42DC00977C8B /* deep_mobileTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = deep_mobileTests.swift; sourceTree = "<group>"; };
 		9BC8A3CD21AB42DC00977C8B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9BC8A3E021AB5A6800977C8B /* RoadDamageService_Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoadDamageService_Tests.swift; sourceTree = "<group>"; };
+		9BF9D1FC21BEEDAC00986A19 /* ImageHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageHelper.swift; sourceTree = "<group>"; };
+		9BF9D1FE21BEEDC300986A19 /* TokenSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TokenSource.swift; sourceTree = "<group>"; };
+		9BF9D1FF21BEEDC300986A19 /* TokenSourceBridge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TokenSourceBridge.m; sourceTree = "<group>"; };
 		B957B25D215EB81B00FF2999 /* deep.mobile-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "deep.mobile-Bridging-Header.h"; sourceTree = "<group>"; };
 		B957B260215EB8DE00FF2999 /* DamageCameraView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DamageCameraView.swift; sourceTree = "<group>"; };
 		B957B263215EB92A00FF2999 /* DamageCameraViewManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DamageCameraViewManager.swift; sourceTree = "<group>"; };
@@ -78,8 +89,6 @@
 		B97BD71121681D700043C3DC /* DamageDetector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DamageDetector.swift; sourceTree = "<group>"; };
 		B97BD71721682F4C0043C3DC /* RoadDamageModel.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = RoadDamageModel.mlmodel; sourceTree = "<group>"; };
 		C84BBB415B0EBC0F79D1A379 /* Pods-deep.mobile.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-deep.mobile.release.xcconfig"; path = "Pods/Target Support Files/Pods-deep.mobile/Pods-deep.mobile.release.xcconfig"; sourceTree = "<group>"; };
-		E339311E925A0DACE0DF0EE2 /* Pods-deep.mobileTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-deep.mobileTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-deep.mobileTests/Pods-deep.mobileTests.release.xcconfig"; sourceTree = "<group>"; };
-		F7FEFB7EEE439A23198E3590 /* Pods-deep.mobileTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-deep.mobileTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-deep.mobileTests/Pods-deep.mobileTests.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -88,7 +97,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				42B6601FDF90DECBBCC23261 /* Pods_deep_mobile.framework in Frameworks */,
-				B78F035174932D44ED413412 /* Pods_deep_mobile.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -96,7 +104,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				15C17CED9E18F4F759D24D44 /* Pods_deep_mobileTests.framework in Frameworks */,
+				7A337A77633EE16F9B4B65C8 /* Pods_deep_mobileTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -107,6 +115,7 @@
 			isa = PBXGroup;
 			children = (
 				00E356F21AD99517003FC87E /* deep.mobile.tests.m */,
+				9B77F31621BF137900D705DA /* test_image.png */,
 				00E356F01AD99517003FC87E /* Supporting Files */,
 			);
 			path = deep.mobileTests;
@@ -144,7 +153,7 @@
 			children = (
 				2D16E6891FA4F8E400B85C8A /* libReact.a */,
 				15A7342A538FEBAB9D56F031 /* Pods_deep_mobile.framework */,
-				33595A05C3BA2DBDF6EF833F /* Pods_deep_mobileTests.framework */,
+				715CB75DAE1B221BFEA9FC76 /* Pods_deep_mobileTests.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -154,8 +163,8 @@
 			children = (
 				2D1BE70E20D17A58F184918B /* Pods-deep.mobile.debug.xcconfig */,
 				C84BBB415B0EBC0F79D1A379 /* Pods-deep.mobile.release.xcconfig */,
-				F7FEFB7EEE439A23198E3590 /* Pods-deep.mobileTests.debug.xcconfig */,
-				E339311E925A0DACE0DF0EE2 /* Pods-deep.mobileTests.release.xcconfig */,
+				0D0CA4902BB2789DE92F1497 /* Pods-deep.mobileTests.debug.xcconfig */,
+				73228D887C035B6884C9D21E /* Pods-deep.mobileTests.release.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -195,10 +204,10 @@
 		9B0BCCD7216E856E009D2503 /* Util */ = {
 			isa = PBXGroup;
 			children = (
+				9BF9D1FC21BEEDAC00986A19 /* ImageHelper.swift */,
 				B9726072216D7F1A0066A59C /* Throttler.swift */,
 				9B0BCCFE216E85E4009D2503 /* FrameExtractor.swift */,
 				9B2DE4772198C3F000C232FF /* Downloader.swift */,
-				9BA85D4721BAFDE100919A1C /* ImageHelper.swift */,
 			);
 			name = Util;
 			sourceTree = "<group>";
@@ -216,10 +225,10 @@
 			isa = PBXGroup;
 			children = (
 				9B0BCD35216E92E3009D2503 /* DamageHTTPService.swift */,
+				9BF9D1FE21BEEDC300986A19 /* TokenSource.swift */,
+				9BF9D1FF21BEEDC300986A19 /* TokenSourceBridge.m */,
 				9B814607216FDFB900590FCB /* DamageService.swift */,
 				9BC1337C219DF58400AE4C95 /* MLModelService.swift */,
-				9BBAE8AC21BC4DC100504FB3 /* TokenSource.swift */,
-				9BBAE8AF21BC545F00504FB3 /* TokenSourceBridge.m */,
 			);
 			name = Service;
 			sourceTree = "<group>";
@@ -227,7 +236,6 @@
 		9BC8A3CA21AB42DC00977C8B /* deep.mobileTests */ = {
 			isa = PBXGroup;
 			children = (
-				9BBAE89321BC2D0000504FB3 /* test_image.png */,
 				9BC8A3E021AB5A6800977C8B /* RoadDamageService_Tests.swift */,
 				9BC8A3CB21AB42DC00977C8B /* deep_mobileTests.swift */,
 				9BC8A3CD21AB42DC00977C8B /* Info.plist */,
@@ -272,7 +280,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 9BC8A3D021AB42DC00977C8B /* Build configuration list for PBXNativeTarget "deep.mobileTests" */;
 			buildPhases = (
-				A3C6C38A9BCF96EBCB9A32E3 /* [CP] Check Pods Manifest.lock */,
+				4F14D5805754741131D6689A /* [CP] Check Pods Manifest.lock */,
 				9BC8A3C521AB42DB00977C8B /* Sources */,
 				9BC8A3C621AB42DB00977C8B /* Frameworks */,
 				9BC8A3C721AB42DB00977C8B /* Resources */,
@@ -280,6 +288,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				9BC8A3CF21AB42DC00977C8B /* PBXTargetDependency */,
 			);
 			name = deep.mobileTests;
 			productName = deep.mobileTests;
@@ -293,7 +302,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 1010;
-				LastUpgradeCheck = 940;
+				LastUpgradeCheck = 1010;
 				ORGANIZATIONNAME = Facebook;
 				TargetAttributes = {
 					13B07F861A680F5B00A75B9A = {
@@ -341,7 +350,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9BBAE89421BC2D0000504FB3 /* test_image.png in Resources */,
+				9B77F31721BF137900D705DA /* test_image.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -374,6 +383,24 @@
 			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
 				"$(DERIVED_FILE_DIR)/Pods-deep.mobile-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		4F14D5805754741131D6689A /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-deep.mobileTests-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -414,24 +441,6 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-deep.mobile/Pods-deep.mobile-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		A3C6C38A9BCF96EBCB9A32E3 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-deep.mobileTests-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -447,14 +456,14 @@
 				9B0BCCFF216E85E4009D2503 /* FrameExtractor.swift in Sources */,
 				13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */,
 				B97BD71821682F4D0043C3DC /* RoadDamageModel.mlmodel in Sources */,
-				9BBAE8AD21BC4DC100504FB3 /* TokenSource.swift in Sources */,
+				9BF9D20021BEEDC300986A19 /* TokenSource.swift in Sources */,
 				9B2DE4782198C3F000C232FF /* Downloader.swift in Sources */,
-				9BBAE8B021BC545F00504FB3 /* TokenSourceBridge.m in Sources */,
 				9B814608216FDFB900590FCB /* DamageService.swift in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
 				9B0BCD36216E92E3009D2503 /* DamageHTTPService.swift in Sources */,
+				9BF9D20121BEEDC300986A19 /* TokenSourceBridge.m in Sources */,
 				B957B264215EB92A00FF2999 /* DamageCameraViewManager.swift in Sources */,
-				9BA85D4821BAFDE100919A1C /* ImageHelper.swift in Sources */,
+				9BF9D1FD21BEEDAC00986A19 /* ImageHelper.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -462,21 +471,29 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9BBAE8A821BC424000504FB3 /* RoadDamageModel.mlmodel in Sources */,
-				9BBAE89921BC309000504FB3 /* DamageHTTPService.swift in Sources */,
-				9BBAE89A21BC309000504FB3 /* DamageService.swift in Sources */,
-				9BBAE89B21BC309000504FB3 /* MLModelService.swift in Sources */,
-				9BBAE89D21BC309000504FB3 /* DamageDetector.swift in Sources */,
-				9BBAE89E21BC309000504FB3 /* Throttler.swift in Sources */,
-				9BBAE89F21BC309000504FB3 /* FrameExtractor.swift in Sources */,
-				9BBAE8A021BC309000504FB3 /* Downloader.swift in Sources */,
-				9BBAE8A121BC309000504FB3 /* ImageHelper.swift in Sources */,
-				9BBAE89621BC2FCC00504FB3 /* RoadDamageService_Tests.swift in Sources */,
-				9BBAE89721BC2FCC00504FB3 /* deep_mobileTests.swift in Sources */,
+				9BF9D20521BEEDDE00986A19 /* ImageHelper.swift in Sources */,
+				9BC8A3E121AB5A6800977C8B /* RoadDamageService_Tests.swift in Sources */,
+				9BC8A3D321AB43D600977C8B /* DamageHTTPService.swift in Sources */,
+				9BC8A3D421AB43D600977C8B /* DamageService.swift in Sources */,
+				9BC8A3D521AB43D600977C8B /* MLModelService.swift in Sources */,
+				9BC8A3D621AB43D600977C8B /* RoadDamageModel.mlmodel in Sources */,
+				9BC8A3D721AB43D600977C8B /* DamageDetector.swift in Sources */,
+				9BC8A3D921AB43D600977C8B /* Throttler.swift in Sources */,
+				9BC8A3DA21AB43D600977C8B /* FrameExtractor.swift in Sources */,
+				9BC8A3DB21AB43D600977C8B /* Downloader.swift in Sources */,
+				9BC8A3CC21AB42DC00977C8B /* deep_mobileTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		9BC8A3CF21AB42DC00977C8B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 13B07F861A680F5B00A75B9A /* deep.mobile */;
+			targetProxy = 9BC8A3CE21AB42DC00977C8B /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		13B07FB11A68108700A75B9A /* LaunchScreen.xib */ = {
@@ -650,13 +667,14 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
 		};
 		9BC8A3D121AB42DC00977C8B /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = F7FEFB7EEE439A23198E3590 /* Pods-deep.mobileTests.debug.xcconfig */;
+			baseConfigurationReference = 0D0CA4902BB2789DE92F1497 /* Pods-deep.mobileTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CLANG_ANALYZER_NONNULL = YES;
@@ -687,7 +705,7 @@
 		};
 		9BC8A3D221AB42DC00977C8B /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = E339311E925A0DACE0DF0EE2 /* Pods-deep.mobileTests.release.xcconfig */;
+			baseConfigurationReference = 73228D887C035B6884C9D21E /* Pods-deep.mobileTests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CLANG_ANALYZER_NONNULL = YES;
@@ -725,7 +743,7 @@
 				13B07F951A680F5B00A75B9A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 		83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "deep.mobile" */ = {
 			isa = XCConfigurationList;
@@ -734,7 +752,7 @@
 				83CBBA211A601CBA00E9B192 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 		9BC8A3D021AB42DC00977C8B /* Build configuration list for PBXNativeTarget "deep.mobileTests" */ = {
 			isa = XCConfigurationList;
@@ -743,7 +761,7 @@
 				9BC8A3D221AB42DC00977C8B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 /* End XCConfigurationList section */
 	};

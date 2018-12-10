@@ -5,13 +5,15 @@ import {
   View,
   TextInput,
   TouchableOpacity,
-  KeyboardAvoidingView
+  KeyboardAvoidingView,
+  Alert
 } from "react-native";
 
 import { AsyncStorage } from "react-native";
 
 
 import AuthService from "../services/auth.service";
+import NetInfoService from "../services/netInfo.service";
 import { ButtonStyle } from "../styles/button.style";
 import { InputStyle } from "../styles/input.style";
 
@@ -25,14 +27,22 @@ export default class loginPage extends Component {
     this.state = {
       email: "",
       password: "",
-      alert: ""
+      failAlert: "",
+      currentToken: null,
     };
   }
 
   render() {
+    if (this.state.failAlert !== "") {
+      alert(this.state.failAlert);
+    }
+
     return (
       <KeyboardAvoidingView style={style.container}>
+        <NetInfoService />
+
         <View>
+
           <Text style={InputStyle.label}>Email</Text>
           <TextInput
             //clearButtonMode ="always"
@@ -42,24 +52,33 @@ export default class loginPage extends Component {
             textContentType="emailAddress"
             value={this.state.email}
             autoCapitalize="none"
-            keyboardType = "email-address"
-            onChangeText={email => this.setState({ email, alert: "" })}
-            
+            autoCorrect={false}
+            keyboardType="url"
+            onChangeText={email => this.setState({ email, failAlert: "" })}
+            returnKeyType="next"
+            onSubmitEditing={() => { this.passwordField.focus(); }}
+            blurOnSubmit={false}
           />
+
           <Text style={InputStyle.label}>Password</Text>
           <TextInput
-          //clearButtonMode ="always"
+            //clearButtonMode ="always"
+            ref={(input) => { this.passwordField = input }}
             style={InputStyle.input}
             placeholder="Password"
             label="Password"
             textContentType="password"
             value={this.state.password}
             autoCapitalize="none"
+            autoCorrect={false}
             secureTextEntry={true}
-            onChangeText={password => this.setState({ password, alert: "" })}
-          />
-          </View>
-          <View style ={ButtonStyle.bContainer}>
+            onChangeText={password => this.setState({ password, failAlert: "" })}
+            onSubmitEditing={() => { this.login(); }}
+          />    
+        </View>
+
+        <View style={ButtonStyle.bContainer}>
+
           <TouchableOpacity
             onPress={this.login.bind(this)}
             style={[ButtonStyle.button, { marginTop: 10 }]}
@@ -68,52 +87,59 @@ export default class loginPage extends Component {
           </TouchableOpacity>
 
           <TouchableOpacity
-            onPress={()=>this.props.navigation.navigate('Register')}
-            style={[ButtonStyle.button,{ marginTop:10 }]}
+            onPress={() => this.props.navigation.navigate('Register')}
+            style={[ButtonStyle.button, { marginTop: 10 }]}
           >
             <Text style={ButtonStyle.buttonText}>REGISTER</Text>
           </TouchableOpacity>
-          <Text>{this.state.alert}</Text>
+
+        </View>
+
+        <View>
+        <TouchableOpacity
+           onPress={() => this.props.navigation.navigate('ForgotPass')}
+            style={[ButtonStyle.button, { top: 0 }, {alignSelf:"center"}]}
+          >
+            <Text style={ButtonStyle.buttonText}>Forgot Password?</Text>
+          </TouchableOpacity>
         </View>
 
       </KeyboardAvoidingView>
+
     );
   }
 
   login() {
-    AsyncStorage.setItem('email', this.state.email).done();
-    AsyncStorage.setItem('password',this.state.password).done();
-
-
     new AuthService()
       .login(this.state.email, this.state.password)
       .then(response => {
-        this.props.navigation.navigate("Map");
+        this.props.navigation.navigate("Camera");
       })
       .catch(error => {
         if (error.message)
-          this.setState({ alert: "Login Failure: " + error.message });
-        else this.setState({ alert: "Login Failure" });
+          this.setState({ failAlert: "Login Failure: " + error.message });
+        else this.setState({ failAlert: "Login Failure" });
       });
-      this.clearAfterSubmit();
+
+    this.clearAfterSubmit();
   }
 
-  clearAfterSubmit()
-  {
+  clearAfterSubmit() {
     this.setState({
-      email:'',
-      password:''
+      email: '',
+      password: ''
     })
   }
 
-  componentDidMount(){
-    AsyncStorage.getItem('email').then((email)=>{
-      this.setState({email:email})
+  async componentDidMount() {
+    new AuthService().getToken().then(token => {
+      console.log(token)
+      this.setState({ currentToken: token });
+      this.props.navigation.navigate("Camera");
+    }).catch(error => {
+      this.setState({ currentToken: null });
     })
-    AsyncStorage.getItem('password').then((password)=>{
-      this.setState({password:password})
-    })
-  } 
+  }
 }
 
 const style = StyleSheet.create({

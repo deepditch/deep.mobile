@@ -8,14 +8,7 @@
 
 import Foundation
 import Moya
-
-func ScaleImage(image: UIImage, size: CGSize) -> UIImage {
-  UIGraphicsBeginImageContextWithOptions(size, false, 0.0);
-  image.draw(in: CGRect(origin: CGPoint.zero, size: CGSize(width: size.width, height: size.height)))
-  let newImage:UIImage = UIGraphicsGetImageFromCurrentImageContext()!
-  UIGraphicsEndImageContext()
-  return newImage
-}
+import CoreLocation
 
 class DamageService {
   var apiProvider: MoyaProvider<APIHTTPService>?
@@ -33,18 +26,16 @@ class DamageService {
   
   init() {
     throttler = Throttler(seconds: 7.5) // Reports are sent a maximum of 8 times per minute
-  }
-  
-  func setToken(with token: String) {
-    apiProvider = MakeApiProvider(with: token)
+    apiProvider = MakeApiProvider()
   }
   
   func setPreviousReports(with previousReports: [String: Any]) {
     for (key, reports) in previousReports {
-      PreviousReports[key] = (reports as! [[Double]]).map { vals in return CLLocation(latitude: vals[0], longitude: vals[1])}
+      PreviousReports[key] = (reports as! [[Double]]).map { vals in return CLLocation(latitude: vals[0], longitude: vals[1])
+      }
     }
   }
-  
+
   func maybeReport(report: DamageReport, completion: @escaping Completion) -> DamageReport {
     var report = report
     
