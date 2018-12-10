@@ -14,6 +14,7 @@
 		42B6601FDF90DECBBCC23261 /* Pods_deep_mobile.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 15A7342A538FEBAB9D56F031 /* Pods_deep_mobile.framework */; };
 		9B0BCCFF216E85E4009D2503 /* FrameExtractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B0BCCFE216E85E4009D2503 /* FrameExtractor.swift */; };
 		9B0BCD36216E92E3009D2503 /* DamageHTTPService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B0BCD35216E92E3009D2503 /* DamageHTTPService.swift */; };
+		9B238AAA217A371000E7AAC3 /* CGImagePropertyOrientation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B238AA9217A371000E7AAC3 /* CGImagePropertyOrientation.swift */; };
 		9B2DE4782198C3F000C232FF /* Downloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B2DE4772198C3F000C232FF /* Downloader.swift */; };
 		9B814608216FDFB900590FCB /* DamageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B814607216FDFB900590FCB /* DamageService.swift */; };
 		9BC1337D219DF58400AE4C95 /* MLModelService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BC1337C219DF58400AE4C95 /* MLModelService.swift */; };
@@ -23,6 +24,7 @@
 		9BC8A3D521AB43D600977C8B /* MLModelService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BC1337C219DF58400AE4C95 /* MLModelService.swift */; };
 		9BC8A3D621AB43D600977C8B /* RoadDamageModel.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = B97BD71721682F4C0043C3DC /* RoadDamageModel.mlmodel */; };
 		9BC8A3D721AB43D600977C8B /* DamageDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = B97BD71121681D700043C3DC /* DamageDetector.swift */; };
+		9BC8A3D821AB43D600977C8B /* CGImagePropertyOrientation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B238AA9217A371000E7AAC3 /* CGImagePropertyOrientation.swift */; };
 		9BC8A3D921AB43D600977C8B /* Throttler.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9726072216D7F1A0066A59C /* Throttler.swift */; };
 		9BC8A3DA21AB43D600977C8B /* FrameExtractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B0BCCFE216E85E4009D2503 /* FrameExtractor.swift */; };
 		9BC8A3DB21AB43D600977C8B /* Downloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B2DE4772198C3F000C232FF /* Downloader.swift */; };
@@ -30,12 +32,6 @@
 		9BC8A3DD21AB43D600977C8B /* DamageCameraView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B957B260215EB8DE00FF2999 /* DamageCameraView.swift */; };
 		9BC8A3DE21AB43D600977C8B /* DamageCameraViewBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = B957B265215EB9FA00FF2999 /* DamageCameraViewBridge.m */; };
 		9BC8A3E121AB5A6800977C8B /* RoadDamageService_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BC8A3E021AB5A6800977C8B /* RoadDamageService_Tests.swift */; };
-		9BF9D1FD21BEEDAC00986A19 /* ImageHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BF9D1FC21BEEDAC00986A19 /* ImageHelper.swift */; };
-		9BF9D20021BEEDC300986A19 /* TokenSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BF9D1FE21BEEDC300986A19 /* TokenSource.swift */; };
-		9BF9D20121BEEDC300986A19 /* TokenSourceBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BF9D1FF21BEEDC300986A19 /* TokenSourceBridge.m */; };
-		9BF9D20221BEEDD900986A19 /* TokenSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BF9D1FE21BEEDC300986A19 /* TokenSource.swift */; };
-		9BF9D20321BEEDD900986A19 /* TokenSourceBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BF9D1FF21BEEDC300986A19 /* TokenSourceBridge.m */; };
-		9BF9D20521BEEDDE00986A19 /* ImageHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BF9D1FC21BEEDAC00986A19 /* ImageHelper.swift */; };
 		B957B261215EB8DE00FF2999 /* DamageCameraView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B957B260215EB8DE00FF2999 /* DamageCameraView.swift */; };
 		B957B264215EB92A00FF2999 /* DamageCameraViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B957B263215EB92A00FF2999 /* DamageCameraViewManager.swift */; };
 		B957B266215EB9FA00FF2999 /* DamageCameraViewBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = B957B265215EB9FA00FF2999 /* DamageCameraViewBridge.m */; };
@@ -70,6 +66,7 @@
 		2D1BE70E20D17A58F184918B /* Pods-deep.mobile.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-deep.mobile.debug.xcconfig"; path = "Pods/Target Support Files/Pods-deep.mobile/Pods-deep.mobile.debug.xcconfig"; sourceTree = "<group>"; };
 		9B0BCCFE216E85E4009D2503 /* FrameExtractor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FrameExtractor.swift; sourceTree = "<group>"; };
 		9B0BCD35216E92E3009D2503 /* DamageHTTPService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DamageHTTPService.swift; sourceTree = "<group>"; };
+		9B238AA9217A371000E7AAC3 /* CGImagePropertyOrientation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGImagePropertyOrientation.swift; sourceTree = "<group>"; };
 		9B2DE4772198C3F000C232FF /* Downloader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Downloader.swift; sourceTree = "<group>"; };
 		9B814607216FDFB900590FCB /* DamageService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DamageService.swift; sourceTree = "<group>"; };
 		9BC1337C219DF58400AE4C95 /* MLModelService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MLModelService.swift; sourceTree = "<group>"; };
@@ -77,9 +74,6 @@
 		9BC8A3CB21AB42DC00977C8B /* deep_mobileTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = deep_mobileTests.swift; sourceTree = "<group>"; };
 		9BC8A3CD21AB42DC00977C8B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9BC8A3E021AB5A6800977C8B /* RoadDamageService_Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoadDamageService_Tests.swift; sourceTree = "<group>"; };
-		9BF9D1FC21BEEDAC00986A19 /* ImageHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageHelper.swift; sourceTree = "<group>"; };
-		9BF9D1FE21BEEDC300986A19 /* TokenSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TokenSource.swift; sourceTree = "<group>"; };
-		9BF9D1FF21BEEDC300986A19 /* TokenSourceBridge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TokenSourceBridge.m; sourceTree = "<group>"; };
 		B957B25D215EB81B00FF2999 /* deep.mobile-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "deep.mobile-Bridging-Header.h"; sourceTree = "<group>"; };
 		B957B260215EB8DE00FF2999 /* DamageCameraView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DamageCameraView.swift; sourceTree = "<group>"; };
 		B957B263215EB92A00FF2999 /* DamageCameraViewManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DamageCameraViewManager.swift; sourceTree = "<group>"; };
@@ -198,7 +192,6 @@
 		9B0BCCD7216E856E009D2503 /* Util */ = {
 			isa = PBXGroup;
 			children = (
-				9BF9D1FC21BEEDAC00986A19 /* ImageHelper.swift */,
 				B9726072216D7F1A0066A59C /* Throttler.swift */,
 				9B0BCCFE216E85E4009D2503 /* FrameExtractor.swift */,
 				9B2DE4772198C3F000C232FF /* Downloader.swift */,
@@ -211,6 +204,7 @@
 			children = (
 				B97BD71721682F4C0043C3DC /* RoadDamageModel.mlmodel */,
 				B97BD71121681D700043C3DC /* DamageDetector.swift */,
+				9B238AA9217A371000E7AAC3 /* CGImagePropertyOrientation.swift */,
 			);
 			name = DamageDetector;
 			sourceTree = "<group>";
@@ -219,8 +213,6 @@
 			isa = PBXGroup;
 			children = (
 				9B0BCD35216E92E3009D2503 /* DamageHTTPService.swift */,
-				9BF9D1FE21BEEDC300986A19 /* TokenSource.swift */,
-				9BF9D1FF21BEEDC300986A19 /* TokenSourceBridge.m */,
 				9B814607216FDFB900590FCB /* DamageService.swift */,
 				9BC1337C219DF58400AE4C95 /* MLModelService.swift */,
 			);
@@ -299,12 +291,12 @@
 				ORGANIZATIONNAME = Facebook;
 				TargetAttributes = {
 					13B07F861A680F5B00A75B9A = {
-						DevelopmentTeam = 45YSJCFXR6;
+						DevelopmentTeam = XLQC5SKSC8;
 						LastSwiftMigration = 1000;
 					};
 					9BC8A3C821AB42DB00977C8B = {
 						CreatedOnToolsVersion = 10.1;
-						DevelopmentTeam = 45YSJCFXR6;
+						DevelopmentTeam = XLQC5SKSC8;
 						ProvisioningStyle = Automatic;
 						TestTargetID = 13B07F861A680F5B00A75B9A;
 					};
@@ -429,15 +421,13 @@
 				B957B266215EB9FA00FF2999 /* DamageCameraViewBridge.m in Sources */,
 				9B0BCCFF216E85E4009D2503 /* FrameExtractor.swift in Sources */,
 				13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */,
+				9B238AAA217A371000E7AAC3 /* CGImagePropertyOrientation.swift in Sources */,
 				B97BD71821682F4D0043C3DC /* RoadDamageModel.mlmodel in Sources */,
-				9BF9D20021BEEDC300986A19 /* TokenSource.swift in Sources */,
 				9B2DE4782198C3F000C232FF /* Downloader.swift in Sources */,
 				9B814608216FDFB900590FCB /* DamageService.swift in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
 				9B0BCD36216E92E3009D2503 /* DamageHTTPService.swift in Sources */,
-				9BF9D20121BEEDC300986A19 /* TokenSourceBridge.m in Sources */,
 				B957B264215EB92A00FF2999 /* DamageCameraViewManager.swift in Sources */,
-				9BF9D1FD21BEEDAC00986A19 /* ImageHelper.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -445,15 +435,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9BF9D20521BEEDDE00986A19 /* ImageHelper.swift in Sources */,
-				9BF9D20221BEEDD900986A19 /* TokenSource.swift in Sources */,
-				9BF9D20321BEEDD900986A19 /* TokenSourceBridge.m in Sources */,
 				9BC8A3E121AB5A6800977C8B /* RoadDamageService_Tests.swift in Sources */,
 				9BC8A3D321AB43D600977C8B /* DamageHTTPService.swift in Sources */,
 				9BC8A3D421AB43D600977C8B /* DamageService.swift in Sources */,
 				9BC8A3D521AB43D600977C8B /* MLModelService.swift in Sources */,
 				9BC8A3D621AB43D600977C8B /* RoadDamageModel.mlmodel in Sources */,
 				9BC8A3D721AB43D600977C8B /* DamageDetector.swift in Sources */,
+				9BC8A3D821AB43D600977C8B /* CGImagePropertyOrientation.swift in Sources */,
 				9BC8A3D921AB43D600977C8B /* Throttler.swift in Sources */,
 				9BC8A3DA21AB43D600977C8B /* FrameExtractor.swift in Sources */,
 				9BC8A3DB21AB43D600977C8B /* Downloader.swift in Sources */,
@@ -495,7 +483,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = NO;
-				DEVELOPMENT_TEAM = 45YSJCFXR6;
+				DEVELOPMENT_TEAM = XLQC5SKSC8;
 				GCC_PREFIX_HEADER = "";
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -512,7 +500,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.deep-mobile";
+				PRODUCT_BUNDLE_IDENTIFIER = org.reactjs.native.example.deep.mobile;
 				PRODUCT_NAME = deep.mobile;
 				SWIFT_OBJC_BRIDGING_HEADER = "deep.mobile-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -528,7 +516,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 45YSJCFXR6;
+				DEVELOPMENT_TEAM = XLQC5SKSC8;
 				GCC_PREFIX_HEADER = "";
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -543,7 +531,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.deep-mobile";
+				PRODUCT_BUNDLE_IDENTIFIER = org.reactjs.native.example.deep.mobile;
 				PRODUCT_NAME = deep.mobile;
 				SWIFT_OBJC_BRIDGING_HEADER = "deep.mobile-Bridging-Header.h";
 				SWIFT_VERSION = 4.2;
@@ -664,7 +652,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DEBUG_INFORMATION_FORMAT = dwarf;
-				DEVELOPMENT_TEAM = 45YSJCFXR6;
+				DEVELOPMENT_TEAM = XLQC5SKSC8;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				INFOPLIST_FILE = deep.mobileTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
@@ -695,7 +683,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEVELOPMENT_TEAM = 45YSJCFXR6;
+				DEVELOPMENT_TEAM = XLQC5SKSC8;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				INFOPLIST_FILE = deep.mobileTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
